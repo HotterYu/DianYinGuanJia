@@ -3,7 +3,6 @@ package com.znt.vodbox.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.FragmentAdapter;
-import com.znt.vodbox.bean.AdPlanInfo;
 import com.znt.vodbox.fragment.AdPlanFragment;
 import com.znt.vodbox.fragment.MediaPlanFragment;
 import com.znt.vodbox.utils.binding.Bind;
