@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/activity_common_include" />
+
+    <include
+        layout="@layout/view_ad_create_header"
+        />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+        <com.znt.vodbox.view.xlistview.LJListView
+            android:id="@+id/ptrl_plan_create"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            ></com.znt.vodbox.view.xlistview.LJListView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+            android:paddingTop="44dp"
+            >
+            <TextView
+                android:id="@+id/tv_plan_create_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="plan_dialog">
+        <item>修改计划</item>
+        <item>查看使用者</item>
+        <item>复制计划</item>
+        <item>删除</item>
+    </string-array>
+
+    <string-array name="album_music_dialog">
+        <item>添加到歌单</item>
+        <item>插播歌曲</item>
+        <item>下载歌曲</item>
+        <item>删除</item>
+    </string-array>
+
+    <string-array name="group_list_dialog">
+        <item>修改名称</item>
+        <item>查看计划</item>
+        <item>删除</item>
+    </string-array>
+
+    <string-array name="ad_list_dialog">
+        <item>实时插播</item>
+        <item>复制链接</item>
+        <item>修改名称</item>
+        <item>删除</item>
+    </string-array>
+
+    <string-array name="shop_zone_dialog">
+        <item>修改名称</item>
+        <item>查看店铺</item>
+        <item>清空店铺</item>
+        <item>删除分区</item>
+    </string-array>
+
+    <string-array name="my_album_dialog">
+        <item>修改名称</item>
+        <item>添加歌曲</item>
+        <item>删除</item>
+        <item>歌单详情</item>
+    </string-array>
+
+    <string-array name="shop_list_dialog">
+        <item>添加到分区</item>
+        <item>插播歌曲</item>
+        <item>删除</item>
+        <item>店铺详情</item>
+    </string-array>
+
+    <string-array name="local_music_dialog">
+        <item>分享</item>
+        <item>设为铃声</item>
+        <item>@string/music_info</item>
+        <item>删除</item>
+    </string-array>
+
+    <string-array name="online_music_dialog">
+        <item>分享</item>
+        <item>查看歌手信息</item>
+        <item>下载</item>
+    </string-array>
+
+    <string-array name="online_music_dialog_without_download">
+        <item>分享</item>
+        <item>查看歌手信息</item>
+    </string-array>
+
+    <string-array name="search_music_dialog">
+        <item>分享</item>
+        <item>下载</item>
+    </string-array>
+
+    <string-array name="search_music_dialog_no_download">
+        <item>分享</item>
+    </string-array>
+
+    <string-array name="timer_text">
+        <item>不开启</item>
+        <item>10分钟后</item>
+        <item>20分钟后</item>
+        <item>30分钟后</item>
+        <item>45分钟后</item>
+        <item>60分钟后</item>
+        <item>90分钟后</item>
+    </string-array>
+
+    <integer-array name="timer_int">
+        <item>0</item>
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>45</item>
+        <item>60</item>
+        <item>90</item>
+    </integer-array>
+
+    <string-array name="online_music_list_title">
+        <item>主打榜单</item>
+        <item>百度热歌榜</item>
+        <item>百度新歌榜</item>
+        <item>分类榜单</item>
+        <item>华语金曲榜</item>
+        <item>欧美金曲榜</item>
+        <item>影视金曲榜</item>
+        <item>情歌对唱榜</item>
+        <item>网络歌曲榜</item>
+        <item>经典老歌榜</item>
+        <item>摇滚榜</item>
+        <item>媒体榜单</item>
+        <item>KTV热歌榜</item>
+        <item>Billboard</item>
+        <item>Hito中文榜</item>
+        <item>叱咤歌曲榜</item>
+    </string-array>
+
+    <string-array name="online_music_list_type">
+        <item>#</item>
+        <item>2</item>
+        <item>1</item>
+        <item>#</item>
+        <item>20</item>
+        <item>21</item>
+        <item>24</item>
+        <item>23</item>
+        <item>25</item>
+        <item>22</item>
+        <item>11</item>
+        <item>#</item>
+        <item>6</item>
+        <item>8</item>
+        <item>18</item>
+        <item>7</item>
+    </string-array>
+
+    <string-array name="filter_size_entries">
+        <item>不过滤</item>
+        <item>100KB</item>
+        <item>200KB</item>
+        <item>500KB</item>
+        <item>1MB</item>
+        <item>2MB</item>
+    </string-array>
+
+    <string-array name="filter_size_entry_values">
+        <item>0</item>
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+        <item>1024</item>
+        <item>2048</item>
+    </string-array>
+
+    <string-array name="filter_time_entries">
+        <item>不过滤</item>
+        <item>15秒</item>
+        <item>30秒</item>
+        <item>1分钟</item>
+        <item>1分30秒</item>
+        <item>2分钟</item>
+    </string-array>
+
+    <string-array name="filter_time_entry_values">
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+    </string-array>
+</resources>
