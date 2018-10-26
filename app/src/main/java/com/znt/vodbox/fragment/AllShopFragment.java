@@ -173,7 +173,8 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
                 case 0://
                     Bundle bundle = new Bundle();
                     bundle.putBoolean("IS_EDIT", true);
-                    bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+                    if(tempShop.getGroup() != null)
+                        bundle.putString("GROUP_ID",tempShop.getGroup().getId());
                     bundle.putString("SHOP_IDS",tempShop.getId());
                     ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
                     break;
