@@ -19,6 +19,10 @@
     <color name="grey_900">#212121</color>
     <color name="grey_900_96p">#F5212121</color>
 
+    <color name="colorDefault">#ffffff</color>
+    <color name="colorBackground">#f1f0f6</color>
+    <color name="colorText">#9b9b9b</color>
+
 
 
 

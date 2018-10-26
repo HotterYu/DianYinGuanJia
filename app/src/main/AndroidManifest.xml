@@ -129,13 +129,20 @@
         <activity
             android:name=".activity.AlbumSelectActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.AdListActivity"></activity>
+        <activity android:name=".activity.AdListActivity" />
         <activity
             android:name=".activity.GroupListActivity"
-            android:windowSoftInputMode="adjustPan" ></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ModifyAlbumActivity"
-            android:windowSoftInputMode="adjustPan" ></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.SearchSystemMusicActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.SearchShopActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.ShopDetailActivity"></activity>
     </application>
 
 </manifest>

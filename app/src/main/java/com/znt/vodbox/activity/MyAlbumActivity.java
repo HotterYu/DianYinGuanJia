@@ -51,6 +51,8 @@ public class MyAlbumActivity extends BaseActivity implements
 
     private MyAlbumlistAdapter mMyAlbumlistAdapter = null;
 
+    private String musicIds = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +61,7 @@ public class MyAlbumActivity extends BaseActivity implements
         setContentView(R.layout.activity_my_album);
 
         //mUserInfo = (UserInfo) getIntent().getSerializableExtra("USER_INFO");
+        musicIds = getIntent().getStringExtra("MUSIC_IDS");
 
         tvTopTitle.setText(getResources().getString(R.string.my_album));
         ivTopMore.setVisibility(View.GONE);
@@ -173,11 +176,20 @@ public class MyAlbumActivity extends BaseActivity implements
         if(position > 0)
             position = position - 1;
         AlbumInfo tempInfor = albumInfos.get(position);
-        Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable("ALBUM_INFO",tempInfor);
-        intent.putExtras(b);
-        startActivity(intent);
+
+        if(TextUtils.isEmpty(musicIds))
+        {
+            Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+            Bundle b = new Bundle();
+            b.putSerializable("ALBUM_INFO",tempInfor);
+            intent.putExtras(b);
+            startActivity(intent);
+        }
+        else
+        {
+            addMusicToAlbum(tempInfor.getId());
+        }
+
     }
 
     @Override
@@ -226,11 +238,7 @@ public class MyAlbumActivity extends BaseActivity implements
                     {
 
                     }
-
                     showToast(resultBean.getMessage());
-
-
-
                 }
 
                 @Override
@@ -241,7 +249,44 @@ public class MyAlbumActivity extends BaseActivity implements
         }
         catch (Exception e)
         {
-            showToast(e.getMessage());
+            if(e != null)
+                showToast(e.getMessage());
+        }
+
+    }
+
+    public void addMusicToAlbum(String id)
+    {
+        String token = Constant.mUserInfo.getToken();
+        try
+        {
+            // Simulate network access.
+            HttpClient.addMusicToAlbum(token, id,musicIds, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+
+                    if(resultBean != null)
+                    {
+                        finish();
+                    }
+                    else
+                    {
+
+                    }
+
+                    showToast(resultBean.getMessage());
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            if(e != null)
+                showToast(e.getMessage());
             Log.e("",e.getMessage());
         }
 

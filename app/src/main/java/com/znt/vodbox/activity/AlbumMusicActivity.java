@@ -3,16 +3,13 @@ package com.znt.vodbox.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AdListAdapter;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
@@ -23,6 +20,8 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.searchview.ICallBack;
+import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.util.ArrayList;
@@ -41,6 +40,9 @@ public class AlbumMusicActivity extends BaseActivity implements
 
     @Bind(R.id.ptrl_album_music)
     private LJListView listView = null;
+    @Bind(R.id.search_view)
+    private SearchView mSearchView = null;
+
 
     private AlbumInfo mAlbumInfo = null;
 
@@ -58,6 +60,8 @@ public class AlbumMusicActivity extends BaseActivity implements
 
         mAlbumInfo = (AlbumInfo) getIntent().getSerializableExtra("ALBUM_INFO");
 
+        mSearchView.init("album_music_record.db");
+
         tvTopTitle.setText(mAlbumInfo.getName());
         ivTopMore.setVisibility(View.VISIBLE);
         ivTopMore.setImageResource(R.drawable.ic_menu_search);
@@ -72,8 +76,17 @@ public class AlbumMusicActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
 
-                ViewUtils.startActivity(getActivity(),SearchMusicActivity.class,null);
+                Bundle bundle = new Bundle();
+                bundle.putString("ALBUM_ID", mAlbumInfo.getId());
+                ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
 
+            }
+        });
+
+        mSearchView.setOnClickSearch(new ICallBack() {
+            @Override
+            public void SearchAciton(String string) {
+                getAlbumMusics(string);
             }
         });
 
@@ -95,11 +108,21 @@ public class AlbumMusicActivity extends BaseActivity implements
 
         listView.onFresh();
 
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mSearchView.showRecordView(false);
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
     }
 
-    public void getAlbumMusics()
+    public void getAlbumMusics(String searchWord)
     {
 
 
@@ -108,7 +131,6 @@ public class AlbumMusicActivity extends BaseActivity implements
         String pageSize = "100";
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
-        String searchWord = "";
 
         try
         {
@@ -147,12 +169,12 @@ public class AlbumMusicActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        getAlbumMusics();
+        getAlbumMusics("");
     }
 
     @Override
     public void onLoadMore() {
-        getAlbumMusics();
+        getAlbumMusics("");
     }
 
     @Override
@@ -194,5 +216,16 @@ public class AlbumMusicActivity extends BaseActivity implements
             }
         });
         dialog.show();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(mSearchView.isRecordViewShow())
+        {
+            mSearchView.showRecordView(false);
+            return;
+        }
+        super.onBackPressed();
     }
 }

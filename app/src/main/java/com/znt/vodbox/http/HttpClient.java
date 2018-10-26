@@ -197,6 +197,33 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void addMusicToAlbum(String token,String id,String musicIds,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(ADD_MUSIC_TO_ALBUM)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("musicIds", musicIds)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getAllShops(String token, String pageNo, String pageSize,String merchId, String groupId, String memberId,
                                    String name, String shopCode, String userShopCode,
                                    @NonNull final HttpCallback<ShopListResultBean> callback) {
@@ -268,6 +295,35 @@ public class HttpClient extends HttpApi{
         OkHttpUtils.post().url(GET_ALBUM_MUSICS)
                 .addHeader("token", token)
                 .addParams("id", id)
+                .addParams("searchWord", searchWord)
+                .addParams("pageSize", pageSize)
+                .addParams("pageNo", pageNo)
+                .build()
+                .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
+                    @Override
+                    public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getSystemMusics(String token, String pageNo, String pageSize,String searchWord
+            ,@NonNull final HttpCallback<MusicListResultBean> callback) {
+        OkHttpUtils.post().url(GET_SYS_MUSICS)
+                .addHeader("token", token)
                 .addParams("searchWord", searchWord)
                 .addParams("pageSize", pageSize)
                 .addParams("pageNo", pageNo)

@@ -17,6 +17,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
+import com.znt.vodbox.activity.ShopDetailActivity;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.ShopListResultBean;
@@ -160,7 +161,15 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-
+        if(position > 0)
+            position = position - 1;
+        Shopinfo tempShop = shopinfoList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IS_EDIT", true);
+        if(tempShop.getGroup() != null)
+            bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+        bundle.putString("SHOP_IDS",tempShop.getId());
+        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
     }
 
     @Override

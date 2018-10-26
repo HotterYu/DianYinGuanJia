@@ -8,6 +8,11 @@ public class MusicListResultBean implements Serializable {
     private String resultcode;
     private String message;
 
+    public boolean isSuccess()
+    {
+        return resultcode.equals("1");
+    }
+
 
     public String getMessage() {
         return message;

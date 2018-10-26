@@ -14,6 +14,8 @@ public class HttpApi
     public static final String GET_MY_ALBUMS = API + "/category/list";
     public static final String DELETE_ALBUM = API + "/category/del";
     public static final String GET_ALBUM_MUSICS = API + "/category/music";
+    public static final String ADD_MUSIC_TO_ALBUM = API + "/category/saveMusic";
+    public static final String GET_SYS_MUSICS = API + "/query/search";
     public static final String GET_AD_LISTS = API + "/adinfo/list";
     public static final String PUSH_MEDIA = API + "/tml/push";
     public static final String GET_PLAN_LIST = API + "/plan/list";

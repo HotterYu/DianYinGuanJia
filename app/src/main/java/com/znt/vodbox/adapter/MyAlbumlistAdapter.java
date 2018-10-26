@@ -22,6 +22,7 @@ public class MyAlbumlistAdapter extends BaseAdapter {
     private OnMoreClickListener listener;
     private boolean isPlaylist=true;
 
+
     public MyAlbumlistAdapter(List<AlbumInfo> albumInfos) {
         this.albumInfos = albumInfos;
     }

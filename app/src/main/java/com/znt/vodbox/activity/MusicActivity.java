@@ -161,7 +161,13 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.iv_search:
-                startActivity(new Intent(this, SearchMusicActivity.class));
+
+                if(mViewPager.getCurrentItem() == 0)
+                {
+                    startActivity(new Intent(this, SearchShopActivity.class));
+                }
+                else
+                    startActivity(new Intent(this, SearchMusicActivity.class));
                 break;
             case R.id.tv_all_shops:
                 mViewPager.setCurrentItem(0);
