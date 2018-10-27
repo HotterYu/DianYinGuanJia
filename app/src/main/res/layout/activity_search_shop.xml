@@ -17,7 +17,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_margin="6dp"
-            android:layout_marginTop="54dp"
+            android:paddingTop="54dp"
             ></com.znt.vodbox.view.xlistview.LJListView>
 
         <com.znt.vodbox.view.searchview.SearchView

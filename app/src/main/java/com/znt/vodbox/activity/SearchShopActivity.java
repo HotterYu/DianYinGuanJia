@@ -149,7 +149,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
                             if(resultBean.getResultcode().equals("1"))
                             {
                                 shopinfoList = resultBean.getData();
-
+                                tvTopTitle.setText("搜索店铺("+resultBean.getMessage()+")");
                                 adapter.notifyDataSetChanged(shopinfoList);
                             }
                             else

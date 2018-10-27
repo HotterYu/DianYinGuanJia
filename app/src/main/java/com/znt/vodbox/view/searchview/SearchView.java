@@ -226,10 +226,12 @@ public class SearchView extends LinearLayout {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 // 获取用户点击列表里的文字,并自动填充到搜索框内
-                TextView textView = (TextView) view.findViewById(android.R.id.text1);
-                String name = textView.getText().toString();
+                /*TextView textView = (TextView) view.findViewById(android.R.id.text1);*/
+                String name = adapter.getKeywords().get(position);
                 et_search.setText(name);
                 showRecordView(false);
+                if(mCallBack != null)
+                    mCallBack.SearchAciton(name);
                 //Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
             }
         });

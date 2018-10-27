@@ -29,6 +29,11 @@ public class SearchRecordAdapter extends BaseAdapter
         this.names = names;
     }
 
+    public List<String> getKeywords()
+    {
+        return names;
+    }
+
     @Override
     public int getCount() {
         return names.size();
