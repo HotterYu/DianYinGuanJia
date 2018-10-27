@@ -4,23 +4,19 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
-
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,9 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.entity.Constant;
@@ -44,6 +37,9 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.binding.Bind;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -242,7 +238,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         else
                         {
                             //showProgress(false);
-                            mPasswordView.setError(getString(R.string.error_incorrect_password));
+                            mPasswordView.setError(tempInfor.getMessage());
                             mPasswordView.requestFocus();
                         }
                     }
@@ -251,14 +247,18 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                     public void onFail(Exception e) {
                         showProgress(false);
                         //mEmailSignInButton.setVisibility(show ? View.GONE : View.VISIBLE);
-                        mPasswordView.setError(getString(R.string.error_incorrect_password));
+                        mPasswordView.setError(getString(R.string.login_error)+":"+e.getMessage());
                         mPasswordView.requestFocus();
                     }
                 });
             }
             catch (Exception e)
             {
-
+                if(e == null)
+                    mPasswordView.setError(getString(R.string.login_error));
+                else
+                    mPasswordView.setError(getString(R.string.login_error)+":"+e.getMessage());
+                mPasswordView.requestFocus();
             }
         }
     }

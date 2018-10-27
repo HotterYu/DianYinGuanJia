@@ -11,7 +11,7 @@
     <string-array name="album_music_dialog">
         <item>添加到歌单</item>
         <item>插播歌曲</item>
-        <item>下载歌曲</item>
+        <item>复制链接</item>
         <item>删除</item>
     </string-array>
 

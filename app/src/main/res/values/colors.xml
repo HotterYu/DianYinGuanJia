@@ -50,6 +50,7 @@
     <color name="text_black_mid">#555555</color>
     <color name="text_black_on">#000000</color>
     <color name="text_blue_on">#ec6400</color>
+    <color name="text_blue_off">#fb967b</color>
     <color name="text_bg">#50000000</color>
     <color name="bottom_bg">#fcfcfc</color>
 

@@ -1,65 +1,109 @@
 package com.znt.vodbox.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
-import android.view.Menu;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
-import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.bean.MusicListResultBean;
+import com.znt.vodbox.adapter.ShoplistAdapter;
+import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.entity.Constant;
-import com.znt.vodbox.enums.LoadStateEnum;
-import com.znt.vodbox.executor.DownloadSearchedMusic;
-import com.znt.vodbox.executor.ShareOnlineMusic;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
-import com.znt.vodbox.model.SearchMusic;
-import com.znt.vodbox.utils.ToastUtils;
+import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.searchview.ICallBack;
+import com.znt.vodbox.view.searchview.SearchView;
+import com.znt.vodbox.view.xlistview.LJListView;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchShopActivity extends BaseActivity implements SearchView.OnQueryTextListener
-        , AdapterView.OnItemClickListener, OnMoreClickListener {
-    @Bind(R.id.lv_search_music_list)
-    private ListView lvSearchMusic;
-    @Bind(R.id.ll_loading)
-    private LinearLayout llLoading;
-    @Bind(R.id.ll_load_fail)
-    private LinearLayout llLoadFail;
-    private List<MediaInfo> dataList = new ArrayList<>();
-    private AlbumMusiclistAdapter mAlbumMusiclistAdapter = new AlbumMusiclistAdapter(dataList);
+public class SearchShopActivity extends BaseActivity  implements LJListView.IXListViewListener,AdapterView.OnItemClickListener, OnMoreClickListener
+  {
+    @Bind(R.id.lv_all_shops)
+    private LJListView listView;
+    @Bind(R.id.tv_all_shops_loading)
+    private TextView vSearching;
+    @Bind(R.id.search_view)
+    private SearchView mSearchView = null;
+
+      @Bind(R.id.tv_common_title)
+      private TextView tvTopTitle = null;
+      @Bind(R.id.iv_common_back)
+      private ImageView ivTopReturn = null;
+      @Bind(R.id.iv_common_more)
+      private ImageView ivTopMore = null;
+      @Bind(R.id.tv_common_confirm)
+      private TextView tvConfirm = null;
+
+
+    private List<Shopinfo> shopinfoList = new ArrayList<>();
+
+    private ShoplistAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_system_music);
+        setContentView(R.layout.activity_search_shop);
 
-    }
+        tvTopTitle.setText("搜索店铺");
+        ivTopMore.setVisibility(View.GONE);
+        tvConfirm.setVisibility(View.GONE);
 
-    @Override
-    protected void onServiceBound() {
-        lvSearchMusic.setAdapter(mAlbumMusiclistAdapter);
-        TextView tvLoadFail = llLoadFail.findViewById(R.id.tv_load_fail_text);
-        tvLoadFail.setText(R.string.search_empty);
+        ivTopReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
-        lvSearchMusic.setOnItemClickListener(this);
-        mAlbumMusiclistAdapter.setOnMoreClickListener(this);
+
+        adapter = new ShoplistAdapter(shopinfoList);
+        adapter.setOnMoreClickListener(this);
+
+        listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
+        listView.getListView().setDividerHeight(1);
+        listView.setPullLoadEnable(true,"");
+        listView.setPullRefreshEnable(true);
+        listView.setIsAnimation(true);
+        listView.setXListViewListener(this);
+        listView.showFootView(false);
+        listView.setRefreshTime();
+        listView.setOnItemClickListener(this);
+
+        listView.setAdapter(adapter);
+
+        mSearchView.init("shop_search_record.db");
+        mSearchView.showRecordView(false);
+        mSearchView.setOnClickSearch(new ICallBack() {
+            @Override
+            public void SearchAciton(String string) {
+                loadShops();
+            }
+        });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mSearchView.showRecordView(false);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
     }
 
     @Override
@@ -67,128 +111,102 @@ public class SearchShopActivity extends BaseActivity implements SearchView.OnQue
         return R.style.AppThemeDark_Search;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search_music, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.onActionViewExpanded();
-        searchView.setQueryHint(getString(R.string.search_tips));
-        searchView.setOnQueryTextListener(this);
-        searchView.setSubmitButtonEnabled(true);
-        try {
-            Field field = searchView.getClass().getDeclaredField("mGoButton");
-            field.setAccessible(true);
-            ImageView mGoButton = (ImageView) field.get(searchView);
-            mGoButton.setImageResource(R.drawable.ic_menu_search);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+    public void loadShops()
+    {
+
+        String name = mSearchView.getText();
+        if(TextUtils.isEmpty(name))
+        {
+            showToast("请输入搜索内容");
+            return;
         }
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOADING);
-        searchMusic(query);
-        return false;
-    }
+        vSearching.setVisibility(View.VISIBLE);
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
-    private void searchMusic(String keyword) {
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
+        String groupId = "";
+        String memberId = "";
+
+        String shopCode = "";
+        String userShopCode = "";
+
+        mSearchView.showRecordView(false);
 
         try
         {
             // Simulate network access.
-            HttpClient.getSystemMusics(token, pageNo, pageSize,keyword, new HttpCallback<MusicListResultBean>() {
-                @Override
-                public void onSuccess(MusicListResultBean resultBean) {
+            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode
+                    , new HttpCallback<ShopListResultBean>() {
+                        @Override
+                        public void onSuccess(ShopListResultBean resultBean) {
+                            vSearching.setVisibility(View.GONE);
+                            listView.stopRefresh();
+                            if(resultBean.getResultcode().equals("1"))
+                            {
+                                shopinfoList = resultBean.getData();
 
-                    if(resultBean != null && resultBean.isSuccess())
-                    {
-                        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_SUCCESS);
+                                adapter.notifyDataSetChanged(shopinfoList);
+                            }
+                            else
+                            {
+                                showToast(resultBean.getMessage());
+                            }
+                        }
 
-                        dataList = resultBean.getData();
-                        mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
-                        //tvTopTitle.setText(mAlbumInfo.getName() + "(" + resultBean.getMessage() + ")");
-                        lvSearchMusic.requestFocus();
-                    }
-                    else
-                    {
-                        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
-                    }
-                    //listView.stopRefresh();
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
-                    //vSearching.setVisibility(View.GONE);
-                    //listView.stopRefresh();
-                }
-            });
+                        @Override
+                        public void onFail(Exception e) {
+                            vSearching.setVisibility(View.GONE);
+                            listView.stopRefresh();
+                            if(e != null)
+                                showToast(e.getMessage());
+                            else
+                                showToast("加载数据失败");
+                        }
+                    });
         }
         catch (Exception e)
         {
-            ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
-            //listView.stopRefresh();
+            listView.stopRefresh();
+            showToast(e.getMessage());
         }
+
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        MediaInfo tempInfor = dataList.get(position);
-        showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());
-
-        /*new PlaySearchedMusic(this, dataList.get(position)) {
-            @Override
-            public void onPrepare() {
-                showProgress();
-            }
-
-            @Override
-            public void onExecuteSuccess(Music music) {
-                cancelProgress();
-                AudioPlayer.get().addAndPlay(music);
-                ToastUtils.show("已添加到播放列表");
-            }
-
-            @Override
-            public void onExecuteFail(Exception e) {
-                cancelProgress();
-                ToastUtils.show(R.string.unable_to_play);
-            }
-        }.execute();*/
+        if(position > 0)
+            position = position - 1;
+        Shopinfo tempShop = shopinfoList.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("IS_EDIT", true);
+        if(tempShop.getGroup() != null)
+            bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+        bundle.putString("SHOP_IDS",tempShop.getId());
+        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
     }
 
     @Override
     public void onMoreClick(int position) {
-        MediaInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.album_music_dialog, (dialog1, which) -> {
+        Shopinfo tempShop = shopinfoList.get(position);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplication());
+        dialog.setTitle(tempShop.getName());
+        dialog.setItems(R.array.shop_list_dialog, (dialog1, which) -> {
             switch (which) {
                 case 0://
-                    //shareMusic(music);
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("IS_EDIT", true);
+                    if(tempShop.getGroup() != null)
+                        bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+                    bundle.putString("SHOP_IDS",tempShop.getId());
+                    ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
                     break;
                 case 1://
-                    Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("MEDIA_NAME",tempInfo.getMusicName());
-                    b.putString("MEDIA_ID",tempInfo.getId());
-                    b.putString("MEDIA_URL",tempInfo.getMusicUrl());
-                    intent.putExtras(b);
-                    startActivity(intent);
                     //requestSetRingtone(music);
                     break;
                 case 2://
@@ -200,62 +218,17 @@ public class SearchShopActivity extends BaseActivity implements SearchView.OnQue
             }
         });
         dialog.show();
-        /*final MediaInfo song = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(song.getMusicName());
-        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getMusicSing(), song.getSongname());
-        File file = new File(path);
-        int itemsId = file.exists() ? R.array.search_music_dialog_no_download : R.array.search_music_dialog;
-        dialog.setItems(itemsId, (dialog1, which) -> {
-            switch (which) {
-                case 0:// 分享
-                    share(song);
-                    break;
-                case 1:// 下载
-                    download(song);
-                    break;
-            }
-        });
-        dialog.show();*/
+
     }
 
-    private void share(SearchMusic.Song song) {
-        new ShareOnlineMusic(this, song.getSongname(), song.getSongid()) {
-            @Override
-            public void onPrepare() {
-                showProgress();
-            }
 
-            @Override
-            public void onExecuteSuccess(Void aVoid) {
-                cancelProgress();
-            }
-
-            @Override
-            public void onExecuteFail(Exception e) {
-                cancelProgress();
-            }
-        }.execute();
+    @Override
+    public void onRefresh() {
+        loadShops();
     }
 
-    private void download(final SearchMusic.Song song) {
-        new DownloadSearchedMusic(this, song) {
-            @Override
-            public void onPrepare() {
-                showProgress();
-            }
-
-            @Override
-            public void onExecuteSuccess(Void aVoid) {
-                cancelProgress();
-                ToastUtils.show(getString(R.string.now_download, song.getSongname()));
-            }
-
-            @Override
-            public void onExecuteFail(Exception e) {
-                cancelProgress();
-                ToastUtils.show(R.string.unable_to_download);
-            }
-        }.execute();
+    @Override
+    public void onLoadMore() {
+        loadShops();
     }
 }

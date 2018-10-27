@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
@@ -63,7 +62,7 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         MediaInfo tempInfo = dataList.get(position);
-        holder.ivCover.setImageResource(R.drawable.default_cover);
+        holder.ivCover.setImageResource(R.drawable.icon_music);
         holder.tvAlbumName.setText(tempInfo.getMusicName());
         String artist = FileUtils.getArtistAndAlbum(tempInfo.getMusicSing(), tempInfo.getMusicAlbum());
         holder.tvDesc.setText(artist);

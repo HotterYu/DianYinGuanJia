@@ -1,6 +1,5 @@
 package com.znt.vodbox.adapter;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.model.Music;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.service.AudioPlayer;
-import com.znt.vodbox.utils.CoverLoader;
-import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -68,7 +64,7 @@ public class ShoplistAdapter extends BaseAdapter {
         }
         holder.vPlaying.setVisibility((isPlaylist && position == AudioPlayer.get().getPlayPosition()) ? View.VISIBLE : View.INVISIBLE);
         Shopinfo shopinfo = shopList.get(position);
-        holder.ivCover.setImageResource(R.drawable.default_cover);
+        holder.ivCover.setImageResource(R.drawable.icon_shop);
         holder.tvShopName.setText(shopinfo.getName());
         holder.tvCurSong.setText(shopinfo.getTmlRunStatus().get(0).getPlayingSong());
         holder.tvOnlineTime.setText(shopinfo.getTmlRunStatus().get(0).getLastConnTime());

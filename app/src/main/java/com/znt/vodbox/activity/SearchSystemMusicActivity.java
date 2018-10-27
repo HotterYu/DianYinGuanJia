@@ -1,5 +1,7 @@
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -210,7 +212,10 @@ public class SearchSystemMusicActivity extends BaseActivity implements SearchVie
                     //requestSetRingtone(music);
                     break;
                 case 2://
-                    //MusicInfoActivity.start(getContext(), music);
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    // 将文本内容放到系统剪贴板里。
+                    cm.setText(tempInfo.getMusicUrl());
+                    showToast("复制成功");
                     break;
                 case 3://
                     //deleteMusic(music);
