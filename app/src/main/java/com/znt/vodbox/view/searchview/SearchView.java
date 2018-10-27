@@ -11,18 +11,17 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.znt.vodbox.R;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Carson_Ho on 17/8/10.
@@ -39,13 +38,13 @@ public class SearchView extends LinearLayout {
     private EditText et_search; // 搜索按键
     private TextView tv_clear;  // 删除搜索记录按键
     private RelativeLayout search_block; // 搜索框布局
-    private ImageView ivClear;
-    private ScrollView svSearchRecord;
+    private LinearLayout svSearchRecord;
+    private ImageView ivSearch = null;
 
 
     // ListView列表 & 适配器
     private SearchListView listView;
-    private BaseAdapter adapter;
+    private SearchRecordAdapter adapter;
 
     // 数据库变量
     // 用于存放历史搜索记录
@@ -235,17 +234,6 @@ public class SearchView extends LinearLayout {
             }
         });
 
-        /**
-         * 点击返回按键后的事件
-         */
-        ivClear.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 注：由于返回需求会根据自身情况不同而不同，所以具体逻辑由开发者自己实现，此处仅留出接口
-                et_search.setText("");
-                showRecordView(true);
-            }
-        });
 
     }
 
@@ -265,8 +253,9 @@ public class SearchView extends LinearLayout {
         et_search.setHint(textHintSearch);
 
         // 3. 搜索框背景颜色
+        ivSearch = (ImageView) findViewById(R.id.iv_search_view_search);
         search_block = (RelativeLayout)findViewById(R.id.search_block);
-        svSearchRecord = (ScrollView)findViewById(R.id.search_view_record);
+        svSearchRecord = (LinearLayout)findViewById(R.id.search_view_record);
         LayoutParams params = (LayoutParams) search_block.getLayoutParams();
         params.height = searchBlockHeight;
         search_block.setBackgroundColor(searchBlockColor);
@@ -279,9 +268,30 @@ public class SearchView extends LinearLayout {
         tv_clear = (TextView) findViewById(R.id.tv_clear);
         tv_clear.setVisibility(INVISIBLE);
 
-        // 6. 返回按键
-        ivClear = (ImageView) findViewById(R.id.search_clear);
+        svSearchRecord.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isRecordViewShow())
+                    showRecordView(false);
+            }
+        });
 
+        ivSearch.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!(mCallBack == null))
+                {
+                    mCallBack.SearchAciton(et_search.getText().toString());
+                    showRecordView(false);
+                }
+            }
+        });
+
+    }
+
+    public String getText()
+    {
+        return et_search.getText().toString().trim();
     }
 
     /**
@@ -290,12 +300,26 @@ public class SearchView extends LinearLayout {
      */
     private void queryData(String tempName) {
 
+        List<String> names = new ArrayList<>();
+
         // 1. 模糊搜索
         Cursor cursor = helper.getReadableDatabase().rawQuery(
                 "select id as _id,name from records where name like '%" + tempName + "%' order by id desc ", null);
+        while(cursor.moveToNext())
+        {
+            //moveToNext()移动光标到下一行
+            HashMap<String,String> HM = new HashMap<String,String>();
+            String id = cursor.getString(cursor.getColumnIndex("_id"));
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+            names.add(name);
+        }
+
+
+        adapter = new SearchRecordAdapter(context,names);
+
         // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
-        adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
-                new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
+        /*adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
+                new int[] { android.R.id.text1 }, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);*/
         // 3. 设置适配器
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
