@@ -141,21 +141,21 @@ public class LocalDataEntity
 	}
 	public void setUserInfor(UserInfo userInfor)
 	{
-		/*sharedPre.setData(USER_ID, userInfor.getUserId());
-		sharedPre.setData(USER_TYPE, userInfor.getMemType());
-		sharedPre.setData(USER_NAME, userInfor.getUserName());
+		sharedPre.setData(USER_ID, userInfor.getId());
+		//sharedPre.setData(USER_TYPE, userInfor.getMemType());
+		sharedPre.setData(USER_NAME, userInfor.getNickName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
-		sharedPre.setData(USER_ACCOUNT, userInfor.getAccount());
-		sharedPre.setData(USER_HEAD, userInfor.getHead());
-		sharedPre.setData(USER_DEVICES, userInfor.getBindDevices());
-		sharedPre.setData(ADMIN, userInfor.isAdmin());
-		sharedPre.setData(PC_CODE, userInfor.getPcCode());
-		sharedPre.setData(SHOW_SYS_MUSIC_FLAG, userInfor.getShowSysMusicFlag());*/
+		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
+		//sharedPre.setData(USER_HEAD, userInfor.getHead());
+		//sharedPre.setData(USER_DEVICES, userInfor.getBindDevices());
+		//sharedPre.setData(ADMIN, userInfor.isAdmin());
+		sharedPre.setData(PC_CODE, userInfor.getMerchant().getBindCode());
+		//sharedPre.setData(SHOW_SYS_MUSIC_FLAG, userInfor.getShowSysMusicFlag());
 	}
 	public UserInfo getUserInfor()
 	{
 		UserInfo userInfor = new UserInfo();
-		/*String userId = sharedPre.getData(USER_ID, SystemUtils.getDeviceId(context));
+		String userId = sharedPre.getData(USER_ID, SystemUtils.getDeviceId(context));
 		String userName = sharedPre.getData(USER_NAME, "DG-" + Build.MODEL);
 		String userPwd = sharedPre.getData(USER_PWD, "");
 		String head = sharedPre.getData(USER_HEAD, "");
@@ -166,22 +166,22 @@ public class LocalDataEntity
 		String showSysMusicFlag = sharedPre.getData(SHOW_SYS_MUSIC_FLAG, "");
 		//String userIp = NetWorkUtils.getLocalIpAddress(context);
 		//boolean admin = sharedPre.getData(ADMIN, false);
-		userInfor.setUserId(userId);
-		userInfor.setUserName(userName);
-		userInfor.setHead(head);
-		userInfor.setMemType(userType);
-		userInfor.setPcCode(pcCode);
-		userInfor.setShowSysMusicFlag(showSysMusicFlag);
+		userInfor.setId(userId);
+		userInfor.setNickName(userName);
+		//userInfor.setHead(head);
+		//userInfor.setMemType(userType);
+		userInfor.getMerchant().setBindCode(pcCode);
+		//userInfor.setShowSysMusicFlag(showSysMusicFlag);
 		String selectDevice = getDeviceId();
-		if(!TextUtils.isEmpty(selectDevice) 
+		/*if(!TextUtils.isEmpty(selectDevice)
 				&& !TextUtils.isEmpty(userDevices)
 				&& userDevices.contains(selectDevice))
 			userInfor.setAdmin(true);
 		else
-			userInfor.setAdmin(false);
+			userInfor.setAdmin(false);*/
 		userInfor.setPwd(userPwd);
-		userInfor.setAccount(userAccount);
-		userInfor.setBindDevices(userDevices);*/
+		userInfor.setUsername(userAccount);
+		//userInfor.setBindDevices(userDevices);
 		//userInfor.setUserIp(userIp);
 		return userInfor;
 	}

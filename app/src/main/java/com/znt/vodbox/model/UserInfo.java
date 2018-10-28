@@ -17,6 +17,15 @@ public class UserInfo implements Serializable
     private String type = "";//0-系统管理管理员，1-客户总管理员，2-客户分区管理员  3-店长
     private String lastLoginIp = "";//
     private String lastLoginTime = "";//
+    private String pwd = "";
+    public String getPwd()
+    {
+        return pwd;
+    }
+    public void setPwd(String pwd)
+    {
+        this.pwd = pwd;
+    }
 
     public String getId() {
         return id;

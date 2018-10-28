@@ -21,12 +21,19 @@ public class SearchRecordAdapter extends BaseAdapter
 {
     private Context context = null;
 
+    private OnRecordDeleteListener mOnRecordDeleteListener = null;
+
     List<String> names = new ArrayList<>();
 
     public SearchRecordAdapter(Context context, List<String> names)
     {
         this.context = context;
         this.names = names;
+    }
+
+    public void setOnRecordDeleteListener(OnRecordDeleteListener mOnRecordDeleteListener)
+    {
+        this.mOnRecordDeleteListener = mOnRecordDeleteListener;
     }
 
     public List<String> getKeywords()
@@ -65,6 +72,14 @@ public class SearchRecordAdapter extends BaseAdapter
                 @Override
                 public void onClick(View view) {
 
+                    int index = (int) view.getTag();
+                    if(mOnRecordDeleteListener != null)
+                    {
+                        mOnRecordDeleteListener.onRecordDelete(names.get(index));
+                        names.remove(index);
+                        notifyDataSetChanged();
+                    }
+
                 }
             });
 
@@ -74,6 +89,7 @@ public class SearchRecordAdapter extends BaseAdapter
             vh = (ViewHolder)convertView.getTag();
 
         vh.tvName.setText(names.get(i));
+        vh.ivDelete.setTag(i);
 
         return convertView;
     }
@@ -82,5 +98,10 @@ public class SearchRecordAdapter extends BaseAdapter
     {
         TextView tvName = null;
         ImageView ivDelete = null;
+    }
+
+    public interface OnRecordDeleteListener
+    {
+        public void onRecordDelete(String name);
     }
 }

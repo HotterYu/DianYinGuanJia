@@ -190,7 +190,7 @@ public class PlanDetailActivity extends BaseActivity  implements
         itvDateStart.getBgView().setOnClickListener(this);
         itvDateEnd.getBgView().setOnClickListener(this);
 
-        if(mPlanInfo.isGroupPlan())
+        if(mPlanInfo != null && mPlanInfo.isGroupPlan())
         {
             switchButton.setChecked(true);
             showShops(true);
@@ -472,7 +472,7 @@ public class PlanDetailActivity extends BaseActivity  implements
             bundle.putSerializable("PLAN_INFO", mPlanInfo);
 
             bundle.putBoolean("IS_EDIT", false);
-            ViewUtils.startActivity(getActivity(), PlanCreateActivity.class, bundle, 2);
+            ViewUtils.startActivity(getActivity(), PlanCreateActivity.class, bundle, 1);
         }
         else if(v == itvMusics.getBgView())
         {

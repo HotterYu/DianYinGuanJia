@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.FragmentAdapter;
+import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.constants.Extras;
 import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.executor.ControlPanel;
@@ -30,6 +31,7 @@ import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.service.QuitTimer;
 import com.znt.vodbox.utils.SystemUtils;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 
@@ -102,6 +104,12 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         // add navigation header
         vNavigationHeader = LayoutInflater.from(this).inflate(R.layout.navigation_header, navigationView, false);
         navigationView.addHeaderView(vNavigationHeader);
+        vNavigationHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewUtils.startActivity(getActivity(),AccountActivity.class,null);
+            }
+        });
 
         // setup view pager
         mAllShopFragment = new AllShopFragment();
@@ -275,9 +283,28 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             return;
         }
 
+        if((System.currentTimeMillis() - touchTime) < 2000)
+        {
+            closeApp();
+            super.onBackPressed();
+            // TODO Auto-generated method stub
+        }
+        else
+        {
+            showToast("�ٰ�һ���˳� �����ܼ�");
+            touchTime = System.currentTimeMillis();
+        }
+
         super.onBackPressed();
     }
 
+    private long touchTime = 0;
+    private void closeApp()
+    {
+        closeAllActivity();
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(Bundle outState) {

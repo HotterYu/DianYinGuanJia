@@ -143,6 +143,7 @@
             android:name=".activity.SearchShopActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.ShopDetailActivity"></activity>
+        <activity android:name=".activity.AccountActivity"></activity>
     </application>
 
 </manifest>

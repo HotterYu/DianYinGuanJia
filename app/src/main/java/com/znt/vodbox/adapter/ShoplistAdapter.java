@@ -66,8 +66,12 @@ public class ShoplistAdapter extends BaseAdapter {
         Shopinfo shopinfo = shopList.get(position);
         holder.ivCover.setImageResource(R.drawable.icon_shop);
         holder.tvShopName.setText(shopinfo.getName());
-        holder.tvCurSong.setText(shopinfo.getTmlRunStatus().get(0).getPlayingSong());
-        holder.tvOnlineTime.setText(shopinfo.getTmlRunStatus().get(0).getLastConnTime());
+        if(shopinfo.getTmlRunStatus() != null && shopinfo.getTmlRunStatus().size() >0)
+        {
+            holder.tvCurSong.setText(shopinfo.getTmlRunStatus().get(0).getPlayingSong());
+            holder.tvOnlineTime.setText(shopinfo.getTmlRunStatus().get(0).getLastConnTime());
+        }
+
         holder.tvAddr.setText(shopinfo.getAddress());
         holder.ivMore.setOnClickListener(v -> {
             if (listener != null) {

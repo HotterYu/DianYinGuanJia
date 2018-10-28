@@ -138,7 +138,6 @@ public class AlbumMusicActivity extends BaseActivity implements
         String pageSize = "100";
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
-        mSearchView.showRecordView(false);
         try
         {
             // Simulate network access.
@@ -151,7 +150,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                                 dataList = resultBean.getData();
                                 mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
                                 tvTopTitle.setText(mAlbumInfo.getName() + "(" + resultBean.getMessage() + ")");
-
+                                mSearchView.showRecordView(false);
                             }
                             else
                             {

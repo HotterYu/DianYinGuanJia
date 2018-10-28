@@ -31,6 +31,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.dialog.MusicPlayDialog;
 import com.znt.vodbox.dialog.MyAlertDialog;
 import com.znt.vodbox.dialog.MyProgressDialog;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.service.PlayService;
 import com.znt.vodbox.storage.preference.Preferences;
 import com.znt.vodbox.utils.PermissionReq;
@@ -48,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected PlayService playService;
     private ServiceConnection serviceConnection;
     private ProgressDialog progressDialog;
+    private LocalDataEntity localData = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         handler = new Handler(Looper.getMainLooper());
         bindService();
+        localData = new LocalDataEntity(getActivity());
+    }
+
+    public LocalDataEntity getLocalData()
+    {
+        return localData;
+    }
+
+    public void closeAllActivity()
+    {
+        MyActivityManager.getScreenManager().popAllActivityExceptionOne(null);
     }
 
     public Activity getActivity()

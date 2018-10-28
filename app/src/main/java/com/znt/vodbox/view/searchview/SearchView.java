@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -161,8 +162,8 @@ public class SearchView extends LinearLayout {
                     // 注：由于此处需求会根据自身情况不同而不同，所以具体逻辑由开发者自己实现，此处仅留出接口
                     if (!(mCallBack == null)){
                         mCallBack.SearchAciton(et_search.getText().toString());
-                        showRecordView(false);
-                    }
+
+                    }showRecordView(false);
                     //Toast.makeText(context, "需要搜索的是" + et_search.getText(), Toast.LENGTH_SHORT).show();
 
                     // 2. 点击搜索键后，对该搜索字段在数据库是否存在进行检查（查询）->> 关注1
@@ -215,6 +216,7 @@ public class SearchView extends LinearLayout {
                 showRecordView(true);
             }
         });
+
 
 
         /**
@@ -318,6 +320,13 @@ public class SearchView extends LinearLayout {
 
 
         adapter = new SearchRecordAdapter(context,names);
+        adapter.setOnRecordDeleteListener(new SearchRecordAdapter.OnRecordDeleteListener() {
+            @Override
+            public void onRecordDelete(String name) {
+
+                deleteData(name);
+            }
+        });
 
         // 2. 创建adapter适配器对象 & 装入模糊搜索的结果
         /*adapter = new SimpleCursorAdapter(context, android.R.layout.simple_list_item_1, cursor, new String[] { "name" },
@@ -331,10 +340,10 @@ public class SearchView extends LinearLayout {
         {
             showRecordView(true);
         }
-        else
+        /*else
         {
             showRecordView(false);
-        };
+        };*/
 
     }
 
@@ -352,6 +361,8 @@ public class SearchView extends LinearLayout {
         }
         else
         {
+            InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(this.getWindowToken(), 0);
             tv_clear.setVisibility(GONE);
             svSearchRecord.setVisibility(GONE);
         }
@@ -380,6 +391,12 @@ public class SearchView extends LinearLayout {
         return cursor.moveToNext();
     }
 
+    private void deleteData(String tempName) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        db.execSQL("delete from records where name=?", new String[]{tempName});
+        db.close();
+    }
+
     /**
      * 关注4
      * 插入数据到数据库，即写入搜索字段到历史搜索记录
@@ -405,4 +422,6 @@ public class SearchView extends LinearLayout {
         this.bCallBack = bCallBack;
 
     }
+
+
 }

@@ -122,7 +122,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
             return;
         }
 
-        vSearching.setVisibility(View.VISIBLE);
+        vSearching.setVisibility(View.GONE);
 
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
@@ -145,12 +145,14 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
                             vSearching.setVisibility(View.GONE);
+
                             listView.stopRefresh();
                             if(resultBean.getResultcode().equals("1"))
                             {
                                 shopinfoList = resultBean.getData();
                                 tvTopTitle.setText("搜索店铺("+resultBean.getMessage()+")");
                                 adapter.notifyDataSetChanged(shopinfoList);
+                                mSearchView.showRecordView(false);
                             }
                             else
                             {
@@ -231,4 +233,15 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
     public void onLoadMore() {
         loadShops();
     }
+
+      @Override
+      public void onBackPressed()
+      {
+          if(mSearchView.isRecordViewShow())
+          {
+              mSearchView.showRecordView(false);
+              return;
+          }
+          super.onBackPressed();
+      }
 }

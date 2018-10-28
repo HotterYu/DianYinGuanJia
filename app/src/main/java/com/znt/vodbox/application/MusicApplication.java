@@ -24,4 +24,6 @@ public class MusicApplication extends Application {
         Intent intent = new Intent(this, PlayService.class);
         startService(intent);
     }
+
+    public static  boolean isLogin = false;
 }

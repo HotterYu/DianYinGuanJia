@@ -99,6 +99,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
                     }
                     else
                     {
+                        showToast(resultBean.getMessage());
                         //shopinfoList.clear();
                     }
 
@@ -107,12 +108,16 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
                 @Override
                 public void onFail(Exception e) {
                     listView.stopRefresh();
+                    showToast(e.getMessage());
                 }
             });
         }
         catch (Exception e)
         {
-
+            if(e!=null)
+                showToast(e.getMessage());
+            else
+                showToast(getResources().getString(R.string.request_fail));
         }
     }
 
@@ -135,18 +140,22 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
                     {
                         //shopinfoList.clear();
                     }
-
+                    showToast(resultBean.getMessage());
                 }
 
                 @Override
                 public void onFail(Exception e) {
                     listView.stopRefresh();
+                    showToast(e.getMessage());
                 }
             });
         }
         catch (Exception e)
         {
-
+            if(e!=null)
+                showToast(e.getMessage());
+            else
+                showToast(getResources().getString(R.string.request_fail));
         }
     }
 
