@@ -157,5 +157,7 @@
     <string name="title_activity_shop_zone">ShopZoneActivity</string>
     <string name="title_activity_add_shop">Sign in</string>
 
+    <string name="app_close_hint">再按一次退出店音</string>
+
 
 </resources>

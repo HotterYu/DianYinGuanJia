@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.FragmentAdapter;
-import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.constants.Extras;
 import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.executor.ControlPanel;
@@ -291,11 +290,11 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         }
         else
         {
-            showToast("�ٰ�һ���˳� �����ܼ�");
+            showToast(getResources().getString(R.string.app_close_hint));
             touchTime = System.currentTimeMillis();
         }
 
-        super.onBackPressed();
+        //super.onBackPressed();
     }
 
     private long touchTime = 0;
