@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <View
         android:id="@+id/v_all_shop_playing"
-        android:layout_width="3dp"
+        android:layout_width="2dp"
         android:layout_height="50dp"
         android:layout_marginRight="3dp"
         android:background="@color/red"
         android:contentDescription="@null"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_all_shop_cover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_gravity="top"
+        android:layout_marginTop="4dp"
         android:scaleType="fitXY"
         android:src="@drawable/icon_shop" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            >
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -39,14 +43,34 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_all_shop_name"
-                    style="@style/AppTheme.Text"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textSize="@dimen/text_size_common" />
+                    android:orientation="horizontal"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_all_shop_name"
+                        style="@style/AppTheme.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textSize="@dimen/text_size_common" />
+
+                    <TextView
+                        android:id="@+id/tv_all_shop_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/grey"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tv_all_shop_curplay"
@@ -56,7 +80,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_all_shop_addr"
@@ -66,7 +90,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/tv_all_shop_online_time"
@@ -80,9 +104,29 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/tv_all_shop_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/tv_all_shop_dev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/iv_all_shop_more"
-                android:layout_width="50dp"
+                android:layout_width="32dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/music_list_more_bg_selector"
                 android:contentDescription="@null"

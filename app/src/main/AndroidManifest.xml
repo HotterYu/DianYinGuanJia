@@ -144,6 +144,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.ShopDetailActivity"></activity>
         <activity android:name=".activity.AccountActivity"></activity>
+        <activity android:name=".activity.ShopSettingActivity"></activity>
     </application>
 
 </manifest>

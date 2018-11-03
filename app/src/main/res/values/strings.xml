@@ -160,4 +160,65 @@
     <string name="app_close_hint">再按一次退出店音</string>
 
 
+    <string name="dev_status_online">在线</string>
+    <string name="dev_status_offline">离线</string>
+    <string name="dev_group_belong_hint">所属分区：</string>
+    <string name="dev_group_belong_none">未分区</string>
+    <string name="dev_shop_addr_none">位置未知</string>
+    <string name="dev_shop_play_none">未播放</string>
+    <string name="dev_shop_none_device">该店铺下没有设备</string>
+    <string name="dev_shop_detail">店铺详情</string>
+    <string name="dev_shop_detail_push_hint">插播</string>
+    <string name="dev_shop_detail_volume_hint">音量</string>
+    <string name="dev_shop_detail_play_pre">上一首</string>
+    <string name="dev_shop_detail_play_status">播放</string>
+    <string name="dev_shop_detail_play_next">下一首</string>
+    <string name="dev_shop_detail_cur_play_count">当前播放列表</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <string name="itv_shop_setting_name">&#160;&#160;&#160;&#160;设备名称:</string>
+    <string name="itv_shop_setting_addr">&#160;&#160;&#160;&#160;设备地址:</string>
+    <string name="itv_shop_setting_oritation">&#160;&#160;&#160;&#160;屏幕方向:</string>
+    <string name="itv_shop_setting_last_online_time">&#160;&#160;&#160;&#160;上次连接:</string>
+    <string name="itv_shop_setting_dead_time">&#160;&#160;&#160;&#160;到期时间:</string>
+    <string name="itv_shop_setting_version">&#160;&#160;&#160;&#160;设备版本:</string>
+    <string name="itv_shop_setting_wifi_name">&#160;&#160;&#160;&#160;WIFI信息:</string>
+    <string name="itv_shop_setting_wifi_pwd">&#160;&#160;&#160;&#160;WIFI密码:</string>
+    <string name="itv_shop_setting_ip">&#160;&#160;&#160;&#160;IP&#160;&#160;地&#160;址:</string>
+    <string name="itv_shop_setting_storage">&#160;&#160;&#160;&#160;其他信息:</string>
+
+    <string name="shop_detail_setting">店铺设置</string>
+
+    <string name="over_time">到期时间</string>
+    <string name="over_time_end">已过期</string>
+    <string name="all_ever">永久有效</string>
+
+    <string name="video_oritation_1">不旋转</string>
+    <string name="video_oritation_2">旋转90度</string>
+    <string name="video_oritation_3">旋转180度</string>
+    <string name="video_oritation_4">旋转270度</string>
+    <string name="video_oritation_5">缩放居中</string>
+    <string name="video_oritation_6">缩放靠左</string>
+    <string name="video_oritation_7">缩放靠右</string>
+    <string name="video_oritation_8">充满屏幕</string>
+    <string name="video_oritation_9">原始左上角</string>
+    <string name="video_oritation_10">原始右上角</string>
+    <string name="video_oritation_11">原始左下角</string>
+    <string name="video_oritation_12">原始右下角</string>
+    <string name="screen_oritiontion">视频设置</string>
+
+    <string name="name_not_change">名称没有改变</string>
+    <string name="please_input_content">请输入内容</string>
+
 </resources>

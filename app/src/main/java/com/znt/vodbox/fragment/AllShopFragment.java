@@ -62,7 +62,7 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new ShoplistAdapter(shopinfoList);
+        adapter = new ShoplistAdapter(getActivity(),shopinfoList);
         adapter.setOnMoreClickListener(this);
 
         fab.setOnClickListener(new View.OnClickListener()
@@ -165,10 +165,11 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
             position = position - 1;
         Shopinfo tempShop = shopinfoList.get(position);
         Bundle bundle = new Bundle();
-        bundle.putBoolean("IS_EDIT", true);
+        /*bundle.putBoolean("IS_EDIT", true);
         if(tempShop.getGroup() != null)
             bundle.putString("GROUP_ID",tempShop.getGroup().getId());
-        bundle.putString("SHOP_IDS",tempShop.getId());
+        bundle.putString("SHOP_IDS",tempShop.getId());*/
+        bundle.putSerializable("SHOP_INFO",tempShop);
         ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
     }
 

@@ -68,7 +68,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         });
 
 
-        adapter = new ShoplistAdapter(shopinfoList);
+        adapter = new ShoplistAdapter(getActivity(),shopinfoList);
         adapter.setOnMoreClickListener(this);
 
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));

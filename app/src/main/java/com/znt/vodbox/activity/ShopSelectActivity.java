@@ -1,7 +1,5 @@
 package com.znt.vodbox.activity;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,11 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -75,7 +70,7 @@ public class ShopSelectActivity extends BaseActivity  implements
         listView.setRefreshTime();
         listView.setOnItemClickListener(this);
 
-        adapter = new ShoplistAdapter(shopinfoList);
+        adapter = new ShoplistAdapter(getActivity(),shopinfoList);
         listView.setAdapter(adapter);
 
         listView.onFresh();
