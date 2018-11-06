@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
+import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.entity.Constant;
@@ -55,6 +57,8 @@ public class AlbumMusicActivity extends BaseActivity implements
 
     private AlbumMusiclistAdapter mAlbumMusiclistAdapter = null;
 
+
+    private int curMusicSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -149,7 +153,9 @@ public class AlbumMusicActivity extends BaseActivity implements
                             {
                                 dataList = resultBean.getData();
                                 mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
-                                tvTopTitle.setText(mAlbumInfo.getName() + "(" + resultBean.getMessage() + ")");
+                                if(!TextUtils.isEmpty(resultBean.getMessage()))
+                                    curMusicSize = Integer.parseInt(resultBean.getMessage());
+                                tvTopTitle.setText(mAlbumInfo.getName() + "(" + curMusicSize + ")");
                                 mSearchView.showRecordView(false);
                             }
                             else
@@ -173,6 +179,59 @@ public class AlbumMusicActivity extends BaseActivity implements
             listView.stopRefresh();
         }
 
+    }
+
+    public void deleteAlbumMusic(String musicIds)
+    {
+        try
+        {
+            String token = Constant.mUserInfo.getToken();
+            String albumId = mAlbumInfo.getId();
+
+            HttpClient.deleteAlbumMusics(token, albumId, musicIds, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null)
+                    {
+                        int deleteCount = updateDeleteMusicList(musicIds);
+                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
+                        dismissDialog();
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private int updateDeleteMusicList(String musicIds)
+    {
+        String[] ids = musicIds.split(",");
+        int len = ids.length;
+        for(int i=0;i<len;i++)
+        {
+            String deleteMusicId = ids[i];
+            for(int j=0;j<dataList.size();j++)
+            {
+                String id = dataList.get(j).getId();
+                if(deleteMusicId.equals(id))
+                {
+                    dataList.remove(j);
+                }
+            }
+        }
+        mAlbumMusiclistAdapter.notifyDataSetChanged();
+        return ids.length;
     }
 
     @Override
@@ -231,7 +290,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                         @Override
                         public void onClick(View view)
                         {
-                            //deleteMusic(music);
+                            deleteAlbumMusic(tempInfo.getId());
                         }
                     }, "", "确定删除该文件吗?");
                     break;

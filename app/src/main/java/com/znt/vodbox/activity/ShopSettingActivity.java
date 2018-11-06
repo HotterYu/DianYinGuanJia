@@ -99,7 +99,8 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		itvWifiName.showMoreButton(true);
 		
 		
-		if(!TextUtils.isEmpty(deviceInfor.getTmlRunStatus().get(0).getExpiredTime()))
+		if(deviceInfor.getTmlRunStatus().size() > 0 &&
+				!TextUtils.isEmpty(deviceInfor.getTmlRunStatus().get(0).getExpiredTime()))
 		{
 			long endTime = Long.parseLong(deviceInfor.getTmlRunStatus().get(0).getExpiredTime());
 			if(endTime > 0 && endTime < System.currentTimeMillis())

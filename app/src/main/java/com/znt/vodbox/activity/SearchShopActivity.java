@@ -140,7 +140,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode
+            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {

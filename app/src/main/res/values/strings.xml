@@ -9,7 +9,9 @@
     <string name="loading">努力加载中…</string>
     <string name="load_fail">加载失败，请检查网络后重试</string>
     <string name="request_fail">加载失败</string>
-    <string name="all_shops">我的店铺</string>
+    <string name="all_shops">全部店铺</string>
+    <string name="all_online_shops">在线店铺</string>
+    <string name="all_offline_shops">离线店铺</string>
     <string name="local_music">本地音乐</string>
     <string name="online_music">在线音乐</string>
     <string name="plan_media_plan">播放计划</string>
@@ -102,6 +104,7 @@
 
     <string name="add_shop">添加店铺</string>
     <string name="my_album">我的歌单</string>
+    <string name="sys_album">系统歌单</string>
     <string name="add_album">创建歌单</string>
     <string name="modify_album">修改歌单</string>
     <string name="select_album">选择歌单</string>

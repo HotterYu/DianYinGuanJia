@@ -99,6 +99,9 @@
             android:name=".activity.MyAlbumActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".activity.SystemAlbumActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".activity.AlbumMusicActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity

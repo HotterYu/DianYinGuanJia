@@ -35,8 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-public class AllShopFragment extends BaseFragment implements LJListView.IXListViewListener,AdapterView.OnItemClickListener, OnMoreClickListener {
+public class OnlineShopFragment extends BaseFragment implements LJListView.IXListViewListener,AdapterView.OnItemClickListener, OnMoreClickListener {
     @Bind(R.id.lv_all_shops)
     private LJListView listView;
     @Bind(R.id.tv_all_shops_loading)
@@ -115,11 +114,12 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
         String name = "";
         String shopCode = "";
         String userShopCode = "";
+        String onlinestatus = "1";
 
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,onlinestatus
                     , new HttpCallback<ShopListResultBean>() {
                 @Override
                 public void onSuccess(ShopListResultBean resultBean) {

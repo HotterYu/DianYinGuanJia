@@ -93,7 +93,7 @@ public class ShopSelectActivity extends BaseActivity  implements
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode
+            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {

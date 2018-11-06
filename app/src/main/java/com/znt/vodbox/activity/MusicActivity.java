@@ -23,9 +23,9 @@ import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.executor.ControlPanel;
 import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.fragment.AllShopFragment;
-import com.znt.vodbox.fragment.MyAlbumFragment_ORG;
+import com.znt.vodbox.fragment.OfflineShopFragment;
+import com.znt.vodbox.fragment.OnlineShopFragment;
 import com.znt.vodbox.fragment.PlayFragment;
-import com.znt.vodbox.fragment.SheetListFragment;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.service.QuitTimer;
@@ -57,8 +57,10 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
     private View vNavigationHeader;
     private AllShopFragment mAllShopFragment;
-    private MyAlbumFragment_ORG mMyAlbumFragment;
-    private SheetListFragment mSheetListFragment;
+    private OnlineShopFragment mOnlineShopFragment;
+    private OfflineShopFragment mOfflineShopFragment;
+    /*private MyAlbumFragment_ORG mMyAlbumFragment;
+    private SheetListFragment mSheetListFragment;*/
     private PlayFragment mPlayFragment;
     private ControlPanel controlPanel;
     private NaviMenuExecutor naviMenuExecutor;
@@ -112,12 +114,16 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
         // setup view pager
         mAllShopFragment = new AllShopFragment();
-        mMyAlbumFragment = new MyAlbumFragment_ORG();
-        mSheetListFragment = new SheetListFragment();
+        mOnlineShopFragment = new OnlineShopFragment();
+        mOfflineShopFragment = new OfflineShopFragment();
+        /*mMyAlbumFragment = new MyAlbumFragment_ORG();
+        mSheetListFragment = new SheetListFragment();*/
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
         adapter.addFragment(mAllShopFragment);
-        adapter.addFragment(mMyAlbumFragment);
-        adapter.addFragment(mSheetListFragment);
+        adapter.addFragment(mOnlineShopFragment);
+        adapter.addFragment(mOfflineShopFragment);
+        //adapter.addFragment(mMyAlbumFragment);
+        //adapter.addFragment(mSheetListFragment);
         mViewPager.setAdapter(adapter);
 
         mViewPager.setOffscreenPageLimit(2);
@@ -126,6 +132,18 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
             @Override
             public void onCountGetBack(String count) {
                 tvAllShops.setText(getResources().getString(R.string.all_shops) + "(" + count + ")");
+            }
+        });
+        mOnlineShopFragment.setOnCountGetCallBack(new OnCountGetCallBack() {
+            @Override
+            public void onCountGetBack(String count) {
+                tvLocalMusic.setText(getResources().getString(R.string.all_online_shops) + "(" + count + ")");
+            }
+        });
+        mOfflineShopFragment.setOnCountGetCallBack(new OnCountGetCallBack() {
+            @Override
+            public void onCountGetBack(String count) {
+                tvOnlineMusic.setText(getResources().getString(R.string.all_offline_shops) + "(" + count + ")");
             }
         });
 
@@ -141,6 +159,8 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         navigationView.setNavigationItemSelectedListener(this);
 
         mAllShopFragment.setUserInfo(mUserInfo);
+        mOnlineShopFragment.setUserInfo(mUserInfo);
+        mOfflineShopFragment.setUserInfo(mUserInfo);
 
     }
 
@@ -309,8 +329,10 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(Keys.VIEW_PAGER_INDEX, mViewPager.getCurrentItem());
         mAllShopFragment.onSaveInstanceState(outState);
-        mMyAlbumFragment.onSaveInstanceState(outState);
-        mSheetListFragment.onSaveInstanceState(outState);
+        mOnlineShopFragment.onSaveInstanceState(outState);
+        mOfflineShopFragment.onSaveInstanceState(outState);
+        //mMyAlbumFragment.onSaveInstanceState(outState);
+        //mSheetListFragment.onSaveInstanceState(outState);
     }
 
     @Override
@@ -318,8 +340,8 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         mViewPager.post(() -> {
             mViewPager.setCurrentItem(savedInstanceState.getInt(Keys.VIEW_PAGER_INDEX), false);
             //mAllShopFragment.onRestoreInstanceState(savedInstanceState);
-            mMyAlbumFragment.onRestoreInstanceState(savedInstanceState);
-            mSheetListFragment.onRestoreInstanceState(savedInstanceState);
+            //mMyAlbumFragment.onRestoreInstanceState(savedInstanceState);
+            //mSheetListFragment.onRestoreInstanceState(savedInstanceState);
         });
     }
 

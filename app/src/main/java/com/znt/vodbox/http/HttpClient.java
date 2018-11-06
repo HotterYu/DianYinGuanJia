@@ -225,7 +225,7 @@ public class HttpClient extends HttpApi{
     }
 
     public static void getAllShops(String token, String pageNo, String pageSize,String merchId, String groupId, String memberId,
-                                   String name, String shopCode, String userShopCode,
+                                   String name, String shopCode, String userShopCode, String onlinestatus,
                                    @NonNull final HttpCallback<ShopListResultBean> callback) {
         OkHttpUtils.post().url(GET_SHOP_LIST)
                 .addHeader("token", token)
@@ -236,6 +236,7 @@ public class HttpClient extends HttpApi{
                 .addParams("name", name)
                 .addParams("shopCode", shopCode)
                 .addParams("userShopCode", userShopCode)
+                .addParams("onlineStatus", onlinestatus)
                 .addParams("pageSize", pageSize)
                 .addParams("pageNo", pageNo)
                 .build()
@@ -302,6 +303,33 @@ public class HttpClient extends HttpApi{
                 .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
                     @Override
                     public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void deleteAlbumMusics(String token,String id, String musicIds,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(DELETE_ALBUM_MUSICS)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("musicIds", musicIds)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else
