@@ -39,7 +39,16 @@ public class StringUtils
 	private static long STOREUNIT = 1024;
 
 
-	
+
+	public static boolean isNumeric(String str){
+		Pattern pattern = Pattern.compile("[0-9]*");
+		Matcher isNum = pattern.matcher(str);
+		if( !isNum.matches() ){
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	* @Description: 瀛楃涓茬┖鍒ゆ柇
 	* @param @param value

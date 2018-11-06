@@ -29,6 +29,7 @@ import com.znt.vodbox.executor.ShareOnlineMusic;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.SearchMusic;
+import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.ToastUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
@@ -50,6 +51,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements SearchVie
     private AlbumMusiclistAdapter mAlbumMusiclistAdapter = new AlbumMusiclistAdapter(dataList);
 
     private String albumId = "";
+    private Shopinfo mShopinfo = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements SearchVie
         setContentView(R.layout.activity_search_system_music);
 
         albumId = getIntent().getStringExtra("ALBUM_ID");
+        mShopinfo = (Shopinfo)getIntent().getSerializableExtra("SHOP_INFO");
 
     }
 
@@ -152,31 +155,70 @@ public class SearchSystemMusicActivity extends BaseActivity implements SearchVie
         }
     }
 
+    private void pushMedia(String terminId)
+    {
+        String type = "1";
+        String dataId = "";
+        String userId = Constant.mUserInfo.getMerchant().getId();
+        String pusherid = "";
+        String pushername = Constant.mUserInfo.getNickName();
+        try
+        {
+            // Simulate network access.
+            HttpClient.pushMedia(terminId, type, dataId, userId,pusherid,pushername, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+
+                    if(resultBean != null)
+                    {
+                        if(!resultBean.isSuccess())
+                        {
+                            ToastUtils.show(getResources().getString(R.string.push_fail)+":"+resultBean.getMessage());
+                        }
+                        else
+                        {
+                            ToastUtils.show(getResources().getString(R.string.push_success));
+
+                            finish();
+                        }
+                    }
+                    else
+                    {
+                        ToastUtils.show(getResources().getString(R.string.push_fail));
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    ToastUtils.show(getResources().getString(R.string.push_fail));
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            ToastUtils.show(getResources().getString(R.string.push_fail));
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         MediaInfo tempInfor = dataList.get(position);
-        showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());
 
-        /*new PlaySearchedMusic(this, dataList.get(position)) {
-            @Override
-            public void onPrepare() {
-                showProgress();
-            }
+        if(mShopinfo == null)
+        {
+            showPlayDialog(tempInfor.getMusicName(), tempInfor.getMusicUrl(), tempInfor.getId());
+        }
+        else
+        {
+            showPlayDialog(tempInfor.getMusicName(), tempInfor.getMusicUrl(), tempInfor.getId(), new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pushMedia(mShopinfo.getId());
+                    dismissDialog();
+                }
+            });
 
-            @Override
-            public void onExecuteSuccess(Music music) {
-                cancelProgress();
-                AudioPlayer.get().addAndPlay(music);
-                ToastUtils.show("已添加到播放列表");
-            }
-
-            @Override
-            public void onExecuteFail(Exception e) {
-                cancelProgress();
-                ToastUtils.show(R.string.unable_to_play);
-            }
-        }.execute();*/
+        }
     }
 
     @Override
@@ -202,13 +244,21 @@ public class SearchSystemMusicActivity extends BaseActivity implements SearchVie
 
                     break;
                 case 1://
-                    Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("MEDIA_NAME",tempInfo.getMusicName());
-                    b.putString("MEDIA_ID",tempInfo.getId());
-                    b.putString("MEDIA_URL",tempInfo.getMusicUrl());
-                    intent.putExtras(b);
-                    startActivity(intent);
+                    if(mShopinfo == null)
+                    {
+                        Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("MEDIA_NAME",tempInfo.getMusicName());
+                        b.putString("MEDIA_ID",tempInfo.getId());
+                        b.putString("MEDIA_URL",tempInfo.getMusicUrl());
+                        intent.putExtras(b);
+                        startActivity(intent);
+                    }
+                    else
+                    {
+                        pushMedia(mShopinfo.getId());
+                    }
+
                     //requestSetRingtone(music);
                     break;
                 case 2://

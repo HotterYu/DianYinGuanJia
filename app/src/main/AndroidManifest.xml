@@ -143,6 +143,9 @@
             android:name=".activity.SearchSystemMusicActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".activity.GrouShopActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".activity.SearchShopActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.ShopDetailActivity"></activity>

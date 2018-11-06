@@ -383,11 +383,11 @@ public class GroupListActivity extends BaseActivity implements
         }
         else
         {
-            /*Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+            Intent intent = new Intent(getActivity(), GrouShopActivity.class);
             Bundle b = new Bundle();
-            b.putSerializable("MEDIA_INFO",tempInfor);
+            b.putSerializable("GROUP_INFO",tempInfor);
             intent.putExtras(b);
-            startActivity(intent);*/
+            startActivity(intent);
         }
 
     }

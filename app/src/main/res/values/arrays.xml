@@ -48,8 +48,15 @@
         <item>歌单详情</item>
     </string-array>
 
+
+
     <string-array name="shop_list_dialog">
         <item>添加到分区</item>
+        <item>插播歌曲</item>
+        <item>店铺详情</item>
+    </string-array>
+    <string-array name="group_shop_dialog">
+        <item>移除分区</item>
         <item>插播歌曲</item>
         <item>店铺详情</item>
     </string-array>

@@ -51,6 +51,7 @@ public class AlbumMusicActivity extends BaseActivity implements
 
 
     private AlbumInfo mAlbumInfo = null;
+    private boolean isSystemAlbum = false;
 
     private List<MediaInfo> dataList = new ArrayList<>();
 
@@ -67,6 +68,8 @@ public class AlbumMusicActivity extends BaseActivity implements
         setContentView(R.layout.activity_album_music);
 
         mAlbumInfo = (AlbumInfo) getIntent().getSerializableExtra("ALBUM_INFO");
+        isSystemAlbum = getIntent().getBooleanExtra("IS_SYSTEM_ALBUM", false);
+
 
         mSearchView.init("album_music_record.db");
         mSearchView.showRecordView(false);
@@ -74,7 +77,10 @@ public class AlbumMusicActivity extends BaseActivity implements
         tvTopTitle.setText(mAlbumInfo.getName());
         ivTopMore.setVisibility(View.GONE);
         tvConfirm.setVisibility(View.VISIBLE);
-        tvConfirm.setText("添加");
+        if(isSystemAlbum)
+            tvConfirm.setText("收藏");
+        else
+            tvConfirm.setText("添加");
 
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,10 +93,16 @@ public class AlbumMusicActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
 
-                Bundle bundle = new Bundle();
-                bundle.putString("ALBUM_ID", mAlbumInfo.getId());
-                ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
-
+                if(isSystemAlbum)
+                {
+                    collectAlbum();
+                }
+                else
+                {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ALBUM_ID", mAlbumInfo.getId());
+                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
+                }
             }
         });
 
@@ -196,6 +208,41 @@ public class AlbumMusicActivity extends BaseActivity implements
                         int deleteCount = updateDeleteMusicList(musicIds);
                         tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
                         dismissDialog();
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    public void collectAlbum()
+    {
+        try
+        {
+            String token = Constant.mUserInfo.getToken();
+            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String albumId = mAlbumInfo.getId();
+
+            HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null)
+                    {
+                        finish();
+                        /*int deleteCount = updateDeleteMusicList(musicIds);
+                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
+                        dismissDialog();*/
                     }
                     else
                     {

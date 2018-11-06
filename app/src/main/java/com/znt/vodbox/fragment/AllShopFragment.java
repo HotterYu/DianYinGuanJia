@@ -17,6 +17,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
+import com.znt.vodbox.activity.SearchSystemMusicActivity;
 import com.znt.vodbox.activity.ShopDetailActivity;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.ShoplistAdapter;
@@ -189,7 +190,9 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
                     ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
                     break;
                 case 1://
-                    //requestSetRingtone(music);
+                    Bundle bundle2 = new Bundle();
+                    bundle2.putSerializable("SHOP_INFO",tempShop);
+                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
                     break;
                 case 2://
                     Bundle bundle1 = new Bundle();

@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
+import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -222,12 +223,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         showProgress(false);
                         UserInfo userInfo = tempInfor.getData();
                         Constant.mUserInfo = userInfo;
-
+                        userInfo.setPwd(mPasswordView.getText().toString());
+                        getLocalData().setUserInfor(userInfo);
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 
                         if(userInfo != null)
                         {
+                            MusicApplication.isLogin = true;
                             Intent intent = new Intent(LoginActivity.this, MusicActivity.class);
                             Bundle b = new Bundle();
                             b.putSerializable("USER_INFO",userInfo);

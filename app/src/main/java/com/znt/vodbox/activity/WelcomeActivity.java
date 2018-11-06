@@ -5,13 +5,24 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
 import com.znt.vodbox.R;
+import com.znt.vodbox.application.MusicApplication;
+import com.znt.vodbox.bean.UserCallBackBean;
+import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
+import com.znt.vodbox.http.HttpCallback;
+import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.SharedPreferencesUtil;
 import com.znt.vodbox.utils.binding.Bind;
 
@@ -73,15 +84,25 @@ public class WelcomeActivity extends Activity {
         set.setDuration(ANIM_TIME).play(animatorX).with(animatorY);
         set.start();
 
+        final boolean result = attemptLogin();
+
         set.addListener(new AnimatorListenerAdapter()
         {
 
             @Override
             public void onAnimationEnd(Animator animation)
             {
+                /*if(MusicApplication.isLogin)
+                {
+                    startActivity(new Intent(WelcomeActivity.this, MusicActivity.class));
+                }
+                else*/
+                if(!result)
+                {
+                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    WelcomeActivity.this.finish();
+                }
 
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                WelcomeActivity.this.finish();
             }
         });
     }
@@ -98,5 +119,60 @@ public class WelcomeActivity extends Activity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private boolean attemptLogin() {
+
+        UserInfo userInfo = LocalDataEntity.newInstance(getApplicationContext()).getUserInfor();
+
+        // Store values at the time of the login attempt.
+        String email = userInfo.getUsername();
+        String password = userInfo.getPwd();
+
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password))
+            return false;
+
+        try
+        {
+            // Simulate network access.
+            HttpClient.userLogin(email, password, new HttpCallback<UserCallBackBean>() {
+                @Override
+                public void onSuccess(UserCallBackBean tempInfor) {
+
+                    UserInfo userInfo = tempInfor.getData();
+                    Constant.mUserInfo = userInfo;
+
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    if(userInfo != null)
+                    {
+                        MusicApplication.isLogin = true;
+                        Intent intent = new Intent(WelcomeActivity.this, MusicActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("USER_INFO",userInfo);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else
+                    {
+                        //showProgress(false);
+                        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    }
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        }
+
+        return true;
     }
 }

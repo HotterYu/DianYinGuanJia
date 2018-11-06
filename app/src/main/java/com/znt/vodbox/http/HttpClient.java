@@ -224,6 +224,33 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void removeGroupShop(String token,String id,String shopIds,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(REMOVE_GROUP_SHOP)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("shopIds", shopIds)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getAllShops(String token, String pageNo, String pageSize,String merchId, String groupId, String memberId,
                                    String name, String shopCode, String userShopCode, String onlinestatus,
                                    @NonNull final HttpCallback<ShopListResultBean> callback) {
@@ -291,6 +318,36 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void getSystemAlbums(String token, String pageNo, String pageSize,String typeId, String name,@NonNull final HttpCallback<AlbumListResultBean> callback) {
+        OkHttpUtils.post().url(GET_SYS_ALBUMS)
+                .addHeader("token", token)
+                .addParams("typeId", typeId)
+                .addParams("typeId", typeId)
+                .addParams("name", name)
+                .addParams("pageSize", pageSize)
+                .addParams("pageNo", pageNo)
+                .build()
+                .execute(new BaseHttpCallback<AlbumListResultBean>(AlbumListResultBean.class) {
+                    @Override
+                    public void onResponse(AlbumListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getAlbumMusics(String token, String pageNo, String pageSize,String id, String searchWord
             ,@NonNull final HttpCallback<MusicListResultBean> callback) {
         OkHttpUtils.post().url(GET_ALBUM_MUSICS)
@@ -326,6 +383,33 @@ public class HttpClient extends HttpApi{
                 .addHeader("token", token)
                 .addParams("id", id)
                 .addParams("musicIds", musicIds)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void collectAlbum(String token,String categoryid, String merchId,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(COLLECT_ALBUM)
+                .addHeader("token", token)
+                .addParams("categoryid", categoryid)
+                .addParams("merchId", merchId)
                 .build()
                 .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override

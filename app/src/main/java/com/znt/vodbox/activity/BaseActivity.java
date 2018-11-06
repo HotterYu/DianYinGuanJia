@@ -229,6 +229,24 @@ public abstract class BaseActivity extends AppCompatActivity {
         lp.height = (int)(display.getHeight()); //设置高度
         playDialog.getWindow().setAttributes(lp);
     }
+    public void showPlayDialog(String mediaName, String mediaUrl, String mediaId, View.OnClickListener listener)
+    {
+        final MusicPlayDialog playDialog = new MusicPlayDialog(getActivity(), R.style.CustomDialog);
+
+        playDialog.setInfor(mediaName, mediaUrl, mediaId);
+        //playDialog.updateProgress("00:02:18 / 00:05:12");
+        if(playDialog.isShowing())
+            playDialog.dismiss();
+        playDialog.show();
+
+        WindowManager windowManager = ((Activity) getActivity()).getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = playDialog.getWindow().getAttributes();
+        lp.width = (int)(display.getWidth()); //设置宽度
+        lp.height = (int)(display.getHeight()); //设置高度
+        playDialog.getWindow().setAttributes(lp);
+        playDialog.getRightButton().setOnClickListener(listener);
+    }
 
 
 

@@ -81,15 +81,11 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		
 		setContentView(R.layout.activity_account);
 		
-
-		
 		userInfor = getLocalData().getUserInfor();
 		
 		isInit = getIntent().getBooleanExtra("INIT", true);
 		
 
-		initSMSSDK();
-		
 		getViews();
 		initViews();
 		initData();
@@ -497,27 +493,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		finish();
 	}
 	
-	private void initSMSSDK() 
-	{
-		if(ready)
-			return;
-		// ��ʼ������SDK
-		ready = true;
 
-		// ��ȡ�º��Ѹ���
-		//showDialog();
-		//SMSSDK.getNewFriendsCount();
-	}
-	
-	private void registerSms()
-	{
-	}
-	
-	private void startSMSCheck()
-	{
-		registerSms();
-	}
-	
 	/**
 	*callbacks
 	*/
@@ -527,8 +503,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		// TODO Auto-generated method stub
 		if(v == tvForgetPwd)//��������
 		{
-			startSMSCheck();
-			
+
 			//��ȡ��ϵ��
 			/*ContactsPage contactsPage = new ContactsPage();
 			contactsPage.show(getActivity());*/
@@ -543,13 +518,12 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		}
 		else if(v == tvRegister)//ע��
 		{
-			startSMSCheck();
+
 			//ViewUtils.startActivity(getActivity(), RegisterActivity.class, null, 1);
 		}
 		else if(v == tvLogout)//ע��
 		{
-			Constant.isShopUpdated = true;
-			Constant.isAlbumUpdated = true;
+
 			//logout();
 			logOutProcess();
 			
@@ -573,34 +547,5 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		}
 	}
 	
-	private long touchTime = 0;
-	@Override
-	public void onBackPressed()
-	{
-		if(!isInit && MusicApplication.isLogin)
-		{
-			finish();
-		}
-		else
-		{
-			if((System.currentTimeMillis() - touchTime) < 2000)
-			{
-				 closeApp();
-				 super.onBackPressed();
-				// TODO Auto-generated method stub
-			}
-		    else
-			{
-				showToast("�ٰ�һ���˳� �����ܼ�");
-				touchTime = System.currentTimeMillis();
-			}
-		}
-	}
-	
-	private void closeApp()
-	{
-		 closeAllActivity();
-		 android.os.Process.killProcess(android.os.Process.myPid());
-		 System.exit(0);
-	}
+
 }

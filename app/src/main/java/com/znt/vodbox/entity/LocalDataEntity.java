@@ -170,7 +170,8 @@ public class LocalDataEntity
 		userInfor.setNickName(userName);
 		//userInfor.setHead(head);
 		//userInfor.setMemType(userType);
-		userInfor.getMerchant().setBindCode(pcCode);
+		if(userInfor.getMerchant() != null)
+			userInfor.getMerchant().setBindCode(pcCode);
 		//userInfor.setShowSysMusicFlag(showSysMusicFlag);
 		String selectDevice = getDeviceId();
 		/*if(!TextUtils.isEmpty(selectDevice)

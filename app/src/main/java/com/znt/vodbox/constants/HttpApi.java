@@ -8,10 +8,13 @@ public class HttpApi
 
     public static final String ADD_SHOP = API + "/shop/add";
     public static final String GET_SHOP_LIST = API + "/shop/list";
+    public static final String REMOVE_GROUP_SHOP = API + "/group/deltml";
 
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";
     public static final String GET_MY_ALBUMS = API + "/category/list";
+    public static final String GET_SYS_ALBUMS = API + "/query/category";
+    public static final String COLLECT_ALBUM = API + "/category/copy";
     public static final String DELETE_ALBUM = API + "/category/del";
     public static final String GET_ALBUM_MUSICS = API + "/category/music";
     public static final String DELETE_ALBUM_MUSICS = API + "/category/delMusic";

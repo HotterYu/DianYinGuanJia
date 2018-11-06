@@ -36,8 +36,7 @@ public class SystemAlbumActivity extends BaseActivity implements
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
-    @Bind(R.id.fab_my_album)
-    FloatingActionButton fab = null;
+
     @Bind(R.id.ptrl_music_album)
     private LJListView listView = null;
 
@@ -47,12 +46,14 @@ public class SystemAlbumActivity extends BaseActivity implements
 
     private String musicIds = "";
 
+    private boolean isSystemAlbum = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_album);
+        setContentView(R.layout.activity_system_album);
 
         //mUserInfo = (UserInfo) getIntent().getSerializableExtra("USER_INFO");
         musicIds = getIntent().getStringExtra("MUSIC_IDS");
@@ -66,17 +67,7 @@ public class SystemAlbumActivity extends BaseActivity implements
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(getActivity(), ModifyAlbumActivity.class);
-                Bundle b = new Bundle();
-                intent.putExtras(b);
-                startActivityForResult(intent,1);
-            }
-        });
+
 
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
         listView.getListView().setDividerHeight(1);
@@ -112,7 +103,7 @@ public class SystemAlbumActivity extends BaseActivity implements
         try
         {
             // Simulate network access.
-            HttpClient.getMyAlbums(token, pageNo, pageSize,merchId,typeId,name, new HttpCallback<AlbumListResultBean>() {
+            HttpClient.getSystemAlbums(token, pageNo, pageSize,typeId,name, new HttpCallback<AlbumListResultBean>() {
                         @Override
                         public void onSuccess(AlbumListResultBean resultBean) {
 
@@ -120,7 +111,7 @@ public class SystemAlbumActivity extends BaseActivity implements
                             {
                                 albumInfos = resultBean.getData();
                                 mMyAlbumlistAdapter.notifyDataSetChanged(albumInfos);
-                                tvTopTitle.setText(getResources().getString(R.string.my_album) + "("+resultBean.getMessage() + ")");
+                                tvTopTitle.setText(getResources().getString(R.string.sys_album) + "("+resultBean.getMessage() + ")");
                             }
                             else
                             {
@@ -176,6 +167,7 @@ public class SystemAlbumActivity extends BaseActivity implements
             Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
             Bundle b = new Bundle();
             b.putSerializable("ALBUM_INFO",tempInfor);
+            b.putBoolean("IS_SYSTEM_ALBUM",true);
             intent.putExtras(b);
             startActivity(intent);
         }
