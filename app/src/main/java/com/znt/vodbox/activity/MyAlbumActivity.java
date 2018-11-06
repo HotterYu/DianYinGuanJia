@@ -6,9 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,13 +17,9 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.bean.GroupInfo;
-import com.znt.vodbox.bean.ShopListResultBean;
-import com.znt.vodbox.dialog.EditNameDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
-import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.xlistview.LJListView;
 
@@ -42,6 +36,8 @@ public class MyAlbumActivity extends BaseActivity implements
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
+    @Bind(R.id.tv_common_confirm)
+    private TextView tvTopConfirm = null;
     @Bind(R.id.fab_my_album)
     FloatingActionButton fab = null;
     @Bind(R.id.ptrl_music_album)
@@ -65,10 +61,22 @@ public class MyAlbumActivity extends BaseActivity implements
 
         tvTopTitle.setText(getResources().getString(R.string.my_album));
         ivTopMore.setVisibility(View.GONE);
+        tvTopConfirm.setVisibility(View.VISIBLE);
+        tvTopConfirm.setText("添加");
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        tvTopConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SystemAlbumActivity.class);
+                Bundle b = new Bundle();
+                intent.putExtras(b);
+                startActivityForResult(intent,1);
             }
         });
 
