@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <include layout="@layout/include_app_bar" />
+    <include layout="@layout/activity_common_include" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/windowBackground">
 
-        <ListView
-            android:id="@+id/lv_search_music_list"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@null" />
+            android:layout_height="match_parent">
+
+            <com.znt.vodbox.view.xlistview.LJListView
+                android:id="@+id/lv_search_music_list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="54dp"
+
+                ></com.znt.vodbox.view.xlistview.LJListView>
+
+            <com.znt.vodbox.view.searchview.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                app:textSizeSearch="5dp"
+                app:textColorSearch="#9b9b9b"
+                app:textHintSearch="输入查询关键字"
+                app:searchBlockColor="#ffffff"
+                />
+
+        </RelativeLayout>
 
         <include
             android:id="@+id/ll_loading"

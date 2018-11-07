@@ -13,12 +13,31 @@
         >
         <include layout="@layout/activity_common_include" />
 
-        <com.znt.vodbox.view.xlistview.LJListView
-            android:id="@+id/ptrl_music_album"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="6dp"
-            ></com.znt.vodbox.view.xlistview.LJListView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.znt.vodbox.view.xlistview.LJListView
+                android:id="@+id/ptrl_music_album"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="54dp"
+
+                ></com.znt.vodbox.view.xlistview.LJListView>
+
+            <com.znt.vodbox.view.searchview.SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                app:textSizeSearch="5dp"
+                app:textColorSearch="#9b9b9b"
+                app:textHintSearch="输入查询关键字"
+                app:searchBlockColor="#ffffff"
+                />
+
+        </RelativeLayout>
 
     </LinearLayout>
     <android.support.design.widget.FloatingActionButton

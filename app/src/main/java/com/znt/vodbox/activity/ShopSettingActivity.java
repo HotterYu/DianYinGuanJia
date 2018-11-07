@@ -18,6 +18,7 @@ import com.znt.vodbox.dialog.EditNameDialog;
 import com.znt.vodbox.dialog.VideoDirectionDialog;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.DateUtils;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
 
@@ -307,8 +308,8 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		else if(v == itvWifiName.getBgView())
 		{
 			Bundle bundle = new Bundle();
-			bundle.putSerializable("DeviceInfor", deviceInfor);
-			//ViewUtils.startActivity(getActivity(), WifiUpdateActivity.class, bundle, 2);
+			bundle.putSerializable("DEVICE_INFO", deviceInfor);
+			ViewUtils.startActivity(getActivity(), WifiSetActivity.class, bundle, 2);
 		}
 	}
 

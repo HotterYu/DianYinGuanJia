@@ -5,13 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
@@ -21,33 +23,26 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.enums.LoadStateEnum;
+import com.znt.vodbox.executor.DownloadSearchedMusic;
+import com.znt.vodbox.executor.ShareOnlineMusic;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.model.SearchMusic;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.ToastUtils;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
-import com.znt.vodbox.view.searchview.ICallBack;
-import com.znt.vodbox.view.xlistview.LJListView;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SearchSystemMusicActivity extends BaseActivity implements
-        LJListView.IXListViewListener, AdapterView.OnItemClickListener,OnMoreClickListener {
-
-    @Bind(R.id.tv_common_title)
-    private TextView tvTopTitle = null;
-    @Bind(R.id.iv_common_back)
-    private ImageView ivTopReturn = null;
-    @Bind(R.id.iv_common_more)
-    private ImageView ivTopMore = null;
-
+public class SearchSystemMusicActivity_old extends BaseActivity implements SearchView.OnQueryTextListener
+        , AdapterView.OnItemClickListener, OnMoreClickListener {
     @Bind(R.id.lv_search_music_list)
-    private LJListView listView = null;
-    @Bind(R.id.search_view)
-    private com.znt.vodbox.view.searchview.SearchView mSearchView = null;
-
+    private ListView lvSearchMusic;
     @Bind(R.id.ll_loading)
     private LinearLayout llLoading;
     @Bind(R.id.ll_load_fail)
@@ -63,55 +58,19 @@ public class SearchSystemMusicActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_system_music);
 
-        tvTopTitle.setText("搜索歌曲");
-        ivTopMore.setVisibility(View.GONE);
-
-        listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
-        listView.getListView().setDividerHeight(1);
-        listView.setPullLoadEnable(true,"");
-        listView.setPullRefreshEnable(true);
-        listView.setIsAnimation(true);
-        listView.setXListViewListener(this);
-        listView.showFootView(false);
-        listView.setRefreshTime();
-        listView.setOnItemClickListener(this);
-
-        listView.setAdapter(mAlbumMusiclistAdapter);
-        mAlbumMusiclistAdapter.setOnMoreClickListener(this);
-
-        ivTopReturn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        mSearchView.init("system_music_search_record.db");
-        mSearchView.showRecordView(false);
-
         albumId = getIntent().getStringExtra("ALBUM_ID");
         mShopinfo = (Shopinfo)getIntent().getSerializableExtra("SHOP_INFO");
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                mSearchView.showRecordView(false);
-            }
+    }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+    @Override
+    protected void onServiceBound() {
+        lvSearchMusic.setAdapter(mAlbumMusiclistAdapter);
+        TextView tvLoadFail = llLoadFail.findViewById(R.id.tv_load_fail_text);
+        tvLoadFail.setText(R.string.search_empty);
 
-            }
-        });
-
-        listView.onFresh();
-
-        mSearchView.setOnClickSearch(new ICallBack() {
-            @Override
-            public void SearchAciton(String string) {
-                searchMusic();
-            }
-        });
+        lvSearchMusic.setOnItemClickListener(this);
+        mAlbumMusiclistAdapter.setOnMoreClickListener(this);
     }
 
     @Override
@@ -119,12 +78,42 @@ public class SearchSystemMusicActivity extends BaseActivity implements
         return R.style.AppThemeDark_Search;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search_music, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.onActionViewExpanded();
+        searchView.setQueryHint(getString(R.string.search_tips));
+        searchView.setOnQueryTextListener(this);
+        searchView.setSubmitButtonEnabled(true);
+        try {
+            Field field = searchView.getClass().getDeclaredField("mGoButton");
+            field.setAccessible(true);
+            ImageView mGoButton = (ImageView) field.get(searchView);
+            mGoButton.setImageResource(R.drawable.ic_menu_search);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
 
-    private void searchMusic() {
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOADING);
+        searchMusic(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    private void searchMusic(String keyword) {
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";
-        String keyword = mSearchView.getText().toString();
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
 
@@ -137,21 +126,23 @@ public class SearchSystemMusicActivity extends BaseActivity implements
 
                     if(resultBean != null && resultBean.isSuccess())
                     {
+                        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_SUCCESS);
+
                         dataList = resultBean.getData();
                         mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
-                        tvTopTitle.setText("搜索歌曲("+resultBean.getMessage()+")");
+                        //tvTopTitle.setText(mAlbumInfo.getName() + "(" + resultBean.getMessage() + ")");
+                        lvSearchMusic.requestFocus();
                     }
                     else
                     {
-
+                        ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
                     }
-                    mSearchView.showRecordView(false);
-                    listView.stopRefresh();
+                    //listView.stopRefresh();
                 }
 
                 @Override
                 public void onFail(Exception e) {
-                    listView.stopRefresh();
+                    ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
                     //vSearching.setVisibility(View.GONE);
                     //listView.stopRefresh();
                 }
@@ -159,7 +150,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
         }
         catch (Exception e)
         {
-            listView.stopRefresh();
+            ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
             //listView.stopRefresh();
         }
     }
@@ -187,6 +178,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                         else
                         {
                             ToastUtils.show(getResources().getString(R.string.push_success));
+
                             finish();
                         }
                     }
@@ -225,6 +217,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                     dismissDialog();
                 }
             });
+
         }
     }
 
@@ -248,6 +241,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                     {
                         addMusicToAlbum(albumId,tempInfo.getId());
                     }
+
                     break;
                 case 1://
                     if(mShopinfo == null)
@@ -279,7 +273,23 @@ public class SearchSystemMusicActivity extends BaseActivity implements
             }
         });
         dialog.show();
-
+        /*final MediaInfo song = dataList.get(position);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(song.getMusicName());
+        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getMusicSing(), song.getSongname());
+        File file = new File(path);
+        int itemsId = file.exists() ? R.array.search_music_dialog_no_download : R.array.search_music_dialog;
+        dialog.setItems(itemsId, (dialog1, which) -> {
+            switch (which) {
+                case 0:// 分享
+                    share(song);
+                    break;
+                case 1:// 下载
+                    download(song);
+                    break;
+            }
+        });
+        dialog.show();*/
     }
 
     public void addMusicToAlbum(String id, String musicIds)
@@ -300,8 +310,10 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                     {
 
                     }
+
                     showToast(resultBean.getMessage());
                 }
+
                 @Override
                 public void onFail(Exception e) {
                     showToast(e.getMessage());
@@ -314,26 +326,46 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                 showToast(e.getMessage());
             Log.e("",e.getMessage());
         }
+
     }
 
-    @Override
-    public void onRefresh() {
-        searchMusic();
+    private void share(SearchMusic.Song song) {
+        new ShareOnlineMusic(this, song.getSongname(), song.getSongid()) {
+            @Override
+            public void onPrepare() {
+                showProgress();
+            }
+
+            @Override
+            public void onExecuteSuccess(Void aVoid) {
+                cancelProgress();
+            }
+
+            @Override
+            public void onExecuteFail(Exception e) {
+                cancelProgress();
+            }
+        }.execute();
     }
 
-    @Override
-    public void onLoadMore() {
-        searchMusic();
-    }
+    private void download(final SearchMusic.Song song) {
+        new DownloadSearchedMusic(this, song) {
+            @Override
+            public void onPrepare() {
+                showProgress();
+            }
 
-    @Override
-    public void onBackPressed()
-    {
-        if(mSearchView.isRecordViewShow())
-        {
-            mSearchView.showRecordView(false);
-            return;
-        }
-        super.onBackPressed();
+            @Override
+            public void onExecuteSuccess(Void aVoid) {
+                cancelProgress();
+                ToastUtils.show(getString(R.string.now_download, song.getSongname()));
+            }
+
+            @Override
+            public void onExecuteFail(Exception e) {
+                cancelProgress();
+                ToastUtils.show(R.string.unable_to_download);
+            }
+        }.execute();
     }
 }

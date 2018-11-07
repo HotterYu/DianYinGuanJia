@@ -1,11 +1,10 @@
 package com.znt.vodbox.activity;
 
 import android.content.Intent;
-import android.os.Parcelable;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,11 +14,12 @@ import com.znt.vodbox.adapter.AdListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdMediaListResultBean;
-import com.znt.vodbox.bean.SubAdPlanInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.searchview.ICallBack;
+import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.io.Serializable;
@@ -39,6 +39,8 @@ public class AdListActivity  extends BaseActivity implements
     private TextView tvConfirm = null;
     @Bind(R.id.ptrl_ad_list)
     private LJListView listView = null;
+    @Bind(R.id.search_view)
+    private SearchView mSearchView = null;
 
     private AdListAdapter mAdListAdapter = null;
 
@@ -98,8 +100,29 @@ public class AdListActivity  extends BaseActivity implements
 
         mAdListAdapter.setOnMoreClickListener(this);
 
+        mSearchView.init("album_search_record.db");
+        mSearchView.showRecordView(false);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mSearchView.showRecordView(false);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+
         listView.onFresh();
 
+        mSearchView.setOnClickSearch(new ICallBack() {
+            @Override
+            public void SearchAciton(String string) {
+                getAdMedias();
+            }
+        });
     }
 
     private void finishAndFeedBack()
@@ -123,7 +146,7 @@ public class AdListActivity  extends BaseActivity implements
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         String adtypeId = "";
-        String adname = "";
+        String adname = mSearchView.getText().toString();
 
         try
         {
@@ -142,6 +165,8 @@ public class AdListActivity  extends BaseActivity implements
                     {
                         //shopinfoList.clear();
                     }
+
+                    mSearchView.showRecordView(false);
                     listView.stopRefresh();
                 }
 
@@ -205,5 +230,16 @@ public class AdListActivity  extends BaseActivity implements
     @Override
     public void onLoadMore() {
         getAdMedias();
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(mSearchView.isRecordViewShow())
+        {
+            mSearchView.showRecordView(false);
+            return;
+        }
+        super.onBackPressed();
     }
 }

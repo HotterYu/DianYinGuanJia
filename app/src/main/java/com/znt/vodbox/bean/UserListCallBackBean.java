@@ -3,8 +3,9 @@ package com.znt.vodbox.bean;
 import com.znt.vodbox.model.UserInfo;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class UserCallBackBean implements Serializable {
+public class UserListCallBackBean implements Serializable {
 
     private String resultcode;
     private String message;
@@ -14,15 +15,15 @@ public class UserCallBackBean implements Serializable {
         return resultcode.equals("1");
     }
 
-    public UserInfo getData() {
+    public List<UserInfo> getData() {
         return data;
     }
 
-    public void setData(UserInfo data) {
+    public void setData(List<UserInfo> data) {
         this.data = data;
     }
 
-    private UserInfo data;
+    private List<UserInfo> data;
 
 
     public String getMessage() {

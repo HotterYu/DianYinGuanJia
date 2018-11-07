@@ -2,13 +2,18 @@ package com.znt.vodbox.constants;
 
 public class HttpApi
 {
-    private static final String API = "http://47.104.209.249:8080/api";
+    //private static final String API = "http://47.104.209.249:8080/api";
+    private static final String API = "http://api.zhunit.com/api";
 
     public static final String LOGIN = API + "/user/login";
 
     public static final String ADD_SHOP = API + "/shop/add";
     public static final String GET_SHOP_LIST = API + "/shop/list";
     public static final String REMOVE_GROUP_SHOP = API + "/group/deltml";
+
+    public static final String GET_USER_LIST= API + "/user/list";
+
+    public static final String UPDATE_SHOP_INFO = API + "/shop/update";
 
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";

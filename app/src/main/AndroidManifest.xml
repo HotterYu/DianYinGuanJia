@@ -132,7 +132,9 @@
         <activity
             android:name=".activity.AlbumSelectActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.AdListActivity" />
+        <activity android:name=".activity.AdListActivity"
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name=".activity.GroupListActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -151,6 +153,15 @@
         <activity android:name=".activity.ShopDetailActivity"></activity>
         <activity android:name=".activity.AccountActivity"></activity>
         <activity android:name=".activity.ShopSettingActivity"></activity>
+        <activity
+            android:name=".activity.UserListActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.LoginRecordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.WifiSetActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

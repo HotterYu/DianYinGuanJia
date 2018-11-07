@@ -221,22 +221,32 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                     @Override
                     public void onSuccess(UserCallBackBean tempInfor) {
                         showProgress(false);
-                        UserInfo userInfo = tempInfor.getData();
-                        Constant.mUserInfo = userInfo;
-                        userInfo.setPwd(mPasswordView.getText().toString());
-                        getLocalData().setUserInfor(userInfo);
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-
-                        if(userInfo != null)
+                        if(tempInfor.isSuccess())
                         {
-                            MusicApplication.isLogin = true;
-                            Intent intent = new Intent(LoginActivity.this, MusicActivity.class);
-                            Bundle b = new Bundle();
-                            b.putSerializable("USER_INFO",userInfo);
-                            intent.putExtras(b);
-                            startActivity(intent);
-                            finish();
+                            UserInfo userInfo = tempInfor.getData();
+                            Constant.mUserInfo = userInfo;
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+                            if(userInfo != null)
+                            {
+
+                                /*LoginRecordInfo tempInfo = new LoginRecordInfo();
+                                tempInfo.setAccount(userInfo.getUsername());
+                                tempInfo.setNickName(userInfo.getNickName());
+                                tempInfo.setPwd(mPasswordView.getText().toString());
+                                DBManager.get().getMusicDao().insert(tempInfo);*/
+
+                                userInfo.setPwd(mPasswordView.getText().toString());
+                                getLocalData().setUserInfor(userInfo);
+                                MusicApplication.isLogin = true;
+                                Intent intent = new Intent(LoginActivity.this, MusicActivity.class);
+                                Bundle b = new Bundle();
+                                b.putSerializable("USER_INFO",userInfo);
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
                         else
                         {

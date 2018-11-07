@@ -7,15 +7,16 @@ import android.support.annotation.Nullable;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.BitmapCallback;
 import com.zhy.http.okhttp.callback.FileCallBack;
+import com.znt.vodbox.bean.AdMediaListResultBean;
 import com.znt.vodbox.bean.AdPlanListResultBean;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.MusicListResultBean;
-import com.znt.vodbox.bean.AdMediaListResultBean;
 import com.znt.vodbox.bean.PlanListResultBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.bean.UserCallBackBean;
+import com.znt.vodbox.bean.UserListCallBackBean;
 import com.znt.vodbox.bean.ZoneListResultBean;
 import com.znt.vodbox.constants.HttpApi;
 import com.znt.vodbox.model.ArtistInfo;
@@ -90,6 +91,50 @@ public class HttpClient extends HttpApi{
                 .addParams("shopName", shopName)
                 .addParams("merchId", merchId)
                 .addParams("shopCode", shopCode)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void updateShopInfo(String token,String id, String userShopCode, String name
+            ,String tel,String linkman,String linkmanPhone,String wifiName
+            ,String wifiPassword,String country,String province,String city,String region,String address
+            ,String longitude,String latitude,String groupId,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(UPDATE_SHOP_INFO)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("userShopCode", userShopCode)
+                .addParams("name", name)
+                .addParams("tel", tel)
+                .addParams("linkman", linkman)
+                .addParams("linkmanPhone", linkmanPhone)
+                .addParams("wifiName", wifiName)
+                .addParams("wifiPassword", wifiPassword)
+                .addParams("country", country)
+                .addParams("province", province)
+                .addParams("city", city)
+                .addParams("region", region)
+                .addParams("address", address)
+                .addParams("longitude", longitude)
+                .addParams("latitude", latitude)
+                .addParams("groupId", groupId)
                 .build()
                 .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override
@@ -474,6 +519,37 @@ public class HttpClient extends HttpApi{
                 .execute(new BaseHttpCallback<AdMediaListResultBean>(AdMediaListResultBean.class) {
                     @Override
                     public void onResponse(AdMediaListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getUserList(String token, String pageNo, String pageSize,String username, String nickName,String orgzId
+            ,@NonNull final HttpCallback<UserListCallBackBean> callback) {
+        OkHttpUtils.post().url(GET_USER_LIST)
+                .addHeader("token", token)
+                .addParams("username", username)
+                .addParams("nickName", nickName)
+                .addParams("orgzId", orgzId)
+                .addParams("pageSize", pageSize)
+                .addParams("pageNo", pageNo)
+                .build()
+                .execute(new BaseHttpCallback<UserListCallBackBean>(UserListCallBackBean.class) {
+                    @Override
+                    public void onResponse(UserListCallBackBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else

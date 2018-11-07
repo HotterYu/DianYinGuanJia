@@ -2,9 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
@@ -13,16 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
-import com.znt.vodbox.bean.AlbumInfo;
-import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.bean.MusicListResultBean;
+import com.znt.vodbox.adapter.UserListAdapter;
+import com.znt.vodbox.bean.UserListCallBackBean;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
-import com.znt.vodbox.utils.ViewUtils;
+import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
@@ -31,7 +26,7 @@ import com.znt.vodbox.view.xlistview.LJListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlbumMusicActivity extends BaseActivity implements
+public class UserListActivity extends BaseActivity implements
         LJListView.IXListViewListener, AdapterView.OnItemClickListener,OnMoreClickListener
 {
 
@@ -41,23 +36,15 @@ public class AlbumMusicActivity extends BaseActivity implements
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
-    @Bind(R.id.tv_common_confirm)
-    private TextView tvConfirm = null;
 
     @Bind(R.id.ptrl_album_music)
     private LJListView listView = null;
     @Bind(R.id.search_view)
     private SearchView mSearchView = null;
 
+    private List<UserInfo> dataList = new ArrayList<>();
 
-    private AlbumInfo mAlbumInfo = null;
-    private boolean isSystemAlbum = false;
-
-    private List<MediaInfo> dataList = new ArrayList<>();
-
-
-    private AlbumMusiclistAdapter mAlbumMusiclistAdapter = null;
-
+    private UserListAdapter mUserListAdapter = null;
 
     private int curMusicSize = 0;
 
@@ -65,22 +52,10 @@ public class AlbumMusicActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_album_music);
+        setContentView(R.layout.activity_user_list);
 
-        mAlbumInfo = (AlbumInfo) getIntent().getSerializableExtra("ALBUM_INFO");
-        isSystemAlbum = getIntent().getBooleanExtra("IS_SYSTEM_ALBUM", false);
-
-
-        mSearchView.init("album_music_record.db");
-        mSearchView.showRecordView(false);
-
-        tvTopTitle.setText(mAlbumInfo.getName());
+        tvTopTitle.setText("账户列表");
         ivTopMore.setVisibility(View.GONE);
-        tvConfirm.setVisibility(View.VISIBLE);
-        if(isSystemAlbum)
-            tvConfirm.setText("收藏");
-        else
-            tvConfirm.setText("添加");
 
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,27 +64,10 @@ public class AlbumMusicActivity extends BaseActivity implements
             }
         });
 
-        tvConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(isSystemAlbum)
-                {
-                    collectAlbum();
-                }
-                else
-                {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ALBUM_ID", mAlbumInfo.getId());
-                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
-                }
-            }
-        });
-
         mSearchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-                getAlbumMusics();
+                getUserList();
             }
         });
 
@@ -123,13 +81,13 @@ public class AlbumMusicActivity extends BaseActivity implements
         listView.setRefreshTime();
         listView.setOnItemClickListener(this);
 
-        mAlbumMusiclistAdapter = new AlbumMusiclistAdapter(dataList);
-        listView.setAdapter(mAlbumMusiclistAdapter);
+        mUserListAdapter = new UserListAdapter(dataList);
+        listView.setAdapter(mUserListAdapter);
 
-        mAlbumMusiclistAdapter.setOnMoreClickListener(this);
+        mUserListAdapter.setOnMoreClickListener(this);
 
-
-        listView.onFresh();
+        mSearchView.init("user_list_record.db");
+        mSearchView.showRecordView(false);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -143,12 +101,16 @@ public class AlbumMusicActivity extends BaseActivity implements
             }
         });
 
+        listView.onFresh();
+
     }
 
-    public void getAlbumMusics()
+    public void getUserList()
     {
 
-        String searchWord = mSearchView.getText().toString();
+        String nickName = mSearchView.getText().toString();
+        String userName = "";
+        String orgzId = "";//所属客户id
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";
@@ -157,18 +119,17 @@ public class AlbumMusicActivity extends BaseActivity implements
         try
         {
             // Simulate network access.
-            HttpClient.getAlbumMusics(token, pageNo, pageSize,mAlbumInfo.getId(),searchWord, new HttpCallback<MusicListResultBean>() {
+            HttpClient.getUserList(token, pageNo, pageSize,userName,nickName,orgzId, new HttpCallback<UserListCallBackBean>() {
                         @Override
-                        public void onSuccess(MusicListResultBean resultBean) {
+                        public void onSuccess(UserListCallBackBean resultBean) {
 
                             if(resultBean != null)
                             {
                                 dataList = resultBean.getData();
-                                mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
+                                mUserListAdapter.notifyDataSetChanged(dataList);
                                 if(!TextUtils.isEmpty(resultBean.getMessage()))
                                     curMusicSize = Integer.parseInt(resultBean.getMessage());
-                                tvTopTitle.setText(mAlbumInfo.getName() + "(" + curMusicSize + ")");
-
+                                tvTopTitle.setText("用户列表" + "(" + curMusicSize + ")");
                             }
                             else
                             {
@@ -193,75 +154,6 @@ public class AlbumMusicActivity extends BaseActivity implements
         }
 
     }
-
-    public void deleteAlbumMusic(String musicIds)
-    {
-        try
-        {
-            String token = Constant.mUserInfo.getToken();
-            String albumId = mAlbumInfo.getId();
-
-            HttpClient.deleteAlbumMusics(token, albumId, musicIds, new HttpCallback<CommonCallBackBean>() {
-                @Override
-                public void onSuccess(CommonCallBackBean resultBean) {
-                    if(resultBean != null)
-                    {
-                        int deleteCount = updateDeleteMusicList(musicIds);
-                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
-                        dismissDialog();
-                    }
-                    else
-                    {
-                        showToast(resultBean.getMessage());
-                    }
-                }
-                @Override
-                public void onFail(Exception e) {
-                    showToast(e.getMessage());
-                }
-            });
-        }
-        catch (Exception e)
-        {
-
-        }
-    }
-
-    public void collectAlbum()
-    {
-        try
-        {
-            String token = Constant.mUserInfo.getToken();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
-            String albumId = mAlbumInfo.getId();
-
-            HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {
-                @Override
-                public void onSuccess(CommonCallBackBean resultBean) {
-                    if(resultBean != null)
-                    {
-                        finish();
-                        /*int deleteCount = updateDeleteMusicList(musicIds);
-                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
-                        dismissDialog();*/
-                    }
-                    else
-                    {
-                        showToast(resultBean.getMessage());
-                    }
-                }
-                @Override
-                public void onFail(Exception e) {
-                    showToast(e.getMessage());
-                }
-            });
-        }
-        catch (Exception e)
-        {
-
-        }
-    }
-
     private int updateDeleteMusicList(String musicIds)
     {
         String[] ids = musicIds.split(",");
@@ -278,18 +170,18 @@ public class AlbumMusicActivity extends BaseActivity implements
                 }
             }
         }
-        mAlbumMusiclistAdapter.notifyDataSetChanged();
+        mUserListAdapter.notifyDataSetChanged();
         return ids.length;
     }
 
     @Override
     public void onRefresh() {
-        getAlbumMusics();
+        getUserList();
     }
 
     @Override
     public void onLoadMore() {
-        getAlbumMusics();
+        getUserList();
     }
 
     @Override
@@ -298,13 +190,19 @@ public class AlbumMusicActivity extends BaseActivity implements
         if(position > 0)
             position = position - 1;
 
-        MediaInfo tempInfor = dataList.get(position);
-        showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());
+        UserInfo tempInfor = dataList.get(position);
+
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(tempInfor.getUsername());
+        showToast("复制账户成功");
+
+        /*showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());*/
     }
 
     @Override
     public void onMoreClick(int position) {
-        MediaInfo tempInfo = dataList.get(position);
+        /*UserInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getMusicName());
         dialog.setItems(R.array.album_music_dialog, (dialog1, which) -> {
@@ -344,7 +242,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                     break;
             }
         });
-        dialog.show();
+        dialog.show();*/
     }
 
     @Override

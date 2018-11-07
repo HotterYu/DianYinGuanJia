@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.searchview.ICallBack;
+import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.util.ArrayList;
@@ -42,6 +45,8 @@ public class MyAlbumActivity extends BaseActivity implements
     FloatingActionButton fab = null;
     @Bind(R.id.ptrl_music_album)
     private LJListView listView = null;
+    @Bind(R.id.search_view)
+    private SearchView mSearchView = null;
 
     private List<AlbumInfo> albumInfos = new ArrayList<>();
 
@@ -107,21 +112,42 @@ public class MyAlbumActivity extends BaseActivity implements
 
         mMyAlbumlistAdapter.setOnMoreClickListener(this);
 
+        mSearchView.init("album_search_record.db");
+        mSearchView.showRecordView(false);
+
         listView.onFresh();
+
+        mSearchView.setOnClickSearch(new ICallBack() {
+            @Override
+            public void SearchAciton(String string) {
+                loadMyAlbums();
+            }
+        });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                mSearchView.showRecordView(false);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
     }
 
     public void loadMyAlbums()
     {
 
-
+        String name = mSearchView.getText().toString();
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "20";
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         String typeId = "";
-        String name = "";
 
         try
         {
@@ -140,6 +166,7 @@ public class MyAlbumActivity extends BaseActivity implements
                             {
                                 //shopinfoList.clear();
                             }
+                            mSearchView.showRecordView(false);
                             listView.stopRefresh();
                         }
 
@@ -237,7 +264,6 @@ public class MyAlbumActivity extends BaseActivity implements
             HttpClient.deleteAlbum(token, id, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
-
                     if(resultBean != null)
                     {
                         loadMyAlbums();
@@ -248,7 +274,6 @@ public class MyAlbumActivity extends BaseActivity implements
                     }
                     showToast(resultBean.getMessage());
                 }
-
                 @Override
                 public void onFail(Exception e) {
                     showToast(e.getMessage());
@@ -281,7 +306,6 @@ public class MyAlbumActivity extends BaseActivity implements
                     {
 
                     }
-
                     showToast(resultBean.getMessage());
                 }
 
@@ -298,6 +322,17 @@ public class MyAlbumActivity extends BaseActivity implements
             Log.e("",e.getMessage());
         }
 
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if(mSearchView.isRecordViewShow())
+        {
+            mSearchView.showRecordView(false);
+            return;
+        }
+        super.onBackPressed();
     }
 
 }
