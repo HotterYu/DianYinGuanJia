@@ -1,10 +1,7 @@
 package com.znt.vodbox.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,11 +18,9 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.PlanDetailAdapter;
-import com.znt.vodbox.bean.AdPlanInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.PlanInfo;
-import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.dialog.DoubleDatePickerDialog;
 import com.znt.vodbox.dialog.EditNameDialog;
@@ -196,7 +191,10 @@ public class PlanDetailActivity extends BaseActivity  implements
             showShops(true);
         }
         else
+        {
             switchButton.setChecked(false);
+            showShops(false);
+        }
 
 
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
@@ -205,7 +203,7 @@ public class PlanDetailActivity extends BaseActivity  implements
             public void onCheckedChanged(CompoundButton arg0, boolean arg1)
             {
                 // TODO Auto-generated method stub
-                showShops(!arg1);
+                showShops(arg1);
             }
         });
         switchButtonDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()

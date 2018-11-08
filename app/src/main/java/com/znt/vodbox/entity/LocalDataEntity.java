@@ -142,7 +142,7 @@ public class LocalDataEntity
 	public void setUserInfor(UserInfo userInfor)
 	{
 		sharedPre.setData(USER_ID, userInfor.getId());
-		//sharedPre.setData(USER_TYPE, userInfor.getMemType());
+		sharedPre.setData(USER_TYPE, userInfor.getType());
 		sharedPre.setData(USER_NAME, userInfor.getNickName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
 		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
@@ -160,30 +160,20 @@ public class LocalDataEntity
 		String userPwd = sharedPre.getData(USER_PWD, "");
 		String head = sharedPre.getData(USER_HEAD, "");
 		String userAccount = sharedPre.getData(USER_ACCOUNT, "");
-		String userDevices = sharedPre.getData(USER_DEVICES, "");
 		String userType = sharedPre.getData(USER_TYPE, "");
 		String pcCode = sharedPre.getData(PC_CODE, "");
-		String showSysMusicFlag = sharedPre.getData(SHOW_SYS_MUSIC_FLAG, "");
-		//String userIp = NetWorkUtils.getLocalIpAddress(context);
-		//boolean admin = sharedPre.getData(ADMIN, false);
+
 		userInfor.setId(userId);
 		userInfor.setNickName(userName);
 		//userInfor.setHead(head);
-		//userInfor.setMemType(userType);
+
 		if(userInfor.getMerchant() != null)
 			userInfor.getMerchant().setBindCode(pcCode);
-		//userInfor.setShowSysMusicFlag(showSysMusicFlag);
-		String selectDevice = getDeviceId();
-		/*if(!TextUtils.isEmpty(selectDevice)
-				&& !TextUtils.isEmpty(userDevices)
-				&& userDevices.contains(selectDevice))
-			userInfor.setAdmin(true);
-		else
-			userInfor.setAdmin(false);*/
+
 		userInfor.setPwd(userPwd);
+		userInfor.setType(userType);
 		userInfor.setUsername(userAccount);
-		//userInfor.setBindDevices(userDevices);
-		//userInfor.setUserIp(userIp);
+
 		return userInfor;
 	}
 	public void clearUserInfor()

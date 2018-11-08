@@ -1,8 +1,11 @@
 package com.znt.vodbox.activity;
 
 import android.app.TimePickerDialog;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -20,12 +23,10 @@ import android.widget.TimePicker;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AdListAdapter;
-import com.znt.vodbox.adapter.MyAlbumlistAdapter;
+import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdPlanInfo;
-import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.SubAdPlanInfo;
-import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.dialog.CountEditDialog;
 import com.znt.vodbox.dialog.WheelListDialog;
 import com.znt.vodbox.utils.DateUtils;
@@ -45,7 +46,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AdPlanCreateActivity extends  BaseActivity implements OnClickListener
-        , OnItemClickListener, LJListView.IXListViewListener
+        , OnItemClickListener, LJListView.IXListViewListener,OnMoreClickListener
 {
 
 
@@ -96,7 +97,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     private AdPlanInfo mAdPlanInfo = null;
 
     private AdListAdapter mAdListAdapter = null;
-    private List<AdMediaInfo> adList = new ArrayList<AdMediaInfo>();
+    //private List<AdMediaInfo> adList = new ArrayList<AdMediaInfo>();
     private List<AdMediaInfo> selectAdList = new ArrayList<AdMediaInfo>();
 
     public static final String[] DAY_STRING = { "00", "01", "02", "03", "04", "05",
@@ -209,6 +210,9 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         listView.setOnItemClickListener(this);
 
         mAdListAdapter = new AdListAdapter(getApplicationContext(),selectAdList);
+
+        mAdListAdapter.setOnMoreClickListener(this);
+
         listView.setAdapter(mAdListAdapter);
         initWheelViews();
 
@@ -658,6 +662,29 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         }
     }
 
+    @Override
+    public void onMoreClick(int position) {
+        AdMediaInfo tempInfo = selectAdList.get(position);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        dialog.setTitle(tempInfo.getAdname());
+        dialog.setItems(R.array.plan_ad_list_dialog, (dialog1, which) -> {
+            switch (which) {
+                case 0://
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    // 将文本内容放到系统剪贴板里。
+                    cm.setText(tempInfo.getAdname() + "\n" + tempInfo.getUrl());
+                    showToast("复制成功");
+                    break;
+                case 1://
+                    selectAdList.remove(position);
+                    mAdListAdapter.notifyDataSetChanged(selectAdList);
+                    break;
+
+            }
+        });
+        dialog.show();
+    }
+
     /**
      *callbacks
      */
@@ -685,11 +712,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         // TODO Auto-generated method stub
         if(arg2 > 1)
             arg2 = arg2 - 2;
-        AdMediaInfo infor = adList.get(arg2);
-        Bundle bundle = new Bundle();
+        AdMediaInfo infor = selectAdList.get(arg2);
+        showPlayDialog(infor.getAdname(),infor.getUrl(),infor.getId());
+        /*Bundle bundle = new Bundle();
         bundle.putSerializable("AD_MEDIA_INFO", infor);
         //bundle.putSerializable("MusicEditType", MusicEditType.DeleteAdd);
-        ViewUtils.startActivity(getActivity(), AdListActivity.class, bundle);
+        ViewUtils.startActivity(getActivity(), AdListActivity.class, bundle);*/
     }
 
 

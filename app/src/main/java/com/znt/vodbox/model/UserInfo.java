@@ -92,6 +92,8 @@ public class UserInfo implements Serializable
     }
 
     public merchant getMerchant() {
+        if(merchant == null)
+            merchant = new merchant();
         return merchant;
     }
 
@@ -100,6 +102,27 @@ public class UserInfo implements Serializable
     }
 
     public String getType() {
+        return type;
+    }
+    public String getTypeName() {
+
+        if(type.equals("0"))
+        {
+            return "系统管理员";
+        }
+        else if(type.equals("1"))
+        {
+            return "总管理员";
+        }
+        else if(type.equals("2"))
+        {
+            return "分区管理员";
+        }
+        else if(type.equals("3"))
+        {
+            return "店长";
+        }
+
         return type;
     }
 

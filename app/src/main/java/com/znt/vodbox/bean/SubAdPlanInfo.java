@@ -1,6 +1,7 @@
 package com.znt.vodbox.bean;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -109,7 +110,7 @@ public class SubAdPlanInfo implements Serializable {
             AdMediaInfo tempInfo = new AdMediaInfo();
             String name = names.get(i);
             String id = ids.get(i);
-            String url = urls.get(i);
+            String url = URLDecoder.decode(urls.get(i));
             tempInfo.setAdname(name);
             tempInfo.setId(id);
             tempInfo.setUrl(url);

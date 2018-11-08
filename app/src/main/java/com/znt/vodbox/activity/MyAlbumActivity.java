@@ -18,9 +18,11 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
+import com.znt.vodbox.bean.TypeInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
@@ -85,6 +87,17 @@ public class MyAlbumActivity extends BaseActivity implements
             }
         });
 
+        tvTopTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle b = new Bundle();
+                b.putString("TYPE","0");
+                intent.putExtras(b);
+                startActivityForResult(intent,2);
+            }
+        });
+
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -120,7 +133,7 @@ public class MyAlbumActivity extends BaseActivity implements
         mSearchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-                loadMyAlbums();
+                loadMyAlbums("");
             }
         });
 
@@ -138,7 +151,7 @@ public class MyAlbumActivity extends BaseActivity implements
 
     }
 
-    public void loadMyAlbums()
+    public void loadMyAlbums(String typeId)
     {
 
         String name = mSearchView.getText().toString();
@@ -147,7 +160,6 @@ public class MyAlbumActivity extends BaseActivity implements
         String pageSize = "20";
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
-        String typeId = "";
 
         try
         {
@@ -192,16 +204,23 @@ public class MyAlbumActivity extends BaseActivity implements
         {
             listView.onFresh();
         }
+        else if(requestCode == 2)
+        {
+
+            TypeInfo tempInfor = (TypeInfo)data.getSerializableExtra("TYPE_INFO");
+
+            loadMyAlbums(tempInfor.getId());
+        }
     }
 
     @Override
     public void onRefresh() {
-        loadMyAlbums();
+        loadMyAlbums("");
     }
 
     @Override
     public void onLoadMore() {
-        loadMyAlbums();
+        loadMyAlbums("");
     }
 
     @Override
@@ -242,7 +261,9 @@ public class MyAlbumActivity extends BaseActivity implements
                     startActivityForResult(intent,1);
                     break;
                 case 1://
-                    //requestSetRingtone(music);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ALBUM_ID", tempInfo.getId());
+                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
                     break;
                 case 2://
                     deleteAlbum(tempInfo.getId());
@@ -266,7 +287,7 @@ public class MyAlbumActivity extends BaseActivity implements
                 public void onSuccess(CommonCallBackBean resultBean) {
                     if(resultBean != null)
                     {
-                        loadMyAlbums();
+                        loadMyAlbums("");
                     }
                     else
                     {

@@ -18,13 +18,10 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AdPlanDetailAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
-import com.znt.vodbox.adapter.PlanDetailAdapter;
 import com.znt.vodbox.bean.AdPlanInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GroupInfo;
-import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubAdPlanInfo;
-import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.dialog.DoubleDatePickerDialog;
 import com.znt.vodbox.dialog.EditNameDialog;
 import com.znt.vodbox.entity.Constant;
@@ -144,7 +141,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
 
         listView.addHeader(headerView);
 
-
         mAdPlanDetailAdapter = new AdPlanDetailAdapter(getActivity(),this);
         listView.setAdapter(mAdPlanDetailAdapter);
 
@@ -159,7 +155,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             mAdPlanInfo.setName(defaultName);
             itvName.getSecondView().setText(mAdPlanInfo.getName());
         }
-
 
         /*listView.onFresh();
         listView.stopRefresh();*/
@@ -189,6 +184,16 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         itvDateStart.getBgView().setOnClickListener(this);
         itvDateEnd.getBgView().setOnClickListener(this);
 
+        if(mAdPlanInfo != null && mAdPlanInfo.isGroupPlan())
+        {
+            switchButton.setChecked(true);
+            showShops(true);
+        }
+        else
+        {
+            switchButton.setChecked(false);
+            showShops(false);
+        }
 
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -196,7 +201,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             public void onCheckedChanged(CompoundButton arg0, boolean arg1)
             {
                 // TODO Auto-generated method stub
-                showShops(!arg1);
+                showShops(arg1);
             }
         });
         switchButtonDate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()

@@ -11,6 +11,7 @@ import com.znt.vodbox.activity.AllPlanListActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
 import com.znt.vodbox.activity.MyAlbumActivity;
+import com.znt.vodbox.activity.SystemAlbumActivity;
 import com.znt.vodbox.service.QuitTimer;
 import com.znt.vodbox.storage.preference.Preferences;
 import com.znt.vodbox.utils.ToastUtils;
@@ -38,6 +39,10 @@ public class NaviMenuExecutor {
             case R.id.action_my_albums:
                 //startActivity(SettingActivity.class);
                 startActivity(MyAlbumActivity.class);
+                return true;
+            case R.id.action_sys_albums:
+                //startActivity(SettingActivity.class);
+                startActivity(SystemAlbumActivity.class);
                 return true;
             case R.id.action_setting:
                 //startActivity(SettingActivity.class);

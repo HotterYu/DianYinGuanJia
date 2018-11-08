@@ -329,7 +329,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                 case 2://
                     ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getMusicUrl());
+                    cm.setText(tempInfo.getMusicName() + "\n" + tempInfo.getMusicUrl());
                     showToast("复制成功");
                     break;
                 case 3://

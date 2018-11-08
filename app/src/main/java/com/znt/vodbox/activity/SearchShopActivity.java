@@ -31,8 +31,6 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
   {
     @Bind(R.id.lv_all_shops)
     private LJListView listView;
-    @Bind(R.id.tv_all_shops_loading)
-    private TextView vSearching;
     @Bind(R.id.search_view)
     private SearchView mSearchView = null;
 
@@ -49,6 +47,10 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
     private List<Shopinfo> shopinfoList = new ArrayList<>();
 
     private ShoplistAdapter adapter;
+
+      private int pageNo = 1;
+      private int pageSize = 25;
+      private int maxSize = 0;
 
 
     @Override
@@ -122,11 +124,8 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
             return;
         }
 
-        vSearching.setVisibility(View.GONE);
-
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
+
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -140,16 +139,26 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
-                            vSearching.setVisibility(View.GONE);
 
                             listView.stopRefresh();
                             if(resultBean.getResultcode().equals("1"))
                             {
-                                shopinfoList = resultBean.getData();
+                                List<Shopinfo> tempList = resultBean.getData();
+
+                                if(pageNo == 1)
+                                    shopinfoList.clear();
+
+                                if(tempList.size() <= pageSize)
+                                    pageNo ++;
+
+                                shopinfoList.addAll(tempList);
+                                if(maxSize == 0)
+                                    maxSize = Integer.parseInt(resultBean.getMessage());
+
                                 tvTopTitle.setText("搜索店铺("+resultBean.getMessage()+")");
                                 adapter.notifyDataSetChanged(shopinfoList);
                                 mSearchView.showRecordView(false);
@@ -162,7 +171,6 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
 
                         @Override
                         public void onFail(Exception e) {
-                            vSearching.setVisibility(View.GONE);
                             listView.stopRefresh();
                             if(e != null)
                                 showToast(e.getMessage());
@@ -196,7 +204,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
     @Override
     public void onMoreClick(int position) {
         Shopinfo tempShop = shopinfoList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplication());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempShop.getName());
         dialog.setItems(R.array.shop_list_dialog, (dialog1, which) -> {
             switch (which) {
@@ -224,15 +232,19 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
     }
 
 
-    @Override
-    public void onRefresh() {
-        loadShops();
-    }
+      @Override
+      public void onRefresh() {
+          pageNo = 1;
+          loadShops();
+      }
 
-    @Override
-    public void onLoadMore() {
-        loadShops();
-    }
+      @Override
+      public void onLoadMore() {
+          if(maxSize > shopinfoList.size())
+              loadShops();
+          else
+              showToast("没有更多数据了");
+      }
 
       @Override
       public void onBackPressed()

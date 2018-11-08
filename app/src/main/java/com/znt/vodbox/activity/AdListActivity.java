@@ -1,5 +1,7 @@
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +16,7 @@ import com.znt.vodbox.adapter.AdListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdMediaListResultBean;
+import com.znt.vodbox.bean.TypeInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -78,6 +81,17 @@ public class AdListActivity  extends BaseActivity implements
             }
         });
 
+        tvTopTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), TypeActivity.class);
+                Bundle b = new Bundle();
+                b.putString("TYPE","1");
+                intent.putExtras(b);
+                startActivityForResult(intent,2);
+            }
+        });
+
         isSelect = getIntent().getBooleanExtra("IS_SELECT", false);
         if(isSelect)
             tvConfirm.setText("完成");
@@ -120,7 +134,7 @@ public class AdListActivity  extends BaseActivity implements
         mSearchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-                getAdMedias();
+                getAdMedias("");
             }
         });
     }
@@ -138,14 +152,13 @@ public class AdListActivity  extends BaseActivity implements
         finish();
     }
 
-    public void getAdMedias()
+    public void getAdMedias(String adtypeId)
     {
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
-        String adtypeId = "";
         String adname = mSearchView.getText().toString();
 
         try
@@ -183,6 +196,56 @@ public class AdListActivity  extends BaseActivity implements
 
     }
 
+    public void deleteAlbumMusic(String musicIds)
+    {
+        /*try
+        {
+            String token = Constant.mUserInfo.getToken();
+            String albumId = mAlbumInfo.getId();
+
+            HttpClient.deleteAlbumMusics(token, albumId, musicIds, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null)
+                    {
+                        int deleteCount = updateDeleteMusicList(musicIds);
+                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
+                        dismissDialog();
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK)
+            return;
+        if(requestCode == 1)
+        {
+            listView.onFresh();
+        }
+        else if(requestCode == 2)
+        {
+            TypeInfo tempInfor = (TypeInfo)data.getSerializableExtra("TYPE_INFO");
+
+            getAdMedias(tempInfor.getId());
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(position > 0)
@@ -209,13 +272,23 @@ public class AdListActivity  extends BaseActivity implements
                     startActivity(intent);
                     break;
                 case 1://
-
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    // 将文本内容放到系统剪贴板里。
+                    cm.setText(tempInfo.getAdname() + "\n" + tempInfo.getUrl());
+                    showToast("复制成功");
                     break;
                 case 2://
                     //MusicInfoActivity.start(getContext(), music);
                     break;
                 case 3://
-                    //deleteMusic(music);
+                    showAlertDialog(getActivity(), new View.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View view)
+                        {
+                            deleteAlbumMusic(tempInfo.getId());
+                        }
+                    }, "", "确定删除该文件吗?");
                     break;
             }
         });
@@ -224,12 +297,12 @@ public class AdListActivity  extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        getAdMedias();
+        getAdMedias("");
     }
 
     @Override
     public void onLoadMore() {
-        getAdMedias();
+        getAdMedias("");
     }
 
     @Override

@@ -162,6 +162,9 @@
         <activity
             android:name=".activity.WifiSetActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.TypeActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

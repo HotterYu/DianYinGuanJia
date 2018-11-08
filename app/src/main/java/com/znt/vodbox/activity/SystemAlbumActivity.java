@@ -3,8 +3,6 @@ package com.znt.vodbox.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -48,8 +46,6 @@ public class SystemAlbumActivity extends BaseActivity implements
 
     private MyAlbumlistAdapter mMyAlbumlistAdapter = null;
 
-    private String musicIds = "";
-
     private boolean isSystemAlbum = true;
 
 
@@ -58,9 +54,6 @@ public class SystemAlbumActivity extends BaseActivity implements
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_album);
-
-        //mUserInfo = (UserInfo) getIntent().getSerializableExtra("USER_INFO");
-        musicIds = getIntent().getStringExtra("MUSIC_IDS");
 
         tvTopTitle.setText(getResources().getString(R.string.sys_album));
         ivTopMore.setVisibility(View.GONE);
@@ -158,6 +151,40 @@ public class SystemAlbumActivity extends BaseActivity implements
 
     }
 
+    public void collectAlbum(String albumId)
+    {
+        try
+        {
+            String token = Constant.mUserInfo.getToken();
+            String merchId = Constant.mUserInfo.getMerchant().getId();
+
+            HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null)
+                    {
+                        finish();
+                        /*int deleteCount = updateDeleteMusicList(musicIds);
+                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
+                        dismissDialog();*/
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -187,19 +214,12 @@ public class SystemAlbumActivity extends BaseActivity implements
             position = position - 1;
         AlbumInfo tempInfor = albumInfos.get(position);
 
-        if(TextUtils.isEmpty(musicIds))
-        {
-            Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
-            Bundle b = new Bundle();
-            b.putSerializable("ALBUM_INFO",tempInfor);
-            b.putBoolean("IS_SYSTEM_ALBUM",true);
-            intent.putExtras(b);
-            startActivity(intent);
-        }
-        else
-        {
-            addMusicToAlbum(tempInfor.getId());
-        }
+        Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+        Bundle b = new Bundle();
+        b.putSerializable("ALBUM_INFO",tempInfor);
+        b.putBoolean("IS_SYSTEM_ALBUM",true);
+        intent.putExtras(b);
+        startActivity(intent);
 
     }
 
@@ -208,23 +228,18 @@ public class SystemAlbumActivity extends BaseActivity implements
         AlbumInfo tempInfo = albumInfos.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.my_album_dialog, (dialog1, which) -> {
+        dialog.setItems(R.array.sys_album_dialog, (dialog1, which) -> {
             switch (which) {
                 case 0://
-                    Intent intent = new Intent(getActivity(), ModifyAlbumActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("ALBUM_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivityForResult(intent,1);
+                    collectAlbum(tempInfo.getId());
                     break;
                 case 1://
-                    //requestSetRingtone(music);
-                    break;
-                case 2://
-                    deleteAlbum(tempInfo.getId());
-                    break;
-                case 3://
-                    //deleteMusic(music);
+                    Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("ALBUM_INFO",tempInfo);
+                    b.putBoolean("IS_SYSTEM_ALBUM",true);
+                    intent.putExtras(b);
+                    startActivity(intent);
                     break;
             }
         });
@@ -266,42 +281,6 @@ public class SystemAlbumActivity extends BaseActivity implements
 
     }
 
-    public void addMusicToAlbum(String id)
-    {
-        String token = Constant.mUserInfo.getToken();
-        try
-        {
-            // Simulate network access.
-            HttpClient.addMusicToAlbum(token, id,musicIds, new HttpCallback<CommonCallBackBean>() {
-                @Override
-                public void onSuccess(CommonCallBackBean resultBean) {
-
-                    if(resultBean != null)
-                    {
-                        finish();
-                    }
-                    else
-                    {
-
-                    }
-
-                    showToast(resultBean.getMessage());
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    showToast(e.getMessage());
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            if(e != null)
-                showToast(e.getMessage());
-            Log.e("",e.getMessage());
-        }
-
-    }
 
     @Override
     public void onBackPressed()

@@ -10,22 +10,22 @@
             android:title="@string/menu_share" />
         <Preference
             android:key="star"
-            android:summary="前往项目地址给个Star，鼓励作者"
-            android:title="给我点赞" />
+            android:summary="在线申请免费试用系统"
+            android:title="免费申请试用" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="关于作者">
+    <PreferenceCategory android:title="关于我们">
         <Preference
             android:key="weibo"
             android:summary="@string/about_weibo"
-            android:title="微博" />
+            android:title="公司官网" />
         <Preference
             android:key="jianshu"
             android:summary="@string/about_jianshu"
-            android:title="简书" />
+            android:title="操作教程" />
         <Preference
             android:key="github"
             android:summary="@string/about_github"
-            android:title="Github" />
+            android:title="PC播放器下载" />
     </PreferenceCategory>
     <PreferenceCategory android:title="版权">
         <Preference

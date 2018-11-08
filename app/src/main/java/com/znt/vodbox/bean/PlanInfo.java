@@ -259,7 +259,7 @@ public class PlanInfo implements Serializable
         int size = subPlanList.size();
         for(int i=0;i<size;i++)
         {
-            //if(i !=selectedPlanIndex)
+            if(i !=selectedPlanIndex)
             {
                 SubPlanInfor tempInfor = subPlanList.get(i);
                 int tempS = DateUtils.timeToInt(tempInfor.getStartTime(), ":");

@@ -12,16 +12,6 @@
         android:layout_margin="6dp"
         ></com.znt.vodbox.view.xlistview.LJListView>
 
-    <TextView
-        android:id="@+id/tv_all_shops_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/screen_tips_top"
-        android:text="@string/loading"
-        android:textColor="@color/grey"
-        android:textSize="14sp"
-        android:visibility="gone" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

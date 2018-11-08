@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 
@@ -140,7 +139,10 @@ public class WelcomeActivity extends Activity {
                 public void onSuccess(UserCallBackBean tempInfor) {
 
                     UserInfo userInfo = tempInfor.getData();
+                    userInfo.setPwd(password);
                     Constant.mUserInfo = userInfo;
+
+                    LocalDataEntity.newInstance(getApplicationContext()).setUserInfor(userInfo);
 
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);

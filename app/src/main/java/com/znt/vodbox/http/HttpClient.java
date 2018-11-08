@@ -15,6 +15,7 @@ import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.bean.PlanListResultBean;
 import com.znt.vodbox.bean.ShopListResultBean;
+import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.bean.UserListCallBackBean;
 import com.znt.vodbox.bean.ZoneListResultBean;
@@ -405,6 +406,43 @@ public class HttpClient extends HttpApi{
                 .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
                     @Override
                     public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getAlbumTypes(String token, String searchWord,String type
+            ,@NonNull final HttpCallback<TypeCallBackBean> callback) {
+
+        String url = "";
+
+        if(type.equals("0"))//歌单分类
+        {
+            url = GET_ALBUM_TYPES;
+        }
+        else
+            url = GET_AD_TYPES;
+
+        OkHttpUtils.post().url(url)
+                .addHeader("token", token)
+                .addParams("searchWord", searchWord)
+                .build()
+                .execute(new BaseHttpCallback<TypeCallBackBean>(TypeCallBackBean.class) {
+                    @Override
+                    public void onResponse(TypeCallBackBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else

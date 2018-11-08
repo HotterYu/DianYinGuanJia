@@ -117,7 +117,8 @@ public class AdListAdapter extends BaseAdapter {
         if(!TextUtils.isEmpty(tempInfo.getFileSize()))
             fileSize = Long.parseLong(tempInfo.getFileSize());
         String artist = FileSizeUtil.FormetFileSize(fileSize) + "  " + addTimeFormat;
-        holder.tvDesc.setText(artist);
+        if(fileSize > 0)
+            holder.tvDesc.setText(artist);
 
         if(isSelect)
         {

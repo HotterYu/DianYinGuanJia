@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AddShopActivity;
@@ -40,8 +39,7 @@ import java.util.List;
 public class AllShopFragment extends BaseFragment implements LJListView.IXListViewListener,AdapterView.OnItemClickListener, OnMoreClickListener {
     @Bind(R.id.lv_all_shops)
     private LJListView listView;
-    @Bind(R.id.tv_all_shops_loading)
-    private TextView vSearching;
+
     @Bind(R.id.fab)
     FloatingActionButton fab = null;
     private List<Shopinfo> shopinfoList = new ArrayList<>();
@@ -51,6 +49,10 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
     private UserInfo mUserInfo = null;
 
     private MusicActivity.OnCountGetCallBack mOnCountGetCallBack = null;
+
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
 
     @Nullable
     @Override
@@ -104,11 +106,8 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
     public void loadShops()
     {
 
-        vSearching.setVisibility(View.VISIBLE);
-
         String token = mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
+
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -120,15 +119,25 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo + "", pageSize + "",merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                 @Override
                 public void onSuccess(ShopListResultBean resultBean) {
-                    vSearching.setVisibility(View.GONE);
                     listView.stopRefresh();
                     if(resultBean.getResultcode().equals("1"))
                     {
-                        shopinfoList = resultBean.getData();
+                        List<Shopinfo> tempList = resultBean.getData();
+
+                        if(pageNo == 1)
+                            shopinfoList.clear();
+
+                        if(tempList.size() <= pageSize)
+                            pageNo ++;
+
+                        shopinfoList.addAll(tempList);
+                        if(maxSize == 0)
+                            maxSize = Integer.parseInt(resultBean.getMessage());
+
                         if(mOnCountGetCallBack != null)
                             mOnCountGetCallBack.onCountGetBack(resultBean.getMessage());
                         adapter.notifyDataSetChanged(shopinfoList);
@@ -141,7 +150,6 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
 
                 @Override
                 public void onFail(Exception e) {
-                    vSearching.setVisibility(View.GONE);
                     listView.stopRefresh();
                     if(e != null)
                         showToast(e.getMessage());
@@ -219,11 +227,15 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
 
     @Override
     public void onRefresh() {
+        pageNo = 1;
         loadShops();
     }
 
     @Override
     public void onLoadMore() {
-        loadShops();
+        if(maxSize > shopinfoList.size())
+            loadShops();
+        else
+            showToast("没有更多数据了");
     }
 }

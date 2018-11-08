@@ -22,6 +22,7 @@ import com.znt.vodbox.constants.Extras;
 import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.executor.ControlPanel;
 import com.znt.vodbox.executor.NaviMenuExecutor;
+import com.znt.vodbox.executor.UserInfoExecutor;
 import com.znt.vodbox.fragment.AllShopFragment;
 import com.znt.vodbox.fragment.OfflineShopFragment;
 import com.znt.vodbox.fragment.OnlineShopFragment;
@@ -105,6 +106,8 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         // add navigation header
         vNavigationHeader = LayoutInflater.from(this).inflate(R.layout.navigation_header, navigationView, false);
         navigationView.addHeaderView(vNavigationHeader);
+        UserInfoExecutor mUserInfoExecutor = new UserInfoExecutor(getApplicationContext(),vNavigationHeader);
+        mUserInfoExecutor.showUserInfo();
         vNavigationHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

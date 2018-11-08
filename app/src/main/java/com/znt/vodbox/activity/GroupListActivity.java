@@ -1,7 +1,9 @@
 package com.znt.vodbox.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -10,20 +12,16 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.GroupListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
-import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.GroupInfo;
-import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.bean.MusicListResultBean;
-import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.dialog.EditNameDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -76,6 +74,28 @@ public class GroupListActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        ivTopConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                View view = View.inflate(GroupListActivity.this, R.layout.dialog_count_edit, null);
+                TextView man = (TextView) view.findViewById(R.id.tv_dialog_count_edit_title);
+                EditText women = (EditText) view.findViewById(R.id.et_count_edit);
+                man.setOnClickListener(this);
+                women.setOnClickListener(this);
+
+                BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(GroupListActivity.this);
+                bottomInterPasswordDialog.setContentView(view);
+                bottomInterPasswordDialog.show();
+                bottomInterPasswordDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+
+                    }
+                });
             }
         });
 
