@@ -150,9 +150,15 @@
         <activity
             android:name=".activity.SearchShopActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.ShopDetailActivity"></activity>
-        <activity android:name=".activity.AccountActivity"></activity>
-        <activity android:name=".activity.ShopSettingActivity"></activity>
+
+        <activity android:name=".activity.ShopDetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".activity.AccountActivity"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name=".activity.ShopSettingActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activity.UserListActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -164,6 +170,9 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.TypeActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.WifiListActivity"
             android:windowSoftInputMode="adjustPan" />
     </application>
 

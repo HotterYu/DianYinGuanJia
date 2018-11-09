@@ -28,6 +28,7 @@ import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class AlbumMusicActivity extends BaseActivity implements
     private AlbumMusiclistAdapter mAlbumMusiclistAdapter = null;
 
 
+    private int pageNo = 1;
+    private int pageSize = 25;
     private int curMusicSize = 0;
 
     @Override
@@ -150,20 +153,29 @@ public class AlbumMusicActivity extends BaseActivity implements
 
         String searchWord = mSearchView.getText().toString();
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
+
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {
             // Simulate network access.
-            HttpClient.getAlbumMusics(token, pageNo, pageSize,mAlbumInfo.getId(),searchWord, new HttpCallback<MusicListResultBean>() {
+            HttpClient.getAlbumMusics(token, pageNo+"", pageSize+"",mAlbumInfo.getId(),searchWord, new HttpCallback<MusicListResultBean>() {
                         @Override
                         public void onSuccess(MusicListResultBean resultBean) {
 
                             if(resultBean != null)
                             {
-                                dataList = resultBean.getData();
+
+                                List<MediaInfo> tempList = resultBean.getData();
+
+                                if(pageNo == 1)
+                                    dataList.clear();
+
+                                if(tempList.size() <= pageSize)
+                                    pageNo ++;
+
+                                dataList.addAll(tempList);
+
                                 mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
                                 if(!TextUtils.isEmpty(resultBean.getMessage()))
                                     curMusicSize = Integer.parseInt(resultBean.getMessage());
@@ -283,13 +295,19 @@ public class AlbumMusicActivity extends BaseActivity implements
     }
 
     @Override
-    public void onRefresh() {
+    public void onRefresh()
+    {
+        pageNo = 1;
         getAlbumMusics();
     }
 
     @Override
-    public void onLoadMore() {
-        getAlbumMusics();
+    public void onLoadMore()
+    {
+        if(curMusicSize > dataList.size())
+            getAlbumMusics();
+        else
+            showToast("没有更多数据了");
     }
 
     @Override
@@ -329,7 +347,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                 case 2://
                     ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getMusicName() + "\n" + tempInfo.getMusicUrl());
+                    cm.setText(tempInfo.getMusicName() + "\n" + URLDecoder.decode(tempInfo.getMusicUrl()));
                     showToast("复制成功");
                     break;
                 case 3://

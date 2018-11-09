@@ -51,7 +51,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getAddress() {
-        return address;
+        return convertWhenNull(address);
     }
 
     public void setAddress(String address) {
@@ -75,7 +75,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getCity() {
-        return city;
+        return convertWhenNull(city);
     }
 
     public void setCity(String city) {
@@ -83,7 +83,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getCountry() {
-        return country;
+        return convertWhenNull(country);
     }
 
     public void setCountry(String country) {
@@ -99,7 +99,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getLatitude() {
-        return latitude;
+        return convertWhenNull(latitude);
     }
 
     public void setLatitude(String latitude) {
@@ -107,7 +107,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getLongitude() {
-        return longitude;
+        return convertWhenNull(longitude);
     }
 
     public void setLongitude(String longitude) {
@@ -123,7 +123,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getMerchId() {
-        return merchId;
+        return convertWhenNull(merchId);
     }
 
     public void setMerchId(String merchId) {
@@ -131,7 +131,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getName() {
-        return name;
+        return convertWhenNull(name);
     }
 
     public void setName(String name) {
@@ -139,7 +139,8 @@ public class Shopinfo implements Serializable
     }
 
     public String getProvince() {
-        return province;
+
+        return convertWhenNull(province);
     }
 
     public void setProvince(String province) {
@@ -147,7 +148,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getRegion() {
-        return region;
+        return convertWhenNull(region);
     }
 
     public void setRegion(String region) {
@@ -163,7 +164,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getUserShopCode() {
-        return userShopCode;
+        return convertWhenNull(userShopCode);
     }
 
     public void setUserShopCode(String userShopCode) {
@@ -171,7 +172,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getTel() {
-        return tel;
+        return convertWhenNull(tel);
     }
 
     public void setTel(String tel) {
@@ -187,7 +188,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getWifiPassword() {
-        return wifiPassword;
+        return convertWhenNull(wifiPassword);
     }
 
     public void setWifiPassword(String wifiPassword) {
@@ -195,7 +196,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getLinkman() {
-        return linkman;
+        return convertWhenNull(linkman);
     }
 
     public void setLinkman(String linkman) {
@@ -203,7 +204,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getLinkmanPhone() {
-        return linkmanPhone;
+        return convertWhenNull(linkmanPhone);
     }
 
     public void setLinkmanPhone(String linkmanPhone) {
@@ -232,5 +233,12 @@ public class Shopinfo implements Serializable
 
     public void setTmlRunStatus(List<com.znt.vodbox.model.tmlRunStatus> tmlRunStatus) {
         this.tmlRunStatus = tmlRunStatus;
+    }
+
+    private String convertWhenNull(String text)
+    {
+        if(text == null)
+            text = "";
+        return text;
     }
 }

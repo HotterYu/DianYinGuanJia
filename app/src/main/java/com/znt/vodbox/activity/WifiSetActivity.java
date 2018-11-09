@@ -1,5 +1,6 @@
 package com.znt.vodbox.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 public class WifiSetActivity  extends BaseActivity{
@@ -27,6 +29,8 @@ public class WifiSetActivity  extends BaseActivity{
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
+    @Bind(R.id.tv_common_confirm)
+    private TextView tvTopTopRight = null;
 
     // UI references.
     @Bind(R.id.et_modify_album_name)
@@ -47,10 +51,19 @@ public class WifiSetActivity  extends BaseActivity{
 
         tvTopTitle.setText(getResources().getString(R.string.dev_wifi_set));
         ivTopMore.setVisibility(View.GONE);
+        tvTopTopRight.setVisibility(View.VISIBLE);
+        tvTopTopRight.setText("选择WIFI");
         ivTopReturn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        tvTopTopRight.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ViewUtils.startActivity(getActivity(),WifiListActivity.class,null,1);
             }
         });
 
@@ -84,47 +97,30 @@ public class WifiSetActivity  extends BaseActivity{
             return;
         }
 
-        String id = "";
-        String userShopCode = "";
-        String name = "";
-        String tel = "";
-        String linkman = "";
-        String linkmanPhone = "";
-        String wifiPassword = "";
-        String country = "";
-        String province = "";
-        String city = "";
-        String region = "";
-        String address = "";
-        String longitude = "";
-        String latitude = "";
-        String groupId = "";
+        mShopinfo.setWifiName(wifiName);
+        mShopinfo.setWifiPassword(etAlbumDesc.getText().toString());
+
         try
         {
             // Simulate network access.
-            HttpClient.updateShopInfo(token, id,userShopCode, name, tel
-                    , linkman, linkmanPhone,wifiName, wifiPassword, country, province, city, region, address, longitude
-                    , latitude, groupId, new HttpCallback<CommonCallBackBean>() {
+            HttpClient.updateShopInfo(token, mShopinfo, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
 
                     if(resultBean.isSuccess())
                     {
-                        //getGroupList();
+                        Intent intent = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("DeviceInfor",mShopinfo);
+                        intent.putExtras(bundle);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                     else
                     {
 
                     }
-
                     showToast(resultBean.getMessage());
-
-                    /*Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    intent.putExtras(bundle);
-                    setResult(RESULT_OK, intent);*/
-                    finish();
-
                 }
 
                 @Override
@@ -139,5 +135,20 @@ public class WifiSetActivity  extends BaseActivity{
             Log.e("",e.getMessage());
         }
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != RESULT_OK)
+            return;
+        if(requestCode == 1)
+        {
+            String name = data.getStringExtra("WIFI_NAME");
+            if(name != null)
+                etAlbumName.setText(name);
+        }
     }
 }

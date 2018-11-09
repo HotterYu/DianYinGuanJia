@@ -26,6 +26,7 @@ import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.io.Serializable;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,10 @@ public class AdListActivity  extends BaseActivity implements
     private List<AdMediaInfo> dataList = new ArrayList<>();
 
     private boolean isSelect = false;
+
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +160,7 @@ public class AdListActivity  extends BaseActivity implements
     public void getAdMedias(String adtypeId)
     {
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
+
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         String adname = mSearchView.getText().toString();
@@ -164,13 +168,22 @@ public class AdListActivity  extends BaseActivity implements
         try
         {
             // Simulate network access.
-            HttpClient.getAdLists(token, pageNo, pageSize,merchId,adtypeId,adname, new HttpCallback<AdMediaListResultBean>() {
+            HttpClient.getAdLists(token, pageNo + "", pageSize + "",merchId,adtypeId,adname, new HttpCallback<AdMediaListResultBean>() {
                 @Override
                 public void onSuccess(AdMediaListResultBean resultBean) {
 
                     if(resultBean != null)
                     {
-                        dataList = resultBean.getData();
+                        List<AdMediaInfo> tempList = resultBean.getData();
+
+                        if(pageNo == 1)
+                            dataList.clear();
+
+                        if(tempList.size() <= pageSize)
+                            pageNo ++;
+
+                        dataList.addAll(tempList);
+
                         mAdListAdapter.notifyDataSetChanged(dataList);
                         tvTopTitle.setText("我的广告("+resultBean.getMessage()+")");
                     }
@@ -252,7 +265,7 @@ public class AdListActivity  extends BaseActivity implements
             position = position - 1;
 
         AdMediaInfo tempInfor = dataList.get(position);
-        showPlayDialog(tempInfor.getAdname(),tempInfor.getUrl(),tempInfor.getId());
+        showPlayDialog(tempInfor.getAdname(),URLDecoder.decode(tempInfor.getUrl()),tempInfor.getId());
     }
 
     @Override
@@ -274,7 +287,7 @@ public class AdListActivity  extends BaseActivity implements
                 case 1://
                     ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getAdname() + "\n" + tempInfo.getUrl());
+                    cm.setText(tempInfo.getAdname() + "\n" + URLDecoder.decode(tempInfo.getUrl()));
                     showToast("复制成功");
                     break;
                 case 2://
@@ -297,12 +310,16 @@ public class AdListActivity  extends BaseActivity implements
 
     @Override
     public void onRefresh() {
+        pageNo = 1;
         getAdMedias("");
     }
 
     @Override
     public void onLoadMore() {
-        getAdMedias("");
+        if(maxSize > dataList.size())
+            getAdMedias("");
+        else
+            showToast("没有更多数据了");
     }
 
     @Override

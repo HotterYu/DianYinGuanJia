@@ -24,6 +24,7 @@ import com.znt.vodbox.model.ArtistInfo;
 import com.znt.vodbox.model.DownloadInfo;
 import com.znt.vodbox.model.OnlineMusicList;
 import com.znt.vodbox.model.SearchMusic;
+import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.model.Splash;
 
 import java.io.File;
@@ -114,10 +115,28 @@ public class HttpClient extends HttpApi{
                 });
     }
 
-    public static void updateShopInfo(String token,String id, String userShopCode, String name
-            ,String tel,String linkman,String linkmanPhone,String wifiName
-            ,String wifiPassword,String country,String province,String city,String region,String address
-            ,String longitude,String latitude,String groupId,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+    public static void updateShopInfo(String token, Shopinfo mShopinfo,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+
+
+        String id = mShopinfo.getId();
+        String userShopCode = mShopinfo.getUserShopCode();
+        String name = mShopinfo.getName();
+        String tel = mShopinfo.getTel();
+        String linkman = mShopinfo.getLinkman();
+        String linkmanPhone = mShopinfo.getLinkmanPhone();
+        String wifiName = mShopinfo.getWifiName();
+        String wifiPassword = mShopinfo.getWifiPassword();
+        String country = mShopinfo.getCountry();
+        String province = mShopinfo.getProvince();
+        String city = mShopinfo.getCity();
+        String region = mShopinfo.getRegion();
+        String address = mShopinfo.getAddress();
+        String longitude = mShopinfo.getLongitude();
+        String latitude = mShopinfo.getLatitude();
+        String groupId = "";
+        if(mShopinfo.getGroup() != null)
+            groupId = mShopinfo.getGroup().getId();
+
         OkHttpUtils.post().url(UPDATE_SHOP_INFO)
                 .addHeader("token", token)
                 .addParams("id", id)

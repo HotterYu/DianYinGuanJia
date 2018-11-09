@@ -6,6 +6,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,8 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
+import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.dialog.EditNameDialog;
 import com.znt.vodbox.dialog.VideoDirectionDialog;
+import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.http.HttpCallback;
+import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.ViewUtils;
@@ -127,7 +132,7 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		itvLastOnline.getSecondView().setText(DateUtils.getDateFromLong(Long.parseLong(deviceInfor.getTmlRunStatus().get(0).getLastConnTime())));
 		
 		//itvVersion.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
-		itvWifiName.getSecondView().setText(deviceInfor.getWifiName() + "\n" + deviceInfor.getWifiName());
+		itvWifiName.getSecondView().setText(deviceInfor.getWifiName() + "\n" + deviceInfor.getWifiPassword());
 		itvWifiPwd.getSecondView().setText(deviceInfor.getWifiPassword());
 		//itvIp.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
 		//itvStorage.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
@@ -276,7 +281,7 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 					showToast(getResources().getString(R.string.name_not_change));
 					return;
 				}
-				//httpFactory.updateSpeakerName(editNameDialog.getContent(), deviceInfor.getCode());
+				updateShopInfo(editNameDialog.getContent());
 				editNameDialog.dismiss();
 			}
 		});
@@ -287,6 +292,43 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		lp.width = (int)(display.getWidth()); //璁剧疆瀹藉害
 		lp.height = (int)(display.getHeight()); //璁剧疆楂樺害
 		editNameDialog.getWindow().setAttributes(lp);
+	}
+
+	public void updateShopInfo(String name)
+	{
+
+		deviceInfor.setName(name);
+		String token = Constant.mUserInfo.getToken();
+		try
+		{
+			// Simulate network access.
+			HttpClient.updateShopInfo(token, deviceInfor, new HttpCallback<CommonCallBackBean>() {
+				@Override
+				public void onSuccess(CommonCallBackBean resultBean) {
+
+					if(resultBean.isSuccess())
+					{
+
+					}
+					else
+					{
+
+					}
+					showToast(resultBean.getMessage());
+				}
+
+				@Override
+				public void onFail(Exception e) {
+					showToast(e.getMessage());
+				}
+			});
+		}
+		catch (Exception e)
+		{
+			showToast(e.getMessage());
+			Log.e("",e.getMessage());
+		}
+
 	}
 	
 	@Override

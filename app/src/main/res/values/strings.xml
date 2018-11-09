@@ -108,6 +108,7 @@
     <string name="sys_album">系统歌单</string>
     <string name="add_album">创建歌单</string>
     <string name="dev_wifi_set">WIFI设置</string>
+    <string name="dev_wifi_select">选择WIFI</string>
     <string name="modify_album">修改歌单</string>
     <string name="select_album">选择歌单</string>
     <string name="my_zones">我的分区</string>

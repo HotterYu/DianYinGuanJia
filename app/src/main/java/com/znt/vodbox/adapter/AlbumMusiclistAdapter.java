@@ -55,7 +55,7 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_my_albums, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_music, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
@@ -80,22 +80,19 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        @Bind(R.id.iv_my_album_cover)
+        @Bind(R.id.iv_cover)
         private ImageView ivCover;
 
-        @Bind(R.id.tv_my_album_name)
+        @Bind(R.id.tv_title)
         private TextView tvAlbumName;
 
-        @Bind(R.id.tv_my_album_desc)
+        @Bind(R.id.tv_artist)
         private TextView tvDesc;
 
-        @Bind(R.id.tv_my_album_count)
-        private TextView tvCount;
-
-        @Bind(R.id.iv_my_album_more)
+        @Bind(R.id.iv_more)
         private ImageView ivMore;
 
-        @Bind(R.id.v_my_album_divider)
+        @Bind(R.id.v_divider)
         private View vDivider;
 
 
