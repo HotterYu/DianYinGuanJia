@@ -138,24 +138,27 @@ public class WelcomeActivity extends Activity {
                 @Override
                 public void onSuccess(UserCallBackBean tempInfor) {
 
-                    UserInfo userInfo = tempInfor.getData();
-                    userInfo.setPwd(password);
-                    Constant.mUserInfo = userInfo;
-
-                    LocalDataEntity.newInstance(getApplicationContext()).setUserInfor(userInfo);
-
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-
-                    if(userInfo != null)
+                    if(tempInfor.isSuccess())
                     {
-                        MusicApplication.isLogin = true;
-                        Intent intent = new Intent(WelcomeActivity.this, MusicActivity.class);
-                        Bundle b = new Bundle();
-                        b.putSerializable("USER_INFO",userInfo);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                        finish();
+                        UserInfo userInfo = tempInfor.getData();
+                        userInfo.setPwd(password);
+                        Constant.mUserInfo = userInfo;
+
+                        LocalDataEntity.newInstance(getApplicationContext()).setUserInfor(userInfo);
+
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+
+                        if(userInfo != null)
+                        {
+                            MusicApplication.isLogin = true;
+                            Intent intent = new Intent(WelcomeActivity.this, MusicActivity.class);
+                            Bundle b = new Bundle();
+                            b.putSerializable("USER_INFO",userInfo);
+                            intent.putExtras(b);
+                            startActivity(intent);
+                            finish();
+                        }
                     }
                     else
                     {
