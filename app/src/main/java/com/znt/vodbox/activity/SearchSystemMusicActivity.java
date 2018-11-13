@@ -221,7 +221,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
             showPlayDialog(tempInfor.getMusicName(), tempInfor.getMusicUrl(), tempInfor.getId(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pushMedia(mShopinfo.getId());
+                    pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
                     dismissDialog();
                 }
             });
@@ -262,7 +262,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                     }
                     else
                     {
-                        pushMedia(mShopinfo.getId());
+                        pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
                     }
 
                     //requestSetRingtone(music);

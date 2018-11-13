@@ -15,8 +15,6 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
-import com.znt.vodbox.utils.StringUtils;
-import com.znt.vodbox.utils.SystemUtils;
 import com.znt.vodbox.utils.ToastUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
@@ -25,8 +23,6 @@ import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ShopSelectActivity extends BaseActivity  implements
         LJListView.IXListViewListener, AdapterView.OnItemClickListener{
@@ -219,7 +215,7 @@ public class ShopSelectActivity extends BaseActivity  implements
             position = position - 1;
 
         Shopinfo tempInfor = shopinfoList.get(position);
-        pushMedia(tempInfor.getId());
+        pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId());
         /*Intent intent = new Intent();
         Bundle b = new Bundle();
         b.putSerializable("SHOP_INFO", tempInfor);

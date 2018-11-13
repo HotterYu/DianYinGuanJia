@@ -656,10 +656,10 @@ public class HttpClient extends HttpApi{
                 });
     }
 
-    public static void pushMedia(String terminId, String type, String dataId,String userId
+    public static void pushMedia(String terminalId, String type, String dataId,String userId
             , String pusherid, String pushername,@NonNull final HttpCallback<CommonCallBackBean> callback) {
         OkHttpUtils.post().url(PUSH_MEDIA)
-                .addParams("terminId", terminId)
+                .addParams("terminalId", terminalId)
                 .addParams("type", type)
                 .addParams("dataId", dataId)
                 .addParams("userId", userId)
