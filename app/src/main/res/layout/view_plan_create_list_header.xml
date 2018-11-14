@@ -18,19 +18,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
 
-        ></com.znt.vodbox.view.ItemTextView>
+        />
     <View
         android:layout_width="fill_parent"
         android:layout_height="10dp"
         android:background="?android:attr/listDivider"
         />
+
     <com.znt.vodbox.view.ItemTextView
         android:id="@+id/itv_plan_detail_broadcast_albums"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
 
-        ></com.znt.vodbox.view.ItemTextView>
+        />
 
     <View
         android:layout_width="fill_parent"

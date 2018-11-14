@@ -21,13 +21,13 @@ public class UserInfoExecutor{
     private Context mContext;
     @Bind(R.id.ll_weather)
     private LinearLayout llWeather;
-    @Bind(R.id.iv_weather_icon)
+    @Bind(R.id.iv_nv_weather_icon)
     private ImageView ivIcon;
-    @Bind(R.id.tv_user_info_name)
+    @Bind(R.id.tv_nv_user_info_name)
     private TextView tvTemp;
-    @Bind(R.id.tv_user_info_type)
+    @Bind(R.id.tv_nv_user_info_type_name)
     private TextView tvCity;
-    @Bind(R.id.tv_user_info_code)
+    @Bind(R.id.tv_nv_user_info_code)
     private TextView tvWind;
 
     public UserInfoExecutor(Context context, View navigationHeader) {

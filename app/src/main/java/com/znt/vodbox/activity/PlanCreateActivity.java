@@ -1,49 +1,36 @@
 package com.znt.vodbox.activity;
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AlbumSelectAdapter;
-import com.znt.vodbox.adapter.MyAlbumlistAdapter;
+import com.znt.vodbox.adapter.PlanAlbumAdapter;
 import com.znt.vodbox.bean.AlbumInfo;
-import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubPlanInfor;
-import com.znt.vodbox.dialog.CountEditDialog;
 import com.znt.vodbox.dialog.WheelListDialog;
-import com.znt.vodbox.entity.Constant;
-import com.znt.vodbox.http.HttpCallback;
-import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.StringUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
-import com.znt.vodbox.view.SwitchButton;
 import com.znt.vodbox.view.wheel.ArrayWheelAdapter;
 import com.znt.vodbox.view.wheel.OnWheelChangedListener;
 import com.znt.vodbox.view.wheel.OnWheelScrollListener;
 import com.znt.vodbox.view.wheel.WheelView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class PlanCreateActivity extends  BaseActivity implements OnClickListener
@@ -84,8 +71,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
     private String cycleType = "0";
     private boolean isEdit = false;
 
-    private AlbumSelectAdapter mAlbumSelectAdapter = null;
-    private List<AlbumInfo> albumList = new ArrayList<AlbumInfo>();
+    private PlanAlbumAdapter mPlanAlbumAdapter = null;
     private List<AlbumInfo> selectAlbumList = new ArrayList<AlbumInfo>();
 
     public static final String[] DAY_STRING = { "00", "01", "02", "03", "04", "05",
@@ -152,6 +138,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
         mPlanInfo = (PlanInfo)getIntent().getSerializableExtra("PLAN_INFO");
 
+
         headerView = LayoutInflater.from(getActivity()).inflate(R.layout.view_plan_create_list_header, null);
         wvHourStart = (WheelView)findViewById(R.id.vh_time_select_hour);
         wvMinStart = (WheelView)findViewById(R.id.vh_time_select_min);
@@ -186,8 +173,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         listView.addHeader(headerView);
         listView.setVisibility(View.VISIBLE);
 
-        mAlbumSelectAdapter = new AlbumSelectAdapter(getActivity(),albumList);
-        listView.setAdapter(mAlbumSelectAdapter);
+        mPlanAlbumAdapter = new PlanAlbumAdapter(getActivity(),selectAlbumList);
+        listView.setAdapter(mPlanAlbumAdapter);
         initWheelViews();
 
         isEdit = getIntent().getBooleanExtra("IS_EDIT", false);
@@ -211,63 +198,10 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
             showCurPlanInfor();
         }
 
-        listView.onFresh();
+        //listView.onFresh();
 
     }
 
-    public void loadMyAlbums()
-    {
-
-
-        String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "20";
-        String merchId = Constant.mUserInfo.getMerchant().getId();
-        //String merchId = mUserInfo.getMerchant().getId();
-        String typeId = "";
-        String name = "";
-
-        try
-        {
-            // Simulate network access.
-            HttpClient.getMyAlbums(token, pageNo, pageSize,merchId,typeId,name, new HttpCallback<AlbumListResultBean>() {
-                @Override
-                public void onSuccess(AlbumListResultBean resultBean) {
-                    listView.stopRefresh();
-                    if(resultBean != null)
-                    {
-                        albumList = resultBean.getData();
-                        if(isEdit)
-                        {
-                            SubPlanInfor subPlanInfor = mPlanInfo.getSelelctPlanInfor();
-                            selectAlbumList.addAll(subPlanInfor.getAlbumList());
-                            mAlbumSelectAdapter.notifyDataSetChanged(albumList);
-                            mAlbumSelectAdapter.setSelectedList(selectAlbumList);
-                        }
-                        else
-                            mAlbumSelectAdapter.notifyDataSetChanged(albumList);
-
-
-                    }
-                    else
-                    {
-                        //shopinfoList.clear();
-                    }
-                    listView.stopRefresh();
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    listView.stopRefresh();
-                }
-            });
-        }
-        catch (Exception e)
-        {
-
-        }
-
-    }
 
     private void onLoad(int updateCount)
     {
@@ -282,6 +216,10 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         SubPlanInfor subPlanInfor = mPlanInfo.getSelelctPlanInfor();
         if(subPlanInfor != null)
         {
+
+            selectAlbumList = mPlanInfo.getSelelctPlanInfor().getAlbumList();
+            mPlanAlbumAdapter.notifyDataSetChanged(selectAlbumList);
+
             String sTime = subPlanInfor.getStartTime();
             String eTime = subPlanInfor.getEndTime();
             cycleType = subPlanInfor.getCycleType();
@@ -381,14 +319,14 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
             return null;
         }
 
-        if(mAlbumSelectAdapter.getSelectedList().size() == 0)
+        if(selectAlbumList.size() == 0)
         {
             showToast("请至少添加一个歌单");
             return null;
         }
         tempInfor.setStartTime(startTimes);
         tempInfor.setEndTime(endTimes);
-        tempInfor.setAlbumList(mAlbumSelectAdapter.getSelectedList());
+        tempInfor.setAlbumList(selectAlbumList);
 
         tempInfor.setCycleType(cycleType);
         return tempInfor;
@@ -574,10 +512,10 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         {
 
         }
-        else if(requestCode == 3)
+        else if(requestCode == 2)
         {
-
-
+            selectAlbumList = (List<AlbumInfo>) data.getSerializableExtra("SELECTED_ALBUM");
+            mPlanAlbumAdapter.notifyDataSetChanged(selectAlbumList);
         }
     }
 
@@ -588,7 +526,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
     public void onRefresh()
     {
         // TODO Auto-generated method stub
-        loadMyAlbums();
+        //loadMyAlbums();
+        onLoad(0);
     }
 
     /**
@@ -597,8 +536,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
     @Override
     public void onLoadMore() {
         // TODO Auto-generated method stub
-
-        loadMyAlbums();
+        onLoad(0);
+        //loadMyAlbums();
     }
 
     /**
@@ -609,7 +548,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         // TODO Auto-generated method stub
         if(arg2 > 1)
             arg2 = arg2 - 2;
-        AlbumInfo infor = albumList.get(arg2);
+
+        AlbumInfo infor = selectAlbumList.get(arg2);
         Bundle bundle = new Bundle();
         bundle.putSerializable("MusicAlbumInfor", infor);
         //bundle.putSerializable("MusicEditType", MusicEditType.DeleteAdd);
@@ -630,9 +570,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         {
             Bundle bundle = new Bundle();
             bundle.putBoolean("IS_SELECT", true);
-            /*if(planInfor.getSelelctPlanInfor() != null && planInfor.getSelelctPlanInfor().getLoopMusicInfoId() != null)
-                bundle.putString("SELECT_MUSIC_ID", planInfor.getSelelctPlanInfor().getLoopMusicInfoId());*/
-            ViewUtils.startActivity(getActivity(), MyAlbumActivity.class, bundle, 3);
+            bundle.putSerializable("SELECTED_ALBUM", (Serializable) selectAlbumList);
+            ViewUtils.startActivity(getActivity(), AlbumSelectActivity.class, bundle, 2);
         }
         else if(v == itvWeekSelect.getBgView())
         {

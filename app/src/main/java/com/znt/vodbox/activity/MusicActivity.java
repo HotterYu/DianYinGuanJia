@@ -216,7 +216,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        drawerLayout.closeDrawers();
+        //drawerLayout.closeDrawers();
         handler.postDelayed(() -> item.setChecked(false), 500);
         return naviMenuExecutor.onNavigationItemSelected(item);
     }

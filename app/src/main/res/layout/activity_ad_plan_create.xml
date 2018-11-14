@@ -6,10 +6,10 @@
 
     <include layout="@layout/activity_common_include" />
 
-    <include
+    <!--<include
         android:id="@+id/view_ad_create_time_select"
         layout="@layout/view_plan_create_header"
-        />
+        />-->
 
     <RelativeLayout
         android:layout_width="fill_parent"

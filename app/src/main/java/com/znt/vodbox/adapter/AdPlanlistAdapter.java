@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AdPlanInfo;
-import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
@@ -63,7 +62,6 @@ public class AdPlanlistAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.vPlaying.setVisibility((isPlaylist && position == AudioPlayer.get().getPlayPosition()) ? View.VISIBLE : View.INVISIBLE);
         AdPlanInfo tempInfo = dataList.get(position);
         holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvPlanName.setText(tempInfo.getName());
@@ -92,8 +90,6 @@ public class AdPlanlistAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        @Bind(R.id.v_plan_playing)
-        private View vPlaying;
         @Bind(R.id.iv_plan_cover)
         private ImageView ivCover;
         @Bind(R.id.tv_plan_name)

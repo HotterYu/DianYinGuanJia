@@ -3,11 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+	android:background="@color/white_8p"
+	android:clickable="false"
+	android:focusable="false"
+	android:focusableInTouchMode="false"
     android:orientation="vertical">
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+		android:background="@color/white_8p"
+		android:clickable="false"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
         >
         <com.znt.vodbox.view.ItemTextView
 	        android:id="@+id/itv_plan_detail_name"
@@ -20,7 +28,6 @@
 			android:layout_width="fill_parent"
 			android:layout_height="1dp"
 			android:background="?android:attr/listDivider"
-			android:visibility="gone"
 			/>
 
 	    <RelativeLayout 
@@ -31,7 +38,7 @@
 	        android:orientation="horizontal"
 	        android:paddingTop="8dp"
         	android:paddingBottom="8dp"
-			android:background="@drawable/btn_action_bg_selector"
+			android:background="@color/white_8p"
 	        >
 	        <TextView 
 	            android:layout_width="wrap_content"
@@ -74,41 +81,13 @@
 	    	android:layout_marginLeft="10dp"
 	        ></com.znt.vodbox.view.ItemTextView>
 
-		<View
-			android:layout_width="fill_parent"
-			android:layout_height="1dp"
-			android:background="?android:attr/listDivider"
-			android:visibility="gone"
-			/>
-
-	    <com.znt.vodbox.view.ItemTextView
-	        android:id="@+id/itv_plan_detail_musics"
-	        android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_marginLeft="10dp"
-			android:visibility="gone"
-	        ></com.znt.vodbox.view.ItemTextView>
-	    
     </LinearLayout>
     <View 
        android:layout_width="fill_parent"
        android:layout_height="1dp"
 		android:background="?android:attr/listDivider"
        />
-    <View 
-       android:layout_width="fill_parent"
-       android:layout_height="12dp"
-		android:visibility="gone"
-		android:background="@color/grey"
-		android:alpha="0.2"
 
-       />
-    <View 
-       android:layout_width="fill_parent"
-       android:layout_height="1dp"
-		android:visibility="gone"
-		android:background="?android:attr/listDivider"
-       />
     <RelativeLayout 
         android:id="@+id/view_plan_detail_date_select"
         android:layout_width="fill_parent"
@@ -117,8 +96,10 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:orientation="horizontal"
-
-		android:background="@drawable/btn_action_bg_selector"
+		android:background="@color/white_8p"
+		android:clickable="false"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
         >
         <TextView 
             android:layout_width="wrap_content"
@@ -152,19 +133,20 @@
         android:layout_width="fill_parent"
         android:layout_height="1dp"
 		android:background="?android:attr/listDivider"
+		android:visibility="gone"
         />
-    <com.znt.vodbox.view.ItemTextView
-	        android:id="@+id/itv_plan_detail_date_select_start"
-	        android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_marginLeft="10dp"
-	        ></com.znt.vodbox.view.ItemTextView>
-    <com.znt.vodbox.view.ItemTextView
-	        android:id="@+id/itv_plan_detail_date_select_end"
-	        android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_marginLeft="10dp"
-	        ></com.znt.vodbox.view.ItemTextView>
+
+	<com.znt.vodbox.view.ItemTextView
+		android:id="@+id/itv_plan_detail_date_select_start"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp" />
+
+	<com.znt.vodbox.view.ItemTextView
+		android:id="@+id/itv_plan_detail_date_select_end"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp" />
     <View 
         android:layout_width="fill_parent"
         android:layout_height="1dp"
@@ -173,8 +155,10 @@
     <RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-
-        android:background="@drawable/btn_action_bg_selector"
+        android:background="@color/white_8p"
+		android:clickable="false"
+		android:focusable="false"
+		android:focusableInTouchMode="false"
         >
         <TextView 
 	        android:id="@+id/tv_plan_detail_plan_time"
@@ -186,6 +170,10 @@
 	        android:textSize="@dimen/title_text_size"
             style="@style/AppTheme.Text"
 	        android:text="计划时间"
+			android:background="@color/white_8p"
+			android:clickable="false"
+			android:focusable="false"
+			android:focusableInTouchMode="false"
 	        />
         
         <LinearLayout 

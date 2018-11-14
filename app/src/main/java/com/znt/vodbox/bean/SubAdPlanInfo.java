@@ -128,7 +128,7 @@ public class SubAdPlanInfo implements Serializable {
     {
         int size = adMediaInfoList.size();
         String tag = ";";
-        adinfoName = ";";
+        adinfoName = "";
         for(int i=0;i<size;i++)
         {
             AdMediaInfo tempInfor = adMediaInfoList.get(i);
@@ -143,7 +143,7 @@ public class SubAdPlanInfo implements Serializable {
     {
         int size = adMediaInfoList.size();
         String tag = ";";
-        adinfoId = ";";
+        adinfoId = "";
         for(int i=0;i<size;i++)
         {
             AdMediaInfo tempInfor = adMediaInfoList.get(i);
@@ -158,7 +158,7 @@ public class SubAdPlanInfo implements Serializable {
     {
         int size = adMediaInfoList.size();
         String tag = ";";
-        adinfoUrl = ";";
+        adinfoUrl = "";
         for(int i=0;i<size;i++)
         {
             AdMediaInfo tempInfor = adMediaInfoList.get(i);

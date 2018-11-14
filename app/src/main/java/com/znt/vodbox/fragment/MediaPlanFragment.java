@@ -3,7 +3,6 @@ package com.znt.vodbox.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -199,20 +198,27 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
         dialog.setItems(R.array.plan_dialog, (dialog1, which) -> {
             switch (which) {
                 case 0://
-                    //shareMusic(music);
+                    Intent intent = new Intent(getActivity(), PlanDetailActivity.class);
+                    Bundle b = new Bundle();
+                    b.putSerializable("PLAN_INFO",tempInfo);
+                    intent.putExtras(b);
+                    startActivityForResult(intent, 1);
                     break;
                 case 1://
-                    /*Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("MEDIA_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivity(intent);*/
-                    //requestSetRingtone(music);
+
+                    PlanInfo copyInfo = null;
+                    try {
+                        copyInfo = (PlanInfo) tempInfo.clone();
+                        copyInfo.setId("");
+                        copyInfo.setPlanName(copyInfo.getPlanName() + "_复制");
+                        dataList.add(0,copyInfo);
+                        mPlanlistAdapter.notifyDataSetChanged(dataList);
+                    } catch (CloneNotSupportedException e) {
+                        e.printStackTrace();
+                    }
+
                     break;
                 case 2://
-                    //MusicInfoActivity.start(getContext(), music);
-                    break;
-                case 3://
                     deletePlan(tempInfo);
                     break;
             }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdPlanInfo implements Serializable
+public class AdPlanInfo implements Serializable, Cloneable
 {
     private String id;
     private String name;
@@ -37,7 +37,10 @@ public class AdPlanInfo implements Serializable
         this.addTime = addTime;
     }
 
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     private List<SubAdPlanInfo> subPlanList = new ArrayList<SubAdPlanInfo>();
     public List<SubAdPlanInfo> getSubPlanList()
@@ -59,7 +62,10 @@ public class AdPlanInfo implements Serializable
     private int selectedPlanIndex = 0;
     public SubAdPlanInfo getSelelctPlanInfor()
     {
-        return getSubPlanList().get(selectedPlanIndex);
+        if(getSubPlanList().size() > 0)
+            return getSubPlanList().get(selectedPlanIndex);
+        else
+            return null;
     }
     public void setSelectedSubPlanIndex(int selectedPlanIndex)
     {

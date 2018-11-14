@@ -30,56 +30,24 @@ import java.util.List;
  * @Description: TODO
  * @author yan.yu 
  */
-public class AlbumSelectAdapter extends BaseAdapter
+public class PlanAlbumAdapter extends BaseAdapter
 {
 
 	private Activity baseActivity = null;
-	private List<AlbumInfo> list = new ArrayList<AlbumInfo>();
 	private List<AlbumInfo> selectedList = new ArrayList<AlbumInfo>();
 
-	public AlbumSelectAdapter(Activity activity, List<AlbumInfo> list)
+	public PlanAlbumAdapter(Activity activity, List<AlbumInfo> list)
 	{
 		this.baseActivity = activity;
-		this.list = list;
+		this.selectedList = list;
 	}
 
 	public void notifyDataSetChanged(List<AlbumInfo> list)
 	{
-		this.list = list;
-		updateSelectedAlbums();
+		this.selectedList = list;
+
 		notifyDataSetChanged();
 
-	}
-	
-	public void setSelectedList(List<AlbumInfo> selectedList)
-	{
-		this.selectedList = selectedList;
-		updateSelectedAlbums();
-		notifyDataSetChanged();
-	}
-
-	private void updateSelectedAlbums()
-	{
-		int size = selectedList.size();
-		for(int i=0;i<size;i++)
-		{
-			AlbumInfo infor = selectedList.get(i);
-			int len = list.size();
-			for(int j=0;j<len;j++)
-			{
-				AlbumInfo tempInfor = list.get(j);
-				if(infor.getId().equals(tempInfor.getId()))
-				{
-					tempInfor.setSelected(true);
-					list.set(j, tempInfor);
-				}
-			}
-		}
-	}
-
-	public List<AlbumInfo> getSelectedList()
-	{
-		return selectedList;
 	}
 	
 	/**
@@ -89,7 +57,7 @@ public class AlbumSelectAdapter extends BaseAdapter
 	public int getCount() 
 	{
 		// TODO Auto-generated method stub
-		return list.size();
+		return selectedList.size();
 	}
 
 	/**
@@ -99,7 +67,7 @@ public class AlbumSelectAdapter extends BaseAdapter
 	public Object getItem(int arg0) 
 	{
 		// TODO Auto-generated method stub
-		return list.get(arg0);
+		return selectedList.get(arg0);
 	}
 
 	/**
@@ -123,7 +91,7 @@ public class AlbumSelectAdapter extends BaseAdapter
 		if(convertView == null)
 		{
 			vh = new ViewHolder();
-			convertView = LayoutInflater.from(baseActivity).inflate(R.layout.view_album_select_item, null);
+			convertView = LayoutInflater.from(baseActivity).inflate(R.layout.view_plan_album_item, null);
 			
 			vh.tvName = (TextView)convertView.findViewById(R.id.tv_album_sellect_name);
 			vh.ivCover = (ImageView)convertView.findViewById(R.id.iv_album_select_cover);
@@ -140,26 +108,7 @@ public class AlbumSelectAdapter extends BaseAdapter
 				{
 					// TODO Auto-generated method stub
 					int index = (Integer) v.getTag();
-					AlbumInfo infor = list.get(index);
-					infor.setSelected(!infor.isSelected());
-					if(infor.isSelected())
-					{
-						selectedList.add(infor);
-					}
-					else
-					{
-						for(int i=0;i<selectedList.size();i++)
-						{
-							AlbumInfo tempInfor = selectedList.get(i);
-							if(infor.getId().equals(tempInfor.getId()))
-							{
-								selectedList.remove(i);
-							}
-						}
-						if(selectedList.size() > 0)
-							selectedList.remove(infor);
-					}
-					list.set(index, infor);
+					selectedList.remove(index);
 					notifyDataSetChanged();
 				}
 			});
@@ -171,14 +120,14 @@ public class AlbumSelectAdapter extends BaseAdapter
 		
 		vh.viewOperation.setTag(pos);
 
-		AlbumInfo infor = list.get(pos);
+		AlbumInfo infor = selectedList.get(pos);
 
-        if(infor.isSelected())
+        /*if(infor.isSelected())
             vh.ivEdit.setImageResource(R.drawable.icon_selected_on);
         else
-            vh.ivEdit.setImageResource(R.drawable.icon_selected_off);
+            vh.ivEdit.setImageResource(R.drawable.icon_selected_off);*/
 		
-		vh.tvName.setText(infor.getName() + "(" + infor.getMusicNum() + ")");
+		vh.tvName.setText(infor.getName());
 		/*if(!TextUtils.isEmpty(infor.getCover()))
 			Picasso.with(baseActivity).load(infor.getCover()).into(vh.ivCover);
 		else

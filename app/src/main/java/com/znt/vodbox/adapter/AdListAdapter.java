@@ -57,6 +57,28 @@ public class AdListAdapter extends BaseAdapter {
         return tempList;
     }
 
+    public void updateSelected(List<AdMediaInfo> selectedList)
+    {
+        if(selectedList == null)
+            return;
+        
+        int size = selectedList.size();
+        for(int i=0;i<size;i++)
+        {
+            AdMediaInfo infor = selectedList.get(i);
+            int len = dataList.size();
+            for(int j=0;j<len;j++)
+            {
+                AdMediaInfo tempInfor = dataList.get(j);
+                if(infor.getId().equals(tempInfor.getId()))
+                {
+                    tempInfor.setSelected(true);
+                    dataList.set(j, tempInfor);
+                }
+            }
+        }
+    }
+
     public void setOnMoreClickListener(OnMoreClickListener listener) {
         this.listener = listener;
     }
@@ -105,7 +127,7 @@ public class AdListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         AdMediaInfo tempInfo = dataList.get(position);
-        holder.ivCover.setImageResource(R.drawable.default_cover);
+        //holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvAlbumName.setText(tempInfo.getAdname());
         holder.ivItemSelect.setTag(position);
 
@@ -118,7 +140,12 @@ public class AdListAdapter extends BaseAdapter {
             fileSize = Long.parseLong(tempInfo.getFileSize());
         String artist = FileSizeUtil.FormetFileSize(fileSize) + "  " + addTimeFormat;
         if(fileSize > 0)
+        {
+            holder.tvDesc.setVisibility(View.VISIBLE);
             holder.tvDesc.setText(artist);
+        }
+        else
+            holder.tvDesc.setVisibility(View.GONE);
 
         if(isSelect)
         {

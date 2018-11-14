@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -23,7 +21,7 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.SubAdPlanInfo;
 import com.znt.vodbox.dialog.DoubleDatePickerDialog;
-import com.znt.vodbox.dialog.EditNameDialog;
+import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -56,8 +54,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
     private ItemTextView itvName = null;
 
     private ItemTextView itvShops = null;
-
-    private ItemTextView itvMusics = null;
 
     private ItemTextView itvDateStart = null;
 
@@ -117,13 +113,14 @@ public class AdPlanDetailActivity extends BaseActivity  implements
 
         headerView = LayoutInflater.from(getActivity()).inflate(R.layout.view_plan_detail_header, null);
 
+        headerView.setOnClickListener(this);
+
         viewApply = headerView.findViewById(R.id.view_plan_detail_apply);
         switchButton = (SwitchButton)headerView.findViewById(R.id.sb_plan_detail);
         switchButtonDate = (SwitchButton)headerView.findViewById(R.id.sb_plan_detail_date);
 
         itvName = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_name);
         itvShops = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_shops);
-        itvMusics = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_musics);
         itvDateStart = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_date_select_start);
         itvDateEnd = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_date_select_end);
         viewAdd = headerView.findViewById(R.id.view_plan_detail_add);
@@ -165,22 +162,18 @@ public class AdPlanDetailActivity extends BaseActivity  implements
     {
         itvName.getFirstView().setText(getResources().getString(R.string.plan_detail_name));
         itvShops.getFirstView().setText(getResources().getString(R.string.plan_detail_groups));
-        itvMusics.getFirstView().setText(getResources().getString(R.string.plan_detail_all_music));
         itvDateStart.getFirstView().setText(getResources().getString(R.string.plan_detail_start_date));
         itvDateEnd.getFirstView().setText(getResources().getString(R.string.plan_detail_end_date));
         itvName.showMoreButton(true);
         itvShops.showMoreButton(true);
-        itvMusics.showMoreButton(true);
         itvDateStart.showMoreButton(true);
         itvDateEnd.showMoreButton(true);
 
-        itvMusics.showBottomLine(false);
         itvDateEnd.showBottomLine(false);
 
         viewAdd.setOnClickListener(this);
         itvName.getBgView().setOnClickListener(this);
         itvShops.getBgView().setOnClickListener(this);
-        itvMusics.getBgView().setOnClickListener(this);
         itvDateStart.getBgView().setOnClickListener(this);
         itvDateEnd.getBgView().setOnClickListener(this);
 
@@ -188,6 +181,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         {
             switchButton.setChecked(true);
             showShops(true);
+            itvShops.getSecondView().setText(mAdPlanInfo.getGroupName());
         }
         else
         {
@@ -258,8 +252,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         itvName.getSecondView().setText(mAdPlanInfo.getName());
         if(!TextUtils.isEmpty(mAdPlanInfo.getStartDate()))
         {
-            /*long startDateLong = Long.parseLong(mPlanInfo.getStartDate());
-            itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_date) + ": " + DateUtils.getStringTimeHead(startDateLong) );*/
             itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + mAdPlanInfo.getStartDate());
             itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": " + mAdPlanInfo.getEndDate());
         }
@@ -267,6 +259,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         {
             switchButtonDate.setChecked(false);
         }
+
         mAdPlanDetailAdapter.notifyDataSetChanged(mAdPlanInfo.getSubPlanList());
     }
 
@@ -275,7 +268,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         if(isShow)
         {
             itvShops.setVisibility(View.VISIBLE);
-            //planInfor.setPlanFlag("1");
+            itvShops.getSecondView().setText(mAdPlanInfo.getGroupName());
         }
         else
         {
@@ -448,6 +441,9 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         if(position >= 2)
             position = position - 2;
 
+        if(position >= mAdPlanInfo.getSubPlanList().size())
+            return;
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("AD_PLAN_INFO", mAdPlanInfo);
         mAdPlanInfo.setSelectedSubPlanIndex(position);
@@ -482,12 +478,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             bundle.putBoolean("IS_EDIT", false);
             ViewUtils.startActivity(getActivity(), AdPlanCreateActivity.class, bundle, 1);
         }
-        else if(v == itvMusics.getBgView())
-        {
-            /*Bundle bundle = new Bundle();
-            bundle.putSerializable("PlanInfor", planInfor);
-            ViewUtils.startActivity(getActivity(), PlanAllMusicActivity.class, bundle);*/
-        }
         else if(v == itvDateStart.getBgView())
         {
 
@@ -508,50 +498,17 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         }
         else if(v == itvName.getBgView())
         {
-            showNameEditDialog(mAdPlanInfo.getName());
+            TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+            mTextInputBottomDialog.show("请输入计划名称", mAdPlanInfo.getName(), new TextInputBottomDialog.OnDismissResultListener() {
+                @Override
+                public void onConfirmDismiss(String content) {
+                    mAdPlanInfo.setName(content);
+                    itvName.getSecondView().setText(content);
+
+                }
+            });
         }
 
-    }
-
-    private EditNameDialog dialog = null;
-    private void showNameEditDialog(final String name)
-    {
-        if(dialog == null || dialog.isDismissed())
-            dialog = new EditNameDialog(getActivity(),"请输入广告计划名称");
-        dialog.setInfor(name);
-        //playDialog.updateProgress("00:02:18 / 00:05:12");
-        if(dialog.isShowing())
-            dialog.dismiss();
-        dialog.show();
-        dialog.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View arg0)
-            {
-                // TODO Auto-generated method stub
-                if(TextUtils.isEmpty(dialog.getContent()))
-                {
-                    showToast("请输入计划名称");
-                    return;
-                }
-                if(dialog.getContent().equals(name))
-                {
-                    showToast("计划名称未更改");
-                    return;
-                }
-                mAdPlanInfo.setName(dialog.getContent());
-                itvName.getSecondView().setText(dialog.getContent());
-                dialog.dismiss();
-                //updatePlan();
-            }
-        });
-
-        WindowManager windowManager = getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.width = (int)(display.getWidth()); //设置宽度
-        lp.height = (int)(display.getHeight()); //设置高度
-        dialog.getWindow().setAttributes(lp);
     }
 
     @Override

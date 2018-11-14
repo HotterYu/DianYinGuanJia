@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.dialog.EditNameDialog;
+import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.dialog.VideoDirectionDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -254,46 +254,6 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		videoDirectionDialog.getWindow().setAttributes(lp);
 	}
 	
-	private EditNameDialog editNameDialog = null;
-	private void showEditNameDialog()
-	{
-		if(editNameDialog == null || editNameDialog.isDismissed())
-			editNameDialog = new EditNameDialog(getActivity(), "请输入店铺名称");
-		//playDialog.updateProgress("00:02:18 / 00:05:12");
-		if(editNameDialog.isShowing())
-			editNameDialog.dismiss();
-		editNameDialog.show();
-		final String oldName = deviceInfor.getName();
-		editNameDialog.setInfor(oldName);
-		editNameDialog.setOnClickListener(new OnClickListener() 
-		{
-			@Override
-			public void onClick(View arg0)
-			{
-				// TODO Auto-generated method stub
-				if(TextUtils.isEmpty(editNameDialog.getContent()))
-				{
-					showToast(getResources().getString(R.string.please_input_content));
-					return;
-				}
-				if(editNameDialog.getContent().equals(oldName))
-				{
-					showToast(getResources().getString(R.string.name_not_change));
-					return;
-				}
-				updateShopInfo(editNameDialog.getContent());
-				editNameDialog.dismiss();
-			}
-		});
-		
-		WindowManager windowManager = getActivity().getWindowManager();
-		Display display = windowManager.getDefaultDisplay();
-		WindowManager.LayoutParams lp = editNameDialog.getWindow().getAttributes();
-		lp.width = (int)(display.getWidth()); //璁剧疆瀹藉害
-		lp.height = (int)(display.getHeight()); //璁剧疆楂樺害
-		editNameDialog.getWindow().setAttributes(lp);
-	}
-
 	public void updateShopInfo(String name)
 	{
 
@@ -337,7 +297,16 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		// TODO Auto-generated method stub
 		if(v == itvName.getBgView())
 		{
-			showEditNameDialog();
+			TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+			mTextInputBottomDialog.show("请输入店铺名称", deviceInfor.getName(), new TextInputBottomDialog.OnDismissResultListener() {
+				@Override
+				public void onConfirmDismiss(String content) {
+
+					updateShopInfo(content);
+					itvName.getSecondView().setText(content);
+
+				}
+			});
 		}
 		else if(v == itvAddr.getBgView())
 		{

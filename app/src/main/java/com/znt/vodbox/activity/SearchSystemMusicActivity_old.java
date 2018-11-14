@@ -213,7 +213,7 @@ public class SearchSystemMusicActivity_old extends BaseActivity implements Searc
             showPlayDialog(tempInfor.getMusicName(), tempInfor.getMusicUrl(), tempInfor.getId(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pushMedia(mShopinfo.getId());
+                    pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
                     dismissDialog();
                 }
             });
@@ -256,7 +256,7 @@ public class SearchSystemMusicActivity_old extends BaseActivity implements Searc
                     }
                     else
                     {
-                        pushMedia(mShopinfo.getId());
+                        pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
                     }
 
                     //requestSetRingtone(music);

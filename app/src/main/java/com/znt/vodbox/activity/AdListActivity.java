@@ -49,6 +49,7 @@ public class AdListActivity  extends BaseActivity implements
     private AdListAdapter mAdListAdapter = null;
 
     private List<AdMediaInfo> dataList = new ArrayList<>();
+    private List<AdMediaInfo> selectedAds = new ArrayList<>();
 
     private boolean isSelect = false;
 
@@ -102,6 +103,9 @@ public class AdListActivity  extends BaseActivity implements
             tvConfirm.setText("完成");
         else
             tvConfirm.setText("选择");
+
+        selectedAds = (List<AdMediaInfo>) getIntent().getSerializableExtra("AD_SELECTED_LIST");
+
 
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
         listView.getListView().setDividerHeight(1);
@@ -185,6 +189,7 @@ public class AdListActivity  extends BaseActivity implements
                         dataList.addAll(tempList);
 
                         mAdListAdapter.notifyDataSetChanged(dataList);
+                        mAdListAdapter.updateSelected(selectedAds);
                         tvTopTitle.setText("我的广告("+resultBean.getMessage()+")");
                     }
                     else

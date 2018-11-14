@@ -1,18 +1,13 @@
 package com.znt.vodbox.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,7 +17,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.GroupInfo;
-import com.znt.vodbox.dialog.EditNameDialog;
+import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -68,7 +63,7 @@ public class GroupListActivity extends BaseActivity implements
 
         tvTopTitle.setText("我的分区");
         ivTopMore.setVisibility(View.GONE);
-        ivTopConfirm.setVisibility(View.VISIBLE);
+        ivTopConfirm.setVisibility(View.GONE);
         ivTopConfirm.setText("选择");
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,21 +76,7 @@ public class GroupListActivity extends BaseActivity implements
             @Override
             public void onClick(View v) {
 
-                View view = View.inflate(GroupListActivity.this, R.layout.dialog_count_edit, null);
-                TextView man = (TextView) view.findViewById(R.id.tv_dialog_count_edit_title);
-                EditText women = (EditText) view.findViewById(R.id.et_count_edit);
-                man.setOnClickListener(this);
-                women.setOnClickListener(this);
 
-                BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(GroupListActivity.this);
-                bottomInterPasswordDialog.setContentView(view);
-                bottomInterPasswordDialog.show();
-                bottomInterPasswordDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-
-                    }
-                });
             }
         });
 
@@ -104,7 +85,14 @@ public class GroupListActivity extends BaseActivity implements
             @Override
             public void onClick(View view)
             {
-                showNameEditDialog(null);
+                TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+                mTextInputBottomDialog.show("请输入分区名称", "", new TextInputBottomDialog.OnDismissResultListener() {
+                    @Override
+                    public void onConfirmDismiss(String content) {
+
+                        addGroup(content);
+                    }
+                });
             }
         });
 
@@ -130,51 +118,6 @@ public class GroupListActivity extends BaseActivity implements
             tvTopTitle.setText("请选择分区");
         listView.onFresh();
 
-    }
-
-    private EditNameDialog dialog = null;
-    private void showNameEditDialog(final GroupInfo groupInfo)
-    {
-        if(dialog == null || dialog.isDismissed())
-            dialog = new EditNameDialog(getActivity(),"请输入分区名称");
-        if(groupInfo != null)
-            dialog.setInfor(groupInfo.getGroupName());
-        //playDialog.updateProgress("00:02:18 / 00:05:12");
-        if(dialog.isShowing())
-            dialog.dismiss();
-        dialog.show();
-        dialog.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View arg0)
-            {
-                // TODO Auto-generated method stub
-                if(TextUtils.isEmpty(dialog.getContent()))
-                {
-                    showToast("请输入分区名称");
-                    return;
-                }
-
-                if(groupInfo != null)
-                {
-                    if(dialog.getContent().equals(groupInfo.getGroupName()))
-                    {
-                        showToast("请输入分区名称");
-                        return;
-                    }
-                    renameGroupName(dialog.getContent(), groupInfo.getId());
-                }
-                else
-                    addGroup(dialog.getContent());
-            }
-        });
-
-        WindowManager windowManager = getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.width = (int)(display.getWidth()); //设置宽度
-        lp.height = (int)(display.getHeight()); //设置高度
-        dialog.getWindow().setAttributes(lp);
     }
 
     public void getGroupList()
@@ -280,7 +223,7 @@ public class GroupListActivity extends BaseActivity implements
                     {
 
                     }
-                    dialog.dismiss();
+
                     showToast(resultBean.getMessage());
                 }
 
@@ -319,7 +262,7 @@ public class GroupListActivity extends BaseActivity implements
                     {
 
                     }
-                    dialog.dismiss();
+
                     showToast(resultBean.getMessage());
                 }
 
@@ -398,7 +341,17 @@ public class GroupListActivity extends BaseActivity implements
         GroupInfo tempInfor = dataList.get(position);
         if(isEdit)
         {
-            addShopTopGroup(tempInfor.getId());
+            if(!TextUtils.isEmpty(shopIds))
+                addShopTopGroup(tempInfor.getId());
+            else
+            {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("GROUP_INFOR", tempInfor);
+                intent.putExtras(bundle);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
 
         }
         else
@@ -420,7 +373,15 @@ public class GroupListActivity extends BaseActivity implements
         dialog.setItems(R.array.group_list_dialog, (dialog1, which) -> {
             switch (which) {
                 case 0://
-                    showNameEditDialog(tempInfo);
+
+                    TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+                    mTextInputBottomDialog.show("请输入分区名称", tempInfo.getGroupName(), new TextInputBottomDialog.OnDismissResultListener() {
+                        @Override
+                        public void onConfirmDismiss(String content) {
+
+                            renameGroupName(content, tempInfo.getId());
+                        }
+                    });
                     break;
                 case 1://
                     /*Intent intent = new Intent(getActivity(), ShopSelectActivity.class);

@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -23,7 +21,7 @@ import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.dialog.DoubleDatePickerDialog;
-import com.znt.vodbox.dialog.EditNameDialog;
+import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -57,11 +55,11 @@ public class PlanDetailActivity extends BaseActivity  implements
 
     private ItemTextView itvShops = null;
 
-    private ItemTextView itvMusics = null;
-
     private ItemTextView itvDateStart = null;
 
     private ItemTextView itvDateEnd = null;
+
+    private TextView tvHint = null;
 
     private View viewAdd = null;
 
@@ -121,12 +119,15 @@ public class PlanDetailActivity extends BaseActivity  implements
         switchButton = (SwitchButton)headerView.findViewById(R.id.sb_plan_detail);
         switchButtonDate = (SwitchButton)headerView.findViewById(R.id.sb_plan_detail_date);
 
+        tvHint = (TextView)headerView.findViewById(R.id.tv_plan_detail_plan_time);
         itvName = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_name);
         itvShops = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_shops);
-        itvMusics = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_musics);
         itvDateStart = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_date_select_start);
         itvDateEnd = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_date_select_end);
         viewAdd = headerView.findViewById(R.id.view_plan_detail_add);
+
+        tvHint.setOnClickListener(this);
+        headerView.setOnClickListener(this);
 
         listView = (LJListView)findViewById(R.id.ptrl_plan_datail);
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
@@ -166,22 +167,18 @@ public class PlanDetailActivity extends BaseActivity  implements
     {
         itvName.getFirstView().setText(getResources().getString(R.string.plan_detail_name));
         itvShops.getFirstView().setText(getResources().getString(R.string.plan_detail_groups));
-        itvMusics.getFirstView().setText(getResources().getString(R.string.plan_detail_all_music));
         itvDateStart.getFirstView().setText(getResources().getString(R.string.plan_detail_start_date));
         itvDateEnd.getFirstView().setText(getResources().getString(R.string.plan_detail_end_date));
         itvName.showMoreButton(true);
         itvShops.showMoreButton(true);
-        itvMusics.showMoreButton(true);
         itvDateStart.showMoreButton(true);
         itvDateEnd.showMoreButton(true);
 
-        itvMusics.showBottomLine(false);
         itvDateEnd.showBottomLine(false);
 
         viewAdd.setOnClickListener(this);
         itvName.getBgView().setOnClickListener(this);
         itvShops.getBgView().setOnClickListener(this);
-        itvMusics.getBgView().setOnClickListener(this);
         itvDateStart.getBgView().setOnClickListener(this);
         itvDateEnd.getBgView().setOnClickListener(this);
 
@@ -195,8 +192,6 @@ public class PlanDetailActivity extends BaseActivity  implements
             switchButton.setChecked(false);
             showShops(false);
         }
-
-
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
             @Override
@@ -438,6 +433,9 @@ public class PlanDetailActivity extends BaseActivity  implements
         if(position >= 2)
             position = position - 2;
 
+        if(position >= mPlanInfo.getSubPlanList().size())
+            return;
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("PLAN_INFO", mPlanInfo);
         mPlanInfo.setSelectedSubPlanIndex(position);
@@ -472,12 +470,6 @@ public class PlanDetailActivity extends BaseActivity  implements
             bundle.putBoolean("IS_EDIT", false);
             ViewUtils.startActivity(getActivity(), PlanCreateActivity.class, bundle, 1);
         }
-        else if(v == itvMusics.getBgView())
-        {
-            /*Bundle bundle = new Bundle();
-            bundle.putSerializable("PlanInfor", planInfor);
-            ViewUtils.startActivity(getActivity(), PlanAllMusicActivity.class, bundle);*/
-        }
         else if(v == itvDateStart.getBgView())
         {
 
@@ -498,51 +490,19 @@ public class PlanDetailActivity extends BaseActivity  implements
         }
         else if(v == itvName.getBgView())
         {
-            showNameEditDialog(mPlanInfo.getPlanName());
+            //showNameEditDialog(mPlanInfo.getPlanName());
+            TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+            mTextInputBottomDialog.show("请输入计划名称", mPlanInfo.getPlanName(), new TextInputBottomDialog.OnDismissResultListener() {
+                @Override
+                public void onConfirmDismiss(String content) {
+                    mPlanInfo.setPlanName(content);
+                    itvName.getSecondView().setText(content);
+                }
+            });
         }
 
     }
 
-    private EditNameDialog dialog = null;
-    private void showNameEditDialog(final String name)
-    {
-        if(dialog == null || dialog.isDismissed())
-            dialog = new EditNameDialog(getActivity(),"请输入计划名称");
-        dialog.setInfor(name);
-        //playDialog.updateProgress("00:02:18 / 00:05:12");
-        if(dialog.isShowing())
-            dialog.dismiss();
-        dialog.show();
-        dialog.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View arg0)
-            {
-                // TODO Auto-generated method stub
-                if(TextUtils.isEmpty(dialog.getContent()))
-                {
-                    showToast("请输入计划名称");
-                    return;
-                }
-                if(dialog.getContent().equals(name))
-                {
-                    showToast("计划名称未更改");
-                    return;
-                }
-                mPlanInfo.setPlanName(dialog.getContent());
-                itvName.getSecondView().setText(dialog.getContent());
-                dialog.dismiss();
-                //updatePlan();
-            }
-        });
-
-        WindowManager windowManager = getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-        lp.width = (int)(display.getWidth()); //设置宽度
-        lp.height = (int)(display.getHeight()); //设置高度
-        dialog.getWindow().setAttributes(lp);
-    }
 
     @Override
     public void OnScheDelete(int index) {

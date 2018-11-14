@@ -3,7 +3,6 @@
 
     <string-array name="plan_dialog">
         <item>修改计划</item>
-        <item>查看使用者</item>
         <item>复制计划</item>
         <item>删除</item>
     </string-array>
@@ -50,7 +49,6 @@
         <item>修改名称</item>
         <item>添加歌曲</item>
         <item>删除</item>
-        <item>歌单详情</item>
     </string-array>
 
     <string-array name="sys_album_dialog">
