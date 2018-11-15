@@ -6,8 +6,10 @@
     >
 
     <LinearLayout 
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
     	android:layout_height="wrap_content"
+		android:paddingLeft="44dp"
+		android:paddingRight="44dp"
     	android:background="@drawable/style_item_bg_frame"
     	android:layout_centerInParent="true"
     	android:orientation="vertical"
@@ -29,7 +31,7 @@
 	        android:marqueeRepeatLimit="marquee_forever" 
 	        android:focusableInTouchMode="true" 
 	        android:scrollHorizontally="true"
-	        android:text="拖动设置音量，大约几秒钟后生效"
+	        android:text="音量设置"
             />
         <View 
 	        android:layout_width="fill_parent"
@@ -45,6 +47,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:padding="18dp"
+			android:layout_marginTop="10dp"
             >
             <TextView 
 		        android:id="@+id/tv_dialog_volume_set_progress"
@@ -75,6 +78,7 @@
 	        android:layout_height="1dip"
 	        android:paddingLeft="5dp"
 	        android:paddingRight="5dp"
+			android:layout_marginTop="10dp"
 	        android:background="@color/spacebar"
 	        />
         
@@ -117,7 +121,6 @@
 		        android:paddingBottom="5dp"
 		        android:background="@drawable/sel_item_bg"
 		        android:text="确定"
-		        android:visibility="gone"
 		        />
         </LinearLayout>
     </LinearLayout>

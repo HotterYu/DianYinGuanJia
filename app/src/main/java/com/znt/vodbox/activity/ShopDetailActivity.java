@@ -1,17 +1,14 @@
 package com.znt.vodbox.activity;
 
-import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.Display;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,9 +16,12 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
+import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.dialog.VolumeSetDialog;
+import com.znt.vodbox.dialog.VolumeSetBottomDialog;
 import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.http.HttpCallback;
+import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
@@ -148,7 +148,7 @@ public class ShopDetailActivity extends BaseActivity implements
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
 
-        listView.onFresh();
+        //listView.onFresh();
 
     }
 
@@ -159,6 +159,7 @@ public class ShopDetailActivity extends BaseActivity implements
         String pageNo = "1";
         String pageSize = "100";
         String merchId = Constant.mUserInfo.getMerchant().getId();
+        listView.stopRefresh();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {
@@ -193,6 +194,42 @@ public class ShopDetailActivity extends BaseActivity implements
         catch (Exception e)
         {
             listView.stopRefresh();
+        }
+
+    }
+
+    public void playControll(String type, String value)
+    {
+        String token = Constant.mUserInfo.getToken();
+        String terminalId = mShopInfo.getTmlRunStatus().get(0).getTerminalId();
+        try
+        {
+            // Simulate network access.
+            HttpClient.playControll(token, terminalId, value, type, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+
+                    if(resultBean.isSuccess())
+                    {
+
+                    }
+                    else
+                    {
+
+                    }
+                    showToast(resultBean.getMessage());
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            showToast(e.getMessage());
+            Log.e("",e.getMessage());
         }
 
     }
@@ -257,29 +294,16 @@ public class ShopDetailActivity extends BaseActivity implements
 
     private void showVolumeDialog(final Shopinfo devInfor)
     {
-        final VolumeSetDialog playDialog = new VolumeSetDialog(getActivity(), devInfor);
 
-        //playDialog.updateProgress("00:02:18 / 00:05:12");
-        if(playDialog.isShowing())
-            playDialog.dismiss();
-        playDialog.show();
-        playDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
-        {
+        VolumeSetBottomDialog mVolumeSetBottomDialog = new VolumeSetBottomDialog(getActivity());
+        mVolumeSetBottomDialog.show("音量设置", devInfor, new VolumeSetBottomDialog.OnVolumeSetDismissResultListener() {
             @Override
-            public void onDismiss(DialogInterface arg0)
-            {
-                // TODO Auto-generated method stub
-                boolean isVolumeUpdated = playDialog.isVolumeUpdated();
-                tvPlayVolume.setText(getResources().getString(R.string.dev_shop_detail_volume_hint) + "(" + playDialog.getCurVolume() + " / 15)");
-                mShopInfo.getTmlRunStatus().get(0).setVolume(playDialog.getCurVolume() + "");
+            public void onConfirmDismiss(int volume) {
+                mShopInfo.getTmlRunStatus().get(0).setVolume(volume + "");
+                playControll("1",volume + "");
             }
         });
-        WindowManager windowManager = ((Activity) getActivity()).getWindowManager();
-        Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = playDialog.getWindow().getAttributes();
-        lp.width = (int)(display.getWidth()); //
-        lp.height = (int)(display.getHeight()); //
-        playDialog.getWindow().setAttributes(lp);
+
     }
 
     @Override

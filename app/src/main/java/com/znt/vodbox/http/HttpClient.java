@@ -133,6 +133,7 @@ public class HttpClient extends HttpApi{
         String address = mShopinfo.getAddress();
         String longitude = mShopinfo.getLongitude();
         String latitude = mShopinfo.getLatitude();
+
         String groupId = "";
         if(mShopinfo.getGroup() != null)
             groupId = mShopinfo.getGroup().getId();
@@ -155,6 +156,35 @@ public class HttpClient extends HttpApi{
                 .addParams("longitude", longitude)
                 .addParams("latitude", latitude)
                 .addParams("groupId", groupId)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void playControll(String token, String terminalId,String value,String type,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+
+        String url = SHOP_PLAY_CONTROLL + type;
+        OkHttpUtils.post().url(url)
+                .addHeader("token", token)
+                .addParams("terminalId", terminalId)
+                .addParams("value", value)
                 .build()
                 .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override

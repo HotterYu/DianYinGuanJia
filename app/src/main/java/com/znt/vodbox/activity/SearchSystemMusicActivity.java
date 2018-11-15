@@ -164,10 +164,9 @@ public class SearchSystemMusicActivity extends BaseActivity implements
         }
     }
 
-    private void pushMedia(String terminId)
+    private void pushMedia(String terminId, String dataId)
     {
         String type = "1";
-        String dataId = "";
         String userId = Constant.mUserInfo.getMerchant().getId();
         String pusherid = "";
         String pushername = Constant.mUserInfo.getNickName();
@@ -221,7 +220,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
             showPlayDialog(tempInfor.getMusicName(), tempInfor.getMusicUrl(), tempInfor.getId(), new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
+                    pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId(),tempInfor.getId());
                     dismissDialog();
                 }
             });
@@ -262,7 +261,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                     }
                     else
                     {
-                        pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
+                        pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId(),tempInfo.getId());
                     }
 
                     //requestSetRingtone(music);

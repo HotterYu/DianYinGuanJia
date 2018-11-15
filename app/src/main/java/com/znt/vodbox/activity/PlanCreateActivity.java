@@ -172,6 +172,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 		listView.setRefreshTime();
         listView.addHeader(headerView);
         listView.setVisibility(View.VISIBLE);
+        listView.setOnItemClickListener(this);
 
         mPlanAlbumAdapter = new PlanAlbumAdapter(getActivity(),selectAlbumList);
         listView.setAdapter(mPlanAlbumAdapter);
@@ -551,7 +552,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
         AlbumInfo infor = selectAlbumList.get(arg2);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("MusicAlbumInfor", infor);
+        bundle.putSerializable("ALBUM_INFO", infor);
         //bundle.putSerializable("MusicEditType", MusicEditType.DeleteAdd);
 
         bundle.putBoolean("IS_COLLECT", true);
