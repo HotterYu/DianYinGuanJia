@@ -1,6 +1,7 @@
 package com.znt.vodbox.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ public class ShopSelectActivity extends BaseActivity  implements
     private String mediaName = "";
     private String mediaUrl = "";
     private String mediaId = "";
+    private String mediaType = "";
 
     private List<Shopinfo> shopinfoList = new ArrayList<>();
 
@@ -64,6 +66,9 @@ public class ShopSelectActivity extends BaseActivity  implements
         mediaName = getIntent().getStringExtra("MEDIA_NAME");
         mediaUrl = getIntent().getStringExtra("MEDIA_URL");
         mediaId = getIntent().getStringExtra("MEDIA_ID");
+        mediaType = getIntent().getStringExtra("MEDIA_TYPE");
+        if(TextUtils.isEmpty(mediaType))
+            mediaType = "1";
 
         mSearchView.init("shop_record.db");
         mSearchView.showRecordView(false);
@@ -165,9 +170,9 @@ public class ShopSelectActivity extends BaseActivity  implements
 
 
 
-    private void pushMedia(String terminId)
+    private void pushMedia(String terminId, String mediaType)
     {
-        String type = "1";
+        //String type = "1";//1 歌曲， 2 广告
         String dataId = mediaId;
         String userId = Constant.mUserInfo.getMerchant().getId();
         String pusherid = "";
@@ -176,7 +181,7 @@ public class ShopSelectActivity extends BaseActivity  implements
         try
         {
             // Simulate network access.
-            HttpClient.pushMedia(terminId, type, dataId, userId,pusherid,pushername, new HttpCallback<CommonCallBackBean>() {
+            HttpClient.pushMedia(terminId, mediaType, dataId, userId,pusherid,pushername, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
 
@@ -215,7 +220,7 @@ public class ShopSelectActivity extends BaseActivity  implements
             position = position - 1;
 
         Shopinfo tempInfor = shopinfoList.get(position);
-        pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId());
+        pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId(),mediaType);
         /*Intent intent = new Intent();
         Bundle b = new Bundle();
         b.putSerializable("SHOP_INFO", tempInfor);

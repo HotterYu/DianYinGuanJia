@@ -14,7 +14,7 @@ public class HttpApi
     public static final String GET_USER_LIST= API + "/user/list";
 
     public static final String UPDATE_SHOP_INFO = API + "/shop/update";
-    public static final String SHOP_PLAY_CONTROLL = API + "tml/cmd/";
+    public static final String SHOP_PLAY_CONTROLL = API + "/tml/cmd/";
 
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";

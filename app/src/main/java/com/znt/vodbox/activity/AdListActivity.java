@@ -270,6 +270,7 @@ public class AdListActivity  extends BaseActivity implements
             position = position - 1;
 
         AdMediaInfo tempInfor = dataList.get(position);
+        tempInfor.setType("2");
         showPlayDialog(tempInfor.getAdname(),URLDecoder.decode(tempInfor.getUrl()),tempInfor.getId());
     }
 
@@ -286,6 +287,7 @@ public class AdListActivity  extends BaseActivity implements
                     b.putString("MEDIA_NAME",tempInfo.getAdname());
                     b.putString("MEDIA_ID",tempInfo.getId());
                     b.putString("MEDIA_URL",tempInfo.getUrl());
+                    b.putString("MEDIA_TYPE","2");
                     intent.putExtras(b);
                     startActivity(intent);
                     break;
