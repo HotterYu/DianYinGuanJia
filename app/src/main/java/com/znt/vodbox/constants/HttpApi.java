@@ -16,6 +16,9 @@ public class HttpApi
     public static final String UPDATE_SHOP_INFO = API + "/shop/update";
     public static final String SHOP_PLAY_CONTROLL = API + "/tml/cmd/";
 
+    //获取时段的歌曲列表
+    public static final String GET_SCHEDULE_MUSICS = API + "/terminal/planschemusic";
+
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";
     public static final String GET_MY_ALBUMS = API + "/category/list";
@@ -36,6 +39,7 @@ public class HttpApi
     public static final String DELETE_PLAN = API + "/plan/del";
     public static final String DELETE_AD_PLAN = API + "/adplan/del";
     public static final String UPDATE_PLAN = API + "/plan/update";
+    public static final String GET_PLAN = API + "/terminal/plan";
     public static final String ADD_PLAN = API + "/plan/add";
     public static final String ADD_AD_PLAN = API + "/adplan/add";
     public static final String UPDATE_AD_PLAN = API + "/adplan/update";

@@ -18,6 +18,8 @@ import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
+import com.znt.vodbox.bean.PlanInfo;
+import com.znt.vodbox.bean.PlanResultBean;
 import com.znt.vodbox.dialog.VolumeSetBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -51,7 +53,7 @@ public class ShopDetailActivity extends BaseActivity implements
     private TextView tvCurPlayName = null;
     private TextView tvCurStatus = null;
     private TextView tvPushMedia = null;
-    private TextView tvPlayPre = null;
+    private TextView tvPlayMode = null;
     private TextView tvPlayNext = null;
     private TextView tvPlayStatus = null;
     private TextView tvPlayVolume = null;
@@ -95,14 +97,14 @@ public class ShopDetailActivity extends BaseActivity implements
         tvCurPlayName = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_song);
         tvCurStatus = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_status);
         tvPushMedia = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_push);
-        tvPlayPre = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_pre);
+        tvPlayMode = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_mode);
         tvPlayNext = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_next);
         tvPlayStatus = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_status);
         tvPlayVolume = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_volume);
         tvCurPlayCount = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_song_count);
 
         tvPushMedia.setOnClickListener(this);
-        tvPlayPre.setOnClickListener(this);
+        tvPlayMode.setOnClickListener(this);
         tvPlayNext.setOnClickListener(this);
         tvPlayStatus.setOnClickListener(this);
         tvPlayVolume.setOnClickListener(this);
@@ -142,58 +144,61 @@ public class ShopDetailActivity extends BaseActivity implements
             {
                 tvCurStatus.setText(getResources().getString(R.string.dev_status_offline));
             }
+
+            if(mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
+                tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_order));
+            else
+                tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_radom));
         }
         else
         {
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
 
-        //listView.onFresh();
+        listView.onFresh();
 
     }
 
-    public void getCurPlayMusics()
+    public void getPlan()
     {
-
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
-        String merchId = Constant.mUserInfo.getMerchant().getId();
-        listView.stopRefresh();
-        //String merchId = mUserInfo.getMerchant().getId();
+        String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
         try
         {
             // Simulate network access.
-            /*HttpClient.getAlbumMusics(token, pageNo, pageSize,mAlbumInfo.getId(),searchWord, new HttpCallback<MusicListResultBean>() {
+            HttpClient.getPlan(token, planId, new HttpCallback<PlanResultBean>() {
                 @Override
-                public void onSuccess(MusicListResultBean resultBean) {
+                public void onSuccess(PlanResultBean resultBean) {
 
-                    if(resultBean != null)
+                    if(resultBean.isSuccess())
                     {
-                        dataList = resultBean.getData();
-                        mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
-                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + resultBean.getMessage() + ")");
-                        mSearchView.showRecordView(false);
+                        PlanInfo planInfo = resultBean.getData();
+                        List<MediaInfo> mediaInfoList = resultBean.getMediaInfos();
+                        if(mediaInfoList != null && mediaInfoList.size() > 0)
+                        {
+                            dataList.addAll(mediaInfoList);
+                            mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
+                        }
                     }
                     else
                     {
                         showToast(resultBean.getMessage());
-                        //shopinfoList.clear();
                     }
                     listView.stopRefresh();
                 }
 
                 @Override
                 public void onFail(Exception e) {
-                    //vSearching.setVisibility(View.GONE);
-                    listView.stopRefresh();
                     showToast(e.getMessage());
+                    listView.stopRefresh();
                 }
-            });*/
+            });
         }
         catch (Exception e)
         {
             listView.stopRefresh();
+            showToast(e.getMessage());
+            Log.e("",e.getMessage());
         }
 
     }
@@ -236,12 +241,12 @@ public class ShopDetailActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        getCurPlayMusics();
+        getPlan();
     }
 
     @Override
     public void onLoadMore() {
-        getCurPlayMusics();
+        getPlan();
     }
 
     @Override
@@ -315,17 +320,22 @@ public class ShopDetailActivity extends BaseActivity implements
             bundle.putSerializable("SHOP_INFO",mShopInfo);
             ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
         }
-        else if(view == tvPlayPre)
+        else if(view == tvPlayMode)
         {
-
+            if(mShopInfo.getTmlRunStatus().size() < 0)
+                return;
+            if(mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
+                playControll("2","1");//0-顺序播放 1-随机播放
+            else
+                playControll("2","0");
         }
         else if(view == tvPlayNext)
         {
-
+            playControll("2","2");
         }
         else if(view == tvPlayStatus)
         {
-
+            playControll("2","");//0-播放 1-暂停
         }
         else if(view == tvPlayVolume)
         {

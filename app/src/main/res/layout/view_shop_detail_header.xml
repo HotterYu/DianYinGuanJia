@@ -102,7 +102,7 @@
 				>
 
 				<TextView
-					android:id="@+id/tv_shop_detail_play_pre"
+					android:id="@+id/tv_shop_detail_play_mode"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:paddingLeft="12dp"
@@ -110,7 +110,7 @@
 					android:paddingTop="6dp"
 					android:paddingBottom="6dp"
 					android:layout_alignParentRight="true"
-					android:text="@string/dev_shop_detail_play_pre"
+					android:text="@string/dev_shop_detail_play_mode_order"
 					android:background="@drawable/sel_item_bg"
 					android:textColor="@color/text_blue_on"
 					/>

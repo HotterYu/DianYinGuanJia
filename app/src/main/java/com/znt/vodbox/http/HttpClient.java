@@ -14,6 +14,7 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.bean.PlanListResultBean;
+import com.znt.vodbox.bean.PlanResultBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.UserCallBackBean;
@@ -365,6 +366,32 @@ public class HttpClient extends HttpApi{
                 .execute(new BaseHttpCallback<ShopListResultBean>(ShopListResultBean.class) {
                     @Override
                     public void onResponse(ShopListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getPlan(String token, String planId, @NonNull final HttpCallback<PlanResultBean> callback) {
+        OkHttpUtils.post().url(GET_PLAN)
+                .addHeader("token", token)
+                .addParams("planId", planId)
+                .build()
+                .execute(new CurPlanCallback<PlanResultBean>(PlanResultBean.class) {
+                    @Override
+                    public void onResponse(PlanResultBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else

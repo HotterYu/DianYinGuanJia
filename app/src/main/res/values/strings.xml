@@ -176,7 +176,8 @@
     <string name="dev_shop_detail">店铺详情</string>
     <string name="dev_shop_detail_push_hint">插播</string>
     <string name="dev_shop_detail_volume_hint">音量</string>
-    <string name="dev_shop_detail_play_pre">上一首</string>
+    <string name="dev_shop_detail_play_mode_order">顺序播放</string>
+    <string name="dev_shop_detail_play_mode_radom">随机播放</string>
     <string name="dev_shop_detail_play_status">播放</string>
     <string name="dev_shop_detail_play_next">下一首</string>
     <string name="dev_shop_detail_cur_play_count">当前播放列表</string>
