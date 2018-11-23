@@ -161,6 +161,8 @@ public class ShopDetailActivity extends BaseActivity implements
 
     public void getPlan()
     {
+        if(mShopInfo.getTmlRunStatus().size() <= 0)
+            return;
         String token = Constant.mUserInfo.getToken();
         String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
         try

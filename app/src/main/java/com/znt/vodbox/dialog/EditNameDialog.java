@@ -92,8 +92,7 @@ public class EditNameDialog extends Dialog
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.dialog_name_edit);
 	    setScreenBrightness();
-	    
-	    
+
 		btnRight = (Button) EditNameDialog.this.findViewById(R.id.btn_dialog_name_edit_right);
     	btnLeft = (Button) EditNameDialog.this.findViewById(R.id.btn_dialog_name_edit_left);
     	textTitle = (TextView) EditNameDialog.this.findViewById(R.id.tv_dialog_name_edit_title);
@@ -108,7 +107,6 @@ public class EditNameDialog extends Dialog
         });
 	    this.setOnDismissListener(new OnDismissListener()
 		{
-			
 			@Override
 			public void onDismiss(DialogInterface arg0)
 			{

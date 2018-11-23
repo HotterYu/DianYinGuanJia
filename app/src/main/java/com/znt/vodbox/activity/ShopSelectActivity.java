@@ -45,6 +45,10 @@ public class ShopSelectActivity extends BaseActivity  implements
     private String mediaId = "";
     private String mediaType = "";
 
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
+
     private List<Shopinfo> shopinfoList = new ArrayList<>();
 
     private ShoplistAdapter adapter;
@@ -115,8 +119,6 @@ public class ShopSelectActivity extends BaseActivity  implements
         String text = mSearchView.getText();
 
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -134,41 +136,52 @@ public class ShopSelectActivity extends BaseActivity  implements
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
-                            if(resultBean != null)
+
+                            listView.stopRefresh();
+                            if(resultBean.getResultcode().equals("1"))
                             {
                                 List<Shopinfo> tempList = resultBean.getData();
-                                if(tempList.size() > 0)
-                                    shopinfoList.addAll(tempList);
-                                adapter.notifyDataSetChanged(shopinfoList);
+
+                                if(pageNo == 1)
+                                    shopinfoList.clear();
+
+                                if(tempList.size() <= pageSize)
+                                    pageNo ++;
+
+                                shopinfoList.addAll(tempList);
+                                if(maxSize == 0)
+                                    maxSize = Integer.parseInt(resultBean.getMessage());
+
                                 tvTopTitle.setText(getResources().getString(R.string.shop_select) + "(" + resultBean.getMessage() +")");
-                                mSearchView.showRecordView(false);
+                                adapter.notifyDataSetChanged(shopinfoList);
                             }
                             else
                             {
                                 showToast(resultBean.getMessage());
                             }
-                            listView.stopRefresh();
                         }
 
                         @Override
                         public void onFail(Exception e) {
                             listView.stopRefresh();
+                            if(e != null)
+                                showToast(e.getMessage());
+                            else
+                                showToast("加载数据失败");
                         }
                     });
         }
         catch (Exception e)
         {
             listView.stopRefresh();
+            showToast(e.getMessage());
         }
 
     }
-
-
-
 
     private void pushMedia(String terminId, String mediaType)
     {
@@ -220,7 +233,10 @@ public class ShopSelectActivity extends BaseActivity  implements
             position = position - 1;
 
         Shopinfo tempInfor = shopinfoList.get(position);
-        pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId(),mediaType);
+        if(tempInfor.getTmlRunStatus().size() > 0)
+            pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId(),mediaType);
+        else
+            showToast("该店铺下没有安装设备");
         /*Intent intent = new Intent();
         Bundle b = new Bundle();
         b.putSerializable("SHOP_INFO", tempInfor);
@@ -233,12 +249,16 @@ public class ShopSelectActivity extends BaseActivity  implements
 
     @Override
     public void onRefresh() {
+        pageNo = 1;
         loadShops();
     }
 
     @Override
     public void onLoadMore() {
-        loadShops();
+        if(maxSize > shopinfoList.size())
+            loadShops();
+        else
+            showToast("没有更多数据了");
     }
 
     @Override

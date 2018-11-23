@@ -49,11 +49,14 @@ public class GrouShopActivity extends BaseActivity  implements
 
     private ShoplistAdapter adapter;
 
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_select);
-
 
         ivTopMore.setVisibility(View.GONE);
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
@@ -110,10 +113,7 @@ public class GrouShopActivity extends BaseActivity  implements
     public void loadShops()
     {
         String text = mSearchView.getText();
-
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "100";
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = mGroupInfo.getId();
@@ -131,34 +131,48 @@ public class GrouShopActivity extends BaseActivity  implements
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo, pageSize,merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
-                            if(resultBean != null)
+                            listView.stopRefresh();
+                            if(resultBean.getResultcode().equals("1"))
                             {
-                                shopinfoList = resultBean.getData();
+                                List<Shopinfo> tempList = resultBean.getData();
 
+                                if(pageNo == 1)
+                                    shopinfoList.clear();
+
+                                if(tempList.size() <= pageSize)
+                                    pageNo ++;
+
+                                shopinfoList.addAll(tempList);
+                                if(maxSize == 0)
+                                    maxSize = Integer.parseInt(resultBean.getMessage());
+
+                                tvTopTitle.setText(getResources().getString(R.string.shop_select) + "(" + resultBean.getMessage() +")");
                                 adapter.notifyDataSetChanged(shopinfoList);
-                                tvTopTitle.setText(mGroupInfo.getGroupName() + "(" + resultBean.getMessage() +")");
-                                mSearchView.showRecordView(false);
                             }
                             else
                             {
                                 showToast(resultBean.getMessage());
                             }
-                            listView.stopRefresh();
                         }
 
                         @Override
                         public void onFail(Exception e) {
                             listView.stopRefresh();
+                            if(e != null)
+                                showToast(e.getMessage());
+                            else
+                                showToast("加载数据失败");
                         }
                     });
         }
         catch (Exception e)
         {
             listView.stopRefresh();
+            showToast(e.getMessage());
         }
 
     }
@@ -280,12 +294,16 @@ public class GrouShopActivity extends BaseActivity  implements
 
     @Override
     public void onRefresh() {
+        pageNo = 1;
         loadShops();
     }
 
     @Override
     public void onLoadMore() {
-        loadShops();
+        if(maxSize > shopinfoList.size())
+            loadShops();
+        else
+            showToast("没有更多数据了");
     }
 
     @Override
