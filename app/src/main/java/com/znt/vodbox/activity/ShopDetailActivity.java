@@ -136,7 +136,8 @@ public class ShopDetailActivity extends BaseActivity implements
             else
                 tvShopGroup.setText(getResources().getString(R.string.dev_group_belong_none));
             tvCurPlayName.setText(mShopInfo.getTmlRunStatus().get(0).getPlayingSong());
-            if(mShopInfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
+            if(mShopInfo.getTmlRunStatus().get(0).getOnlineStatus() != null
+                    && mShopInfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
                 tvCurStatus.setText(getResources().getString(R.string.dev_status_online));
             }
@@ -145,7 +146,8 @@ public class ShopDetailActivity extends BaseActivity implements
                 tvCurStatus.setText(getResources().getString(R.string.dev_status_offline));
             }
 
-            if(mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
+            if(mShopInfo.getTmlRunStatus().get(0).getPlayModel() != null
+            && mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
                 tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_order));
             else
                 tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_radom));
@@ -155,16 +157,24 @@ public class ShopDetailActivity extends BaseActivity implements
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
 
-        listView.onFresh();
+        getPlan();
 
     }
 
     public void getPlan()
     {
         if(mShopInfo.getTmlRunStatus().size() <= 0)
+        {
+            listView.stopRefresh();
             return;
+        }
         String token = Constant.mUserInfo.getToken();
         String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
+        if(TextUtils.isEmpty(planId))
+        {
+            listView.stopRefresh();
+            return;
+        }
         try
         {
             // Simulate network access.

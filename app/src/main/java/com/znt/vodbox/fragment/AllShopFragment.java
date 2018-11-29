@@ -173,13 +173,16 @@ public class AllShopFragment extends BaseFragment implements LJListView.IXListVi
         if(position > 0)
             position = position - 1;
         Shopinfo tempShop = shopinfoList.get(position);
-        Bundle bundle = new Bundle();
-        /*bundle.putBoolean("IS_EDIT", true);
-        if(tempShop.getGroup() != null)
-            bundle.putString("GROUP_ID",tempShop.getGroup().getId());
-        bundle.putString("SHOP_IDS",tempShop.getId());*/
-        bundle.putSerializable("SHOP_INFO",tempShop);
-        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
+        if(tempShop.getTmlRunStatus() != null
+                && tempShop.getTmlRunStatus().size() >0
+                && tempShop.getTmlRunStatus().get(0).getOnlineStatus() != null)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("SHOP_INFO",tempShop);
+            ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
+        }
+        else
+            showToast(getResources().getString(R.string.no_device_hint));
     }
 
     @Override

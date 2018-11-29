@@ -35,7 +35,7 @@ public class TextInputBottomDialog
     {
         View view = View.inflate(mContext, R.layout.dialog_bottom_text_input, null);
 
-        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext);
+        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext, R.style.BottomSheetEdit);
         bottomInterPasswordDialog.setContentView(view);
         bottomInterPasswordDialog.show();
 
@@ -89,6 +89,6 @@ public class TextInputBottomDialog
                 bottomInterPasswordDialog.dismiss();
             }
         });
-    }
 
+    }
 }

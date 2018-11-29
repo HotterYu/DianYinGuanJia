@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DianYin</string>
+    <string name="app_name">店音管家</string>
     <string name="sure">确定</string>
     <string name="cancel">取消</string>
     <string name="share">分享</string>
@@ -145,6 +145,9 @@
     <string name="week_sunday">星期日</string>
 
     <string name="week_select">时间类型（周）</string>
+
+
+    <string name="no_device_hint">该店铺下没有安装设备</string>
 
 
     <string name="xlistview_header_hint_normal">下拉刷新</string>

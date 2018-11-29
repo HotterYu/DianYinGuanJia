@@ -233,10 +233,13 @@ public class ShopSelectActivity extends BaseActivity  implements
             position = position - 1;
 
         Shopinfo tempInfor = shopinfoList.get(position);
-        if(tempInfor.getTmlRunStatus().size() > 0)
+
+        if(tempInfor.getTmlRunStatus() != null
+                && tempInfor.getTmlRunStatus().size() >0
+                && tempInfor.getTmlRunStatus().get(0).getOnlineStatus() != null)
             pushMedia(tempInfor.getTmlRunStatus().get(0).getTerminalId(),mediaType);
         else
-            showToast("该店铺下没有安装设备");
+            showToast(getResources().getString(R.string.no_device_hint));
         /*Intent intent = new Intent();
         Bundle b = new Bundle();
         b.putSerializable("SHOP_INFO", tempInfor);

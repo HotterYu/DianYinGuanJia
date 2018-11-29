@@ -180,7 +180,7 @@ public class Shopinfo implements Serializable
     }
 
     public String getWifiName() {
-        return wifiName;
+        return convertWhenNull(wifiName);
     }
 
     public void setWifiName(String wifiName) {
