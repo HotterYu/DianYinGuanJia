@@ -71,7 +71,7 @@ public class ShoplistAdapter extends BaseAdapter {
         Shopinfo shopinfo = shopList.get(position);
         holder.ivCover.setImageResource(R.drawable.icon_shop);
         holder.tvShopName.setText(shopinfo.getName());
-        holder.tvDevId.setText(shopinfo.getId());
+
         if(shopinfo.getGroup() != null && !TextUtils.isEmpty(shopinfo.getGroup().getGroupName()))
         {
             holder.tvGroup.setText(" - " + shopinfo.getGroup().getGroupName());
@@ -83,9 +83,14 @@ public class ShoplistAdapter extends BaseAdapter {
             holder.tvGroup.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
         }
 
-        if(shopinfo.getTmlRunStatus() != null && shopinfo.getTmlRunStatus().size() >0)
+        if(shopinfo.getTmlRunStatus() != null
+                && shopinfo.getTmlRunStatus().size() >0)
         {
-            if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
+
+            holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId());
+
+            if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
+                    shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
                 holder.tvStatus.setText(mContext.getResources().getString(R.string.dev_status_online));
                 holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
