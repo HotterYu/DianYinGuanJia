@@ -1,5 +1,6 @@
 package com.znt.vodbox.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.FragmentAdapter;
 import com.znt.vodbox.constants.Extras;
 import com.znt.vodbox.constants.Keys;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.executor.ControlPanel;
 import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.executor.UserInfoExecutor;
@@ -27,7 +30,10 @@ import com.znt.vodbox.fragment.AllShopFragment;
 import com.znt.vodbox.fragment.OfflineShopFragment;
 import com.znt.vodbox.fragment.OnlineShopFragment;
 import com.znt.vodbox.fragment.PlayFragment;
+import com.znt.vodbox.location.LocationModel;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.permission.PermissionHelper;
+import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.service.QuitTimer;
 import com.znt.vodbox.utils.SystemUtils;
@@ -36,7 +42,7 @@ import com.znt.vodbox.utils.binding.Bind;
 
 
 public class MusicActivity extends BaseActivity implements View.OnClickListener, QuitTimer.OnTimerListener,
-        NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener{
+        NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener,PermissionInterface {
     @Bind(R.id.drawer_layout)
     private DrawerLayout drawerLayout;
     @Bind(R.id.navigation_view)
@@ -70,7 +76,46 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
     private UserInfo mUserInfo = null;
 
+    private LocationModel mLocationModel = null;
 
+    private PermissionHelper mPermissionHelper;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(mPermissionHelper.requestPermissionsResult(requestCode, permissions, grantResults)){
+            //权限请求结果，并已经处理了该回调
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public int getPermissionsRequestCode() {
+        return 10000;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                /*Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,*/
+                Manifest.permission.ACCESS_FINE_LOCATION
+
+        };
+    }
+    @Override
+    public void requestPermissionsSuccess() {
+        //权限请求用户已经全部允许
+        initLocation();
+    }
+
+    @Override
+    public void requestPermissionsFail() {
+        //权限请求不被用户允许。可以提示并退出或者提示权限的用途并重新发起权限申请。
+        mPermissionHelper.requestPermissions();
+        //finish();
+    }
 
     public interface OnCountGetCallBack
     {
@@ -84,6 +129,33 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
         mUserInfo = (UserInfo) getIntent().getSerializableExtra("USER_INFO");
 
+        mPermissionHelper = new PermissionHelper(this, this);
+        mPermissionHelper.requestPermissions();
+    }
+
+    private void initLocation()
+    {
+        mLocationModel = new LocationModel(getApplicationContext(), new LocationModel.OnLocationResultListener() {
+            @Override
+            public void onLocationSuccess(AMapLocation location) {
+
+                String lat = location.getLatitude() + "";
+                String lon = location.getLongitude() + "";
+                String addr = location.getAddress();
+                LocalDataEntity.newInstance(getApplicationContext()).setLat(lat);
+                LocalDataEntity.newInstance(getApplicationContext()).setLon(lon);
+                LocalDataEntity.newInstance(getApplicationContext()).setDeviceAddr(addr);
+                //HttpClient.updateShopInfo(getApplicationContext());
+
+                mLocationModel.stopLocation();
+            }
+
+            @Override
+            public void onLocationFail(String error) {
+                mLocationModel.stopLocation();
+            }
+        });
+        mLocationModel.startLocation();
     }
 
     @Override

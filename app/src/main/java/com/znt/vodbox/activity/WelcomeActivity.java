@@ -57,6 +57,7 @@ public class WelcomeActivity extends Activity {
 
         // 如果不是第一次启动app，则正常显示启动屏
         setContentView(R.layout.activity_welcome);
+
         //ButterKnife.bind(this);
         startMainActivity();
     }
