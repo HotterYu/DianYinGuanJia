@@ -149,6 +149,17 @@
 
     <string name="no_device_hint">该店铺下没有安装设备</string>
 
+    <string name="version_hint_debug">测试版</string>
+    <string name="version_hint_release">正式版</string>
+
+
+    <string name="push_ad_select_hint">请至少添加一个广告</string>
+    <string name="play_time_space">播放时段</string>
+    <string name="push_mode_set">插播模式</string>
+    <string name="select_push_ad">选择广告（多个）</string>
+    <string name="select_push_ad_timeing">选择广告（1个）</string>
+    <string name="select_timeing">选择定时时间</string>
+
 
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>

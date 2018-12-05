@@ -2,8 +2,8 @@ package com.znt.vodbox.constants;
 
 public class HttpApi
 {
-    private static final String API = "http://47.104.209.249:8080/api";
-    //private static final String API = "http://api.zhunit.com/api";
+    //private static final String API = "http://47.104.209.249:8080/api";
+    public static final String API = "http://api.zhunit.com/api";
 
     public static final String LOGIN = API + "/user/login";
 

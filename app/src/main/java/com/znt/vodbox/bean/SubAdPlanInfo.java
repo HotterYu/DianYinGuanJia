@@ -1,5 +1,7 @@
 package com.znt.vodbox.bean;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -16,6 +18,21 @@ public class SubAdPlanInfo implements Serializable {
     private String adinfoName;
     private String adinfoUrl;
     private String id = "";
+    private String playModel = "1";//时段的playModel=1标识 间隔musicNum首歌插播一次；=2标识定时插播
+
+    public String getPlayModel() {
+        return playModel;
+    }
+
+    public void setPlayModel(String playModel) {
+        this.playModel = playModel;
+    }
+
+
+    public boolean isTimePushModel()
+    {
+        return !TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) &&  startTime.equals(endTime);
+    }
 
     public String getId() {
         return id;

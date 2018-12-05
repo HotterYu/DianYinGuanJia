@@ -67,6 +67,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     private String endTimes = "";
     private String loopAddNum = "1";
     private String cycleType = "0";
+    private String pushTime = "";
     private boolean isEdit = false;
 
     private AdPlanInfo mAdPlanInfo = null;
@@ -113,12 +114,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         itvWeekSelect = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_push_week);
         itvPushTimeing = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_broadcast_timeing);
 
-        itvTimeSelect.getFirstView().setText("播放时段");
-        itvInsetCount.getFirstView().setText("插播设置");
-        itvInsertMusic.getFirstView().setText("选择广告（必选）");
+        itvTimeSelect.getFirstView().setText(getResources().getString(R.string.play_time_space));
+        itvInsetCount.getFirstView().setText(getResources().getString(R.string.push_mode_set));
+        itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad));
         itvWeekSelect.getFirstView().setText(getResources().getString(R.string.week_select));
         itvWeekSelect.getSecondView().setText(getResources().getString(R.string.week_every));
-        itvPushTimeing.getFirstView().setText("选择定时时间");
+        itvPushTimeing.getFirstView().setText(getResources().getString(R.string.select_timeing));
         itvTimeSelect.showMoreButton(true);
         itvInsetCount.showMoreButton(true);
         itvInsertMusic.showMoreButton(true);
@@ -203,10 +204,17 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         {
             itvPushTimeing.setVisibility(View.VISIBLE);
 
+            /*itvTimeSelect.setVisibility(View.INVISIBLE);
+            itvInsetCount.setVisibility(View.INVISIBLE);*/
+            itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad));
         }
         else
         {
             itvPushTimeing.setVisibility(View.GONE);
+
+            /*itvTimeSelect.setVisibility(View.VISIBLE);
+            itvInsetCount.setVisibility(View.VISIBLE);*/
+            itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad_timeing));
 
         }
     }
@@ -229,6 +237,18 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
             itvTimeSelect.getSecondView().setText(startTimes + " 到 " + endTimes);
 
             cycleType = tempInfor.getCycleType();
+
+            if(tempInfor.isTimePushModel())
+            {
+                switchButtonTimeing.setChecked(true);
+                showTimeingPushSet(true);
+                itvPushTimeing.getSecondView().setText(tempInfor.getStartTime());
+            }
+            else
+            {
+                switchButtonTimeing.setChecked(false);
+                showTimeingPushSet(false);
+            }
 
             showCycleType(cycleType);
 
@@ -256,7 +276,6 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else
             mAdPlanInfo.updateSelect(tempInfor);
 
-
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putSerializable("AD_PLAN_INFO", mAdPlanInfo);
@@ -267,49 +286,66 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
 
     private SubAdPlanInfo getSubPlanInfor()
     {
-        SubAdPlanInfo tempInfor = new SubAdPlanInfo();
-        if(startTimes.equals(endTimes))
-        {
-            showToast("起始时间不能一样的哦");
-            return null;
-        }
-        if(TextUtils.isEmpty(startTimes))
-        {
-            showToast("请设置起始时间");
-            return null;
-        }
-        if(TextUtils.isEmpty(endTimes))
-        {
-            showToast("请设置结束时间");
-            return null;
-        }
-
-        if(!mAdPlanInfo.checkPlanTime(startTimes, endTimes))
-        {
-            showToast("当前时间与计划时间有重叠");
-            return null;
-        }
+        SubAdPlanInfo tempInfor = mAdPlanInfo.getSelelctPlanInfor();
+        if(tempInfor == null)
+            tempInfor = new SubAdPlanInfo();
 
         if(selectAdList.size() == 0)
         {
-            showToast("请至少添加一个广告");
+            showToast(getResources().getString(R.string.push_ad_select_hint));
             return null;
         }
-        tempInfor.setStartTime(startTimes);
-        tempInfor.setEndTime(endTimes);
+
+        if(switchButtonTimeing.isChecked())
+        {
+            //定时广播
+            tempInfor.setPlayModel("2");
+            tempInfor.setStartTime(pushTime);
+            tempInfor.setEndTime(pushTime);
+
+            AdMediaInfo tempMedia = selectAdList.get(0);
+            selectAdList.clear();
+            selectAdList.add(tempMedia);
+        }
+        else
+        {
+            //正常间隔广播
+            tempInfor.setPlayModel("1");
+
+            if(startTimes.equals(endTimes))
+            {
+                showToast("起始时间不能一样的哦");
+                return null;
+            }
+            if(TextUtils.isEmpty(startTimes))
+            {
+                showToast("请设置起始时间");
+                return null;
+            }
+            if(TextUtils.isEmpty(endTimes))
+            {
+                showToast("请设置结束时间");
+                return null;
+            }
+
+            if(!mAdPlanInfo.checkPlanTime(startTimes, endTimes))
+            {
+                showToast("当前时间与计划时间有重叠");
+                return null;
+            }
+            tempInfor.setStartTime(startTimes);
+            tempInfor.setEndTime(endTimes);
+
+            if(TextUtils.isEmpty(loopAddNum))
+                loopAddNum = "1";
+            tempInfor.setMusicNum(loopAddNum);
+        }
+
         tempInfor.setSelectedAdList(selectAdList);
 
-        if(TextUtils.isEmpty(loopAddNum))
-            loopAddNum = "1";
-        tempInfor.setMusicNum(loopAddNum);
         if(TextUtils.isEmpty(cycleType))
             cycleType = "0";
         tempInfor.setCycleType(cycleType);
-        if(selectAdList.size() == 0)
-        {
-            showToast("请选择要插播的歌曲");
-            return null;
-        }
 
         return tempInfor;
     }
@@ -501,6 +537,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     //Log.i("text","时间："+hourOfDay+"："+minute);
                     itvPushTimeing.getSecondView().setText(hourOfDay + "点"+minute+"分");
+                    pushTime = hourOfDay + ":" + minute;
                 }
             },hour,minute,true);
             tpd.show();

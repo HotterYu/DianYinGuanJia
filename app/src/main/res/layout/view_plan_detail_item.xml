@@ -56,7 +56,7 @@
 			</LinearLayout>
 
 			<TextView
-				android:id="@+id/tv_plan_item_album"
+				android:id="@+id/tv_plan_item_album_hint"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:paddingBottom="2dp"
@@ -64,6 +64,17 @@
 				android:paddingRight="12dp"
 				android:textSize="@dimen/SmallTextSize"
 				android:textColor="@color/text_black_mid"
+				/>
+
+			<TextView
+				android:id="@+id/tv_plan_item_album"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:paddingBottom="2dp"
+				android:paddingLeft="32dp"
+				android:paddingRight="12dp"
+				android:textSize="@dimen/SmallTextSize"
+				android:textColor="@color/text_black_off"
 				/>
 
 		</LinearLayout>

@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.SubAdPlanInfo;
-import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.utils.DateUtils;
 
 import java.util.ArrayList;
@@ -88,6 +87,7 @@ public class AdPlanDetailAdapter extends BaseAdapter
             convertView = LayoutInflater.from(activity).inflate(R.layout.view_plan_detail_item, null);
             vh.tvTime = (TextView)convertView.findViewById(R.id.tv_plan_item_time);
             vh.tvAlbum = (TextView)convertView.findViewById(R.id.tv_plan_item_album);
+            vh.tvAlbumHint = (TextView)convertView.findViewById(R.id.tv_plan_item_album_hint);
             vh.tvWeek = (TextView)convertView.findViewById(R.id.tv_plan_item_week);
             vh.viewDelete = convertView.findViewById(R.id.view_plan_item_delete);
 
@@ -117,7 +117,22 @@ public class AdPlanDetailAdapter extends BaseAdapter
 
         SubAdPlanInfo infor = subPlanList.get(pos);
         vh.tvTime.setText(infor.getPlanTime());
-        vh.tvAlbum.setText("播放广告：" + infor.getAdinfoName());
+
+        if(infor.isTimePushModel())
+        {
+            //定时插播
+            vh.tvAlbumHint.setText("定时 " + infor.getStartTime() + "  播放广告：");
+        }
+        else
+        {
+            //间隔插播
+            if(!infor.getMusicNum().startsWith("0"))
+                vh.tvAlbumHint.setText("间隔 " + infor.getMusicNum() + "首歌曲插播一次：" );
+            else
+                vh.tvAlbumHint.setText("间隔 " + infor.getMusicNum() + "分钟插播一次：");
+        }
+        vh.tvAlbum.setText(infor.getAdinfoName());
+
         vh.tvWeek.setText(DateUtils.getWeekByCycleType(activity,infor.getCycleType()));
 
 
@@ -127,6 +142,7 @@ public class AdPlanDetailAdapter extends BaseAdapter
     private class ViewHolder
     {
         TextView tvTime = null;
+        TextView tvAlbumHint = null;
         TextView tvAlbum = null;
         TextView tvWeek = null;
         View viewDelete = null;

@@ -8,6 +8,7 @@ import android.preference.PreferenceFragment;
 
 import com.znt.vodbox.BuildConfig;
 import com.znt.vodbox.R;
+import com.znt.vodbox.constants.HttpApi;
 
 
 public class AboutActivity extends BaseActivity {
@@ -40,7 +41,10 @@ public class AboutActivity extends BaseActivity {
             mJianshu = findPreference("jianshu");
             mGithub = findPreference("github");
 
-            mVersion.setSummary("v " + BuildConfig.VERSION_NAME);
+            if(!HttpApi.API.contains("zhunit.com"))
+                mVersion.setSummary("v " + BuildConfig.VERSION_NAME + " " + getResources().getString(R.string.version_hint_debug));
+            else
+                mVersion.setSummary("v " + BuildConfig.VERSION_NAME + " " + getResources().getString(R.string.version_hint_release));
             setListener();
         }
 

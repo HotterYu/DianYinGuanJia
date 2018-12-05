@@ -125,6 +125,11 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         itvDateEnd = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_date_select_end);
         viewAdd = headerView.findViewById(R.id.view_plan_detail_add);
 
+        if(isEdit)
+            switchButton.setEnable(false);
+        else
+            switchButton.setEnable(true);
+
         listView = (LJListView)findViewById(R.id.ptrl_plan_datail);
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
         listView.getListView().setDividerHeight(1);
@@ -320,6 +325,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             endTimes = removeTags(endTimes);
             musicNums = removeTags(musicNums);
             adinfoIds = removeTags(adinfoIds);
+
             if(adinfoIds.startsWith(";"))
                 adinfoIds = adinfoIds.substring(1);
             // Simulate network access.
