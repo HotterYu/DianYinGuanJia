@@ -107,6 +107,8 @@ public class MyActivityManager
     public void popAllActivityExceptionOne(Class cls)
     {
     	int index = 0;
+    	if(activityStack == null || activityStack.size() == 0)
+    	    return;
     	while(activityStack.size() > 1)
     	{
     		Activity activity = (Activity) activityStack.get(index);

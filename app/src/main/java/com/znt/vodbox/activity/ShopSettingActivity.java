@@ -171,6 +171,9 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 
 	private String getVideoWhirl(String videoWhirl)
 	{
+		if(TextUtils.isEmpty(videoWhirl))
+			videoWhirl = "0";
+
 		if(videoWhirl.equals("0"))
 		{
 			return getResources().getString(R.string.video_oritation_1);

@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             >
 
             <LinearLayout
@@ -86,7 +86,7 @@
                     android:id="@+id/tv_all_shop_addr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginTop="4dp"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
@@ -100,7 +100,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 

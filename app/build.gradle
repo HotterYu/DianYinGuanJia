@@ -12,7 +12,7 @@ android {
         config {
             keyAlias 'znt'
             keyPassword 'zhunikeji1818'
-            storeFile file('C:/vodbox.keystore')
+            storeFile file('./keystore/vodbox.keystore')
             storePassword 'zhunikeji1818'
         }
     }
