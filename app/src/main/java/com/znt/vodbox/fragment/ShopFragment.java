@@ -114,16 +114,7 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(loadMoreWrapper);
-
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                ViewUtils.startActivity(getActivity(),AddShopActivity.class,null,1);
-            }
-        });
-
+        fab.setVisibility(View.GONE);
 
         // 设置下拉刷新
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -1,5 +1,8 @@
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
@@ -20,6 +23,7 @@ import com.znt.vodbox.executor.PlaySearchedMusic;
 import com.znt.vodbox.executor.ShareOnlineMusic;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.model.DownloadInfo;
 import com.znt.vodbox.model.Music;
 import com.znt.vodbox.model.SearchMusic;
 import com.znt.vodbox.service.AudioPlayer;
@@ -30,6 +34,7 @@ import com.znt.vodbox.utils.binding.Bind;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,22 +152,53 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
     @Override
     public void onMoreClick(int position) {
         final SearchMusic.Song song = searchMusicList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(song.getSongname());
-        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getArtistname(), song.getSongname());
-        File file = new File(path);
-        int itemsId = file.exists() ? R.array.search_music_dialog_no_download : R.array.search_music_dialog;
-        dialog.setItems(itemsId, (dialog1, which) -> {
-            switch (which) {
-                case 0:// 分享
-                    share(song);
-                    break;
-                case 1:// 下载
-                    download(song);
-                    break;
+        // 获取歌曲下载链接
+        HttpClient.getMusicDownloadInfo(song.getSongid(), new HttpCallback<DownloadInfo>() {
+            @Override
+            public void onSuccess(DownloadInfo response) {
+                if (response == null || response.getBitrate() == null) {
+                    onFail(null);
+                    ToastUtils.show("获取数据失败");
+                    return;
+                }
+
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(SearchMusicActivity.this);
+                dialog.setTitle(searchMusicList.get(position).getSongname());
+                /*String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getArtist_name(), song.getSongname());
+                File file = new File(path);*/
+                //int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
+                int itemsId = R.array.online_music_dialog;
+                dialog.setItems(itemsId, (dialog1, which) -> {
+                    switch (which) {
+
+                        case 0://
+                            Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("MEDIA_NAME",song.getSongname());
+                            b.putString("MEDIA_ID",song.getSongid());
+                            b.putString("MEDIA_URL",response.getBitrate().getFile_link());
+                            intent.putExtras(b);
+                            startActivity(intent);
+                            //requestSetRingtone(music);
+                            break;
+                        case 1://
+                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            // 将文本内容放到系统剪贴板里。
+                            cm.setText(song.getSongname() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
+                            showToast("复制成功");
+                            break;
+
+                    }
+                });
+                dialog.show();
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                ToastUtils.show("获取数据失败");
             }
         });
-        dialog.show();
     }
 
     private void share(SearchMusic.Song song) {

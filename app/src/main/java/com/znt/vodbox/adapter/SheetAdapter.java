@@ -35,6 +35,13 @@ public class SheetAdapter extends BaseAdapter {
         mData = data;
     }
 
+    public void setDataList(List<SheetInfo> data)
+    {
+        this.mData.clear();
+        this.mData.addAll(data);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return mData.size();

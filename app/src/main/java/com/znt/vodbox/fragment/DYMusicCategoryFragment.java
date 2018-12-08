@@ -111,15 +111,7 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(loadMoreWrapper);
 
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                ViewUtils.startActivity(getActivity(),AddShopActivity.class,null,1);
-            }
-        });
-
+        fab.setVisibility(View.GONE);
 
         // 设置下拉刷新
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

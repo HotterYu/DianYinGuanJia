@@ -1,5 +1,6 @@
 package com.znt.vodbox.executor;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
@@ -22,9 +23,9 @@ import com.znt.vodbox.utils.ToastUtils;
  * Created by hzwangchenyan on 2016/1/14.
  */
 public class NaviMenuExecutor {
-    private MusicActivity activity;
+    private Activity activity;
 
-    public NaviMenuExecutor(MusicActivity activity) {
+    public NaviMenuExecutor(Activity activity) {
         this.activity = activity;
     }
 

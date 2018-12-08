@@ -17,7 +17,9 @@ import com.znt.vodbox.constants.Extras;
 import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.model.SheetInfo;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.xlistview.LJListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,11 +27,20 @@ import java.util.List;
  * 在线音乐
  * Created by wcy on 2015/11/26.
  */
-public class SheetListFragment extends BaseFragment implements AdapterView.OnItemClickListener {
+public class SheetListFragment extends BaseFragment implements LJListView.IXListViewListener, AdapterView.OnItemClickListener {
     @Bind(R.id.lv_sheet)
-    private ListView lvPlaylist;
+    private LJListView listView = null;
+    private SheetAdapter adapter = null;
+    private List<SheetInfo> mSongLists = new ArrayList<>();
 
-    private List<SheetInfo> mSongLists;
+    public static SheetListFragment INSTANCE = null;
+
+    public static SheetListFragment newInstance()
+    {
+        if(INSTANCE == null)
+            INSTANCE = new SheetListFragment();
+        return INSTANCE;
+    }
 
     @Nullable
     @Override
@@ -41,6 +52,24 @@ public class SheetListFragment extends BaseFragment implements AdapterView.OnIte
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
+        listView.getListView().setDividerHeight(1);
+        listView.setPullLoadEnable(true,"");
+        listView.setPullRefreshEnable(true);
+        listView.setIsAnimation(true);
+        listView.setXListViewListener(this);
+        listView.showFootView(false);
+        listView.setRefreshTime();
+        listView.setOnItemClickListener(this);
+        adapter = new SheetAdapter(mSongLists);
+        listView.setAdapter(adapter);
+
+        listView.onFresh();
+
+    }
+
+    private void loadData()
+    {
         mSongLists = AppCache.get().getSheetList();
         if (mSongLists.isEmpty()) {
             String[] titles = getResources().getStringArray(R.array.online_music_list_title);
@@ -52,14 +81,10 @@ public class SheetListFragment extends BaseFragment implements AdapterView.OnIte
                 mSongLists.add(info);
             }
         }
-        SheetAdapter adapter = new SheetAdapter(mSongLists);
-        lvPlaylist.setAdapter(adapter);
+        adapter.setDataList(mSongLists);
+        listView.stopRefresh();
     }
 
-    @Override
-    protected void setListener() {
-        lvPlaylist.setOnItemClickListener(this);
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,17 +96,39 @@ public class SheetListFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        int position = lvPlaylist.getFirstVisiblePosition();
+        /*int position = lvPlaylist.getFirstVisiblePosition();
         int offset = (lvPlaylist.getChildAt(0) == null) ? 0 : lvPlaylist.getChildAt(0).getTop();
         outState.putInt(Keys.PLAYLIST_POSITION, position);
-        outState.putInt(Keys.PLAYLIST_OFFSET, offset);
+        outState.putInt(Keys.PLAYLIST_OFFSET, offset);*/
     }
 
-    public void onRestoreInstanceState(final Bundle savedInstanceState) {
+   /* public void onRestoreInstanceState(final Bundle savedInstanceState) {
         lvPlaylist.post(() -> {
             int position = savedInstanceState.getInt(Keys.PLAYLIST_POSITION);
             int offset = savedInstanceState.getInt(Keys.PLAYLIST_OFFSET);
             lvPlaylist.setSelectionFromTop(position, offset);
         });
+    }*/
+
+    @Override
+    protected void onFragmentFirstVisible() {
+        super.onFragmentFirstVisible();
+        if(listView !=null)
+            listView.onFresh();
+    }
+
+    @Override
+    protected void onFragmentVisibleChange(boolean isVisible) {
+        super.onFragmentVisibleChange(isVisible);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+    }
+
+    @Override
+    public void onLoadMore() {
+
     }
 }

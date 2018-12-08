@@ -29,8 +29,13 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.tamic.novate.Novate;
 import com.znt.vodbox.R;
+import com.znt.vodbox.bean.AlbumInfo;
+import com.znt.vodbox.executor.NaviMenuExecutor;
+import com.znt.vodbox.fragment.PersonalFragment;
+import com.znt.vodbox.fragment.SheetListFragment;
 import com.znt.vodbox.fragment.first.DYMusicFragment;
 import com.znt.vodbox.fragment.first.HomeFragment;
+import com.znt.vodbox.utils.ViewUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,8 +44,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private Toolbar mtoolbar;
     private HomeFragment homeFragment;
     private DYMusicFragment mDYMusicFragment;
-    private HomeFragment videoFragment;
-    private HomeFragment weiTouTiao;
+    private PersonalFragment mPersonalFragment;
+    private SheetListFragment mSheetListFragment;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
@@ -64,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         setContentView(R.layout.activity_main);
         homeFragment = new HomeFragment();
         mDYMusicFragment = new DYMusicFragment();
-        videoFragment = new HomeFragment();
-        weiTouTiao = new HomeFragment();
+        mPersonalFragment = new PersonalFragment();
+        mSheetListFragment = SheetListFragment.newInstance();
 
         //navgationview
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     public void initView() {
         //显示toolbar
         mtoolbar = (Toolbar) findViewById(R.id.toolbar);
-        mtoolbar.setTitle("今日头条 - 新闻");
+        mtoolbar.setTitle("我的店铺");
         setSupportActionBar(mtoolbar);
         mtoolbar.setBackgroundColor(Color.parseColor(sp.getString("theme", "#ec6400")));
         //绑定侧边栏
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         bottomNavigationBar.setBarBackgroundColor("#FCFCFC");
         bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.home2, "店铺").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.main_bg))
                 .addItem(new BottomNavigationItem(R.drawable.comment, "发现").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.main_bg))
-                .addItem(new BottomNavigationItem(R.drawable.photo, "图片").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.main_bg))
+                .addItem(new BottomNavigationItem(R.drawable.photo, "精选").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.main_bg))
                 .addItem(new BottomNavigationItem(R.drawable.play, "我的").setInActiveColor(R.color.colorbttonfont).setActiveColorResource(R.color.main_bg))
                 .setFirstSelectedPosition(0)
                 .initialise();
@@ -131,58 +136,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(false);//设置选项是否选中
                 item.setCheckable(false);//选项是否可选
-                switch (item.getItemId()) {
-                    case R.id.item_setting:
-                        if (message) {
-                            //startActivity(new Intent(MainActivity.this, Se.class));
-                        } else {
-                            alert_info();
-                        }
-                        break;
-                    case R.id.item_theme:
-                        if (message)
-                        {
-                            dialog = new BottomSheetDialog(MainActivity.this);
-                            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.theme_choose, null);
-                            dialog.setContentView(view);
-                            dialog.show();
-                            theme_choose(view);
-                        } else {
-                            alert_info();
-                        }
-                        break;
-                    case R.id.item_love:
-                        if (message) {
-                        } else {
-                            alert_info();
-                        }
-                        break;
-                    case R.id.item_share:
-                        /*if (message) {
-                            dialog = new BottomSheetDialog(MainActivity.this);
-                            View view = LayoutInflater.from(MainActivity.this).inflate(R.layout.user_share, null);
-                            dialog.setContentView(view);
-                            dialog.show();
-                            user_share(view, dialog);
-                        } else {
-                            alert_info();
-                        }*/
-                        break;
-                    case R.id.logout:
-                        if (message) {
-                            new AlertDialog.Builder(MainActivity.this).setTitle("退出登录").setMessage("确认退出登录吗?").setNegativeButton("取消", null).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    logout();
-                                }
-                            }).show();
-                        } else {
-                            alert_info();
-                        }
-                        break;
-                }
-                drawerLayout.closeDrawers();
-                return true;
+                //drawerLayout.closeDrawers();
+                NaviMenuExecutor naviMenuExecutor = new NaviMenuExecutor(MainActivity.this);
+                return naviMenuExecutor.onNavigationItemSelected(item);
             }
         });
 
@@ -247,8 +203,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 }
                 else if(bottomNavigationBar.getCurrentSelectedPosition() == 2)
                 {
-                    mDYMusicFragment.goSearchMusicActivity(getApplicationContext());
+                    showSearTypeDialog();
+
                 }
+                return false;
+            }
+        });
+        MenuItem addItem = menu.findItem(R.id.add);
+        addItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if(bottomNavigationBar.getCurrentSelectedPosition() == 0)
+                {
+                    homeFragment.goAddShopActivity(getApplicationContext());
+                }
+
                 return false;
             }
         });
@@ -270,26 +239,53 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         return super.onPrepareOptionsMenu(menu);
     }
 
+    private void showSearTypeDialog()
+    {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("请选择搜索类型");
+        dialog.setItems(R.array.search_sys_album_dialog, (dialog1, which) -> {
+            switch (which) {
+                case 0://
+                    mDYMusicFragment.goSearchAlbumActivity(getApplicationContext());
+                    break;
+                case 1://
+                    mDYMusicFragment.goSearchMusicActivity(getApplicationContext());
+                    break;
+            }
+        });
+        dialog.show();
+    }
+
     //底部导航监听事件
     @Override
     public void onTabSelected(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (position) {
             case 0:
-                mtoolbar.setTitle("我们的店铺");
+                mtoolbar.setTitle("我的店铺");
                 ft.replace(R.id.maindfragment, homeFragment).commit();
+                mtoolbar.getMenu().findItem(R.id.search).setVisible(true);
+                mtoolbar.getMenu().findItem(R.id.add).setVisible(true);
                 break;
             case 1:
-                ft.replace(R.id.maindfragment, weiTouTiao).commit();
+                ft.replace(R.id.maindfragment, mSheetListFragment).commit();
                 mtoolbar.setTitle("在线音乐");
+                mtoolbar.getMenu().findItem(R.id.search).setVisible(true);
+                mtoolbar.getMenu().findItem(R.id.add).setVisible(false);
+
                 break;
             case 2:
                 ft.replace(R.id.maindfragment, mDYMusicFragment).commit();
                 mtoolbar.setTitle("系统音乐");
+                mtoolbar.getMenu().findItem(R.id.search).setVisible(true);
+                mtoolbar.getMenu().findItem(R.id.add).setVisible(false);
                 break;
             case 3:
-                ft.replace(R.id.maindfragment, videoFragment).commit();
+                /*ft.replace(R.id.maindfragment, mPersonalFragment).commit();
                 mtoolbar.setTitle("我的");
+                mtoolbar.getMenu().findItem(R.id.search).setVisible(false);
+                mtoolbar.getMenu().findItem(R.id.add).setVisible(false);*/
+                ViewUtils.startActivity(getApplicationContext(),AboutActivity.class,null);
                 break;
         }
     }
@@ -311,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         switch (v.getId()) {
             case R.id.profile_image_before:
                 drawerLayout.closeDrawers();//关闭navigationview
-                startActivity(new Intent(this, UserLoginAndRegisterActivity.class));//启动用户登录界面
+                startActivity(new Intent(this, OnlineMusicActivity.class));//启动用户登录界面
                 break;
             case R.id.theme_black:
                 mtoolbar.setBackgroundColor(Color.parseColor("#000000"));

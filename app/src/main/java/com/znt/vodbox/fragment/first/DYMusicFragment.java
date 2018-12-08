@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.SearchMusicActivity;
 import com.znt.vodbox.activity.SearchShopActivity;
+import com.znt.vodbox.activity.SearchSysAlbumActivity;
+import com.znt.vodbox.activity.SearchSystemMusicActivity;
 import com.znt.vodbox.adapter.DYMusicFragmentPagerAdapter;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
@@ -40,9 +42,13 @@ public class DYMusicFragment extends Fragment {
     {
         startActivity(new Intent(activity, SearchShopActivity.class));
     }
+    public void goSearchAlbumActivity(Context activity)
+    {
+        startActivity(new Intent(activity, SearchSysAlbumActivity.class));
+    }
     public void goSearchMusicActivity(Context activity)
     {
-        startActivity(new Intent(activity, SearchMusicActivity.class));
+        startActivity(new Intent(activity, SearchSystemMusicActivity.class));
     }
 
 

@@ -85,7 +85,8 @@ public class DYMusicAlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.tvName.setText(tempInfo.getName());
             holder.tvCount.setText(tempInfo.getMusicNum());
             if(!TextUtils.isEmpty(tempInfo.getImageUrl()))
-                Glide.with(mContext).load(tempInfo.getImageUrl()).into(holder.imageView);
+                Glide.with(mContext).load(tempInfo.getImageUrl()).placeholder(R.drawable.default_cover)
+                .error(R.drawable.default_cover).into(holder.imageView);
             holder.ivMore.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onMoreClick(position);

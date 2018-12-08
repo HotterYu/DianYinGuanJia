@@ -104,7 +104,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
             }
         });
 
-        listView.onFresh();
+        //listView.onFresh();
 
         mSearchView.setOnClickSearch(new ICallBack() {
             @Override
@@ -121,10 +121,18 @@ public class SearchSystemMusicActivity extends BaseActivity implements
 
 
     private void searchMusic() {
+
+        String keyword = mSearchView.getText().toString();
+        if(TextUtils.isEmpty(keyword))
+        {
+            ToastUtils.show("请输入查找内容");
+            listView.stopRefresh();
+            return;
+        }
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";
-        String keyword = mSearchView.getText().toString();
+
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
 

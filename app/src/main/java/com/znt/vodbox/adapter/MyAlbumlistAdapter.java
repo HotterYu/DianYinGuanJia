@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.model.Shopinfo;
@@ -74,6 +75,13 @@ public class MyAlbumlistAdapter extends BaseAdapter {
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
+
+        Glide.with(parent.getContext())
+                .load(albumInfo.getImageUrl())
+                .placeholder(R.drawable.default_cover)
+                .error(R.drawable.default_cover)
+                .into(holder.ivCover);
+
         return convertView;
     }
 

@@ -1,5 +1,8 @@
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -26,6 +29,7 @@ import com.znt.vodbox.executor.PlayOnlineMusic;
 import com.znt.vodbox.executor.ShareOnlineMusic;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.model.DownloadInfo;
 import com.znt.vodbox.model.Music;
 import com.znt.vodbox.model.OnlineMusic;
 import com.znt.vodbox.model.OnlineMusicList;
@@ -40,6 +44,7 @@ import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.widget.AutoLoadListView;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,27 +144,58 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     @Override
-    public void onMoreClick(int position) {
+    public void onMoreClick(int position)
+    {
         final OnlineMusic onlineMusic = mMusicList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(mMusicList.get(position).getTitle());
-        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(onlineMusic.getArtist_name(), onlineMusic.getTitle());
-        File file = new File(path);
-        int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
-        dialog.setItems(itemsId, (dialog1, which) -> {
-            switch (which) {
-                case 0:// 分享
-                    share(onlineMusic);
-                    break;
-                case 1:// 查看歌手信息
-                    artistInfo(onlineMusic);
-                    break;
-                case 2:// 下载
-                    download(onlineMusic);
-                    break;
+
+        // 获取歌曲下载链接
+        HttpClient.getMusicDownloadInfo(onlineMusic.getSong_id(), new HttpCallback<DownloadInfo>() {
+            @Override
+            public void onSuccess(DownloadInfo response) {
+                if (response == null || response.getBitrate() == null) {
+                    onFail(null);
+                    ToastUtils.show("获取数据失败");
+                    return;
+                }
+
+                //downloadMusic(response.getBitrate().getFile_link(), artist, title, albumFile.getPath());
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(OnlineMusicActivity.this);
+                dialog.setTitle(mMusicList.get(position).getTitle());
+                String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(onlineMusic.getArtist_name(), onlineMusic.getTitle());
+                File file = new File(path);
+                //int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
+                int itemsId = R.array.online_music_dialog;
+                dialog.setItems(itemsId, (dialog1, which) -> {
+                    switch (which) {
+
+                        case 0://
+                            Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("MEDIA_NAME",onlineMusic.getTitle());
+                            b.putString("MEDIA_ID",onlineMusic.getSong_id());
+                            b.putString("MEDIA_URL",response.getBitrate().getFile_link());
+                            intent.putExtras(b);
+                            startActivity(intent);
+                            //requestSetRingtone(music);
+                            break;
+                        case 1://
+                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            // 将文本内容放到系统剪贴板里。
+                            cm.setText(onlineMusic.getTitle() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
+                            showToast("复制成功");
+                            break;
+
+                    }
+                });
+                dialog.show();
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                ToastUtils.show("获取数据失败");
             }
         });
-        dialog.show();
     }
 
     private void initHeader() {

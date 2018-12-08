@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.znt.vodbox.R;
+import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.SearchMusicActivity;
 import com.znt.vodbox.activity.SearchShopActivity;
 import com.znt.vodbox.adapter.ShopFragmentPagerAdapter;
+import com.znt.vodbox.utils.ViewUtils;
 
 
 /**
@@ -35,6 +37,10 @@ public class HomeFragment extends Fragment {
     public void goSearchMusicActivity(Context activity)
     {
         startActivity(new Intent(activity, SearchMusicActivity.class));
+    }
+    public void goAddShopActivity(Context activity)
+    {
+        ViewUtils.startActivity(getActivity(),AddShopActivity.class,null,1);
     }
 
 
