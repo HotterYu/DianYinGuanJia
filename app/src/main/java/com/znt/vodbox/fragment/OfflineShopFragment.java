@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
 import com.znt.vodbox.activity.ShopDetailActivity;
@@ -21,6 +20,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.constants.RequestCode;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -51,6 +51,14 @@ public class OfflineShopFragment extends BaseFragment implements LJListView.IXLi
     private int pageSize = 25;
     private int maxSize = 0;
 
+    private static OfflineShopFragment INSTANCE = null;
+    public static OfflineShopFragment newInstance()
+    {
+        if(INSTANCE == null)
+            INSTANCE = new OfflineShopFragment();
+        return INSTANCE;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -62,7 +70,7 @@ public class OfflineShopFragment extends BaseFragment implements LJListView.IXLi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        adapter = new ShoplistAdapter(getActivity(),shopinfoList);
+        /*adapter = new ShoplistAdapter(getActivity(),shopinfoList);
         adapter.setOnMoreClickListener(this);
 
         fab.setOnClickListener(new View.OnClickListener()
@@ -84,7 +92,7 @@ public class OfflineShopFragment extends BaseFragment implements LJListView.IXLi
         listView.setRefreshTime();
         listView.setOnItemClickListener(this);
 
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter);*/
 
     }
 
@@ -102,7 +110,8 @@ public class OfflineShopFragment extends BaseFragment implements LJListView.IXLi
 
     public void loadShops()
     {
-
+        if(mUserInfo == null)
+            mUserInfo = LocalDataEntity.newInstance(getContext()).getUserInfor();
         String token = mUserInfo.getToken();
 
         String merchId = "";

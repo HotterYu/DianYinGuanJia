@@ -132,7 +132,6 @@ public class ShoplistAdapter extends BaseAdapter {
                 listener.onMoreClick(position);
             }
         });
-        holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
         return convertView;
     }
 
@@ -161,8 +160,7 @@ public class ShoplistAdapter extends BaseAdapter {
         private TextView tvStatus;
         @Bind(R.id.tv_all_shop_dev)
         private TextView tvDevId;
-        @Bind(R.id.v_all_shop_divider)
-        private View vDivider;
+
 
         public ViewHolder(View view) {
             ViewBinder.bind(this, view);

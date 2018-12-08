@@ -160,6 +160,8 @@
     <string name="select_push_ad_timeing">选择广告（1个）</string>
     <string name="select_timeing">选择定时时间</string>
 
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
 
     <string name="xlistview_header_hint_normal">下拉刷新</string>
     <string name="xlistview_header_hint_ready">松开刷新数据</string>
@@ -197,17 +199,6 @@
     <string name="dev_shop_detail_cur_play_count">当前播放列表</string>
 
 
-
-
-
-
-
-
-
-
-
-
-
     <string name="itv_shop_setting_name">&#160;&#160;&#160;&#160;设备名称:</string>
     <string name="itv_shop_setting_addr">&#160;&#160;&#160;&#160;设备地址:</string>
     <string name="itv_shop_setting_oritation">&#160;&#160;&#160;&#160;屏幕方向:</string>
@@ -241,5 +232,9 @@
 
     <string name="name_not_change">名称没有改变</string>
     <string name="please_input_content">请输入内容</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 </resources>

@@ -26,7 +26,7 @@ import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.executor.ControlPanel;
 import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.executor.UserInfoExecutor;
-import com.znt.vodbox.fragment.AllShopFragment;
+import com.znt.vodbox.fragment.ShopFragment;
 import com.znt.vodbox.fragment.OfflineShopFragment;
 import com.znt.vodbox.fragment.OnlineShopFragment;
 import com.znt.vodbox.fragment.PlayFragment;
@@ -63,7 +63,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     private FrameLayout flPlayBar;
 
     private View vNavigationHeader;
-    private AllShopFragment mAllShopFragment;
+    private ShopFragment mAllShopFragment;
     private OnlineShopFragment mOnlineShopFragment;
     private OfflineShopFragment mOfflineShopFragment;
     /*private MyAlbumFragment_ORG mMyAlbumFragment;
@@ -188,7 +188,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         });
 
         // setup view pager
-        mAllShopFragment = new AllShopFragment();
+        mAllShopFragment = new ShopFragment();
         mOnlineShopFragment = new OnlineShopFragment();
         mOfflineShopFragment = new OfflineShopFragment();
         /*mMyAlbumFragment = new MyAlbumFragment_ORG();
@@ -233,7 +233,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         mViewPager.addOnPageChangeListener(this);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mAllShopFragment.setUserInfo(mUserInfo);
+        //mAllShopFragment.setUserInfo(mUserInfo);
         mOnlineShopFragment.setUserInfo(mUserInfo);
         mOfflineShopFragment.setUserInfo(mUserInfo);
 
@@ -302,7 +302,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         {
             //GroupInfo tempInfo = (GroupInfo) data.getSerializableExtra("GROUP_INFOR");
             //mPlanInfo.convertPlanToSubPlan();
-            mAllShopFragment.loadShops();
+            //mAllShopFragment.loadShops();
 
         }
         else if(requestCode == 2)

@@ -1,144 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
-
-    <View
-        android:id="@+id/v_all_shop_playing"
-        android:layout_width="2dp"
-        android:layout_height="50dp"
-        android:layout_marginRight="3dp"
-        android:background="@color/red"
-        android:contentDescription="@null"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/iv_all_shop_cover"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="4dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/icon_shop" />
-
-    <FrameLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="4dp">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="4dp">
 
-        <LinearLayout
+        <View
+            android:id="@+id/v_all_shop_playing"
+            android:layout_width="2dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/red"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_all_shop_cover"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/icon_shop"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="2dp" />
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            >
+            android:layout_marginLeft="4dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                >
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_all_shop_name"
-                        style="@style/AppTheme.Text"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:ellipsize="end"
-                        android:singleLine="true"
-                        android:textSize="@dimen/text_size_common" />
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_all_shop_name"
+                            style="@style/AppTheme.Text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textSize="@dimen/text_size_common" />
+
+                        <TextView
+                            android:id="@+id/tv_all_shop_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:ellipsize="end"
+                            android:singleLine="true"
+                            android:textColor="@color/grey"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:id="@+id/tv_all_shop_group"
+                        android:id="@+id/tv_all_shop_curplay"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="4dp"
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/grey"
                         android:textSize="12sp" />
 
+                    <TextView
+                        android:id="@+id/tv_all_shop_addr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tv_all_shop_online_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:textColor="@color/grey"
+                        android:textSize="12sp"/>
+
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_all_shop_curplay"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                    android:layout_gravity="top"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/tv_all_shop_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:id="@+id/tv_all_shop_dev"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textSize="12sp"/>
 
-                <TextView
-                    android:id="@+id/tv_all_shop_addr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/grey"
-                    android:textSize="10sp" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_all_shop_online_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:textColor="@color/grey"
-                    android:textSize="12sp"/>
-
+                <ImageView
+                    android:id="@+id/iv_all_shop_more"
+                    android:layout_width="32dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/music_list_more_bg_selector"
+                    android:contentDescription="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_music_list_icon_more" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:id="@+id/tv_all_shop_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/tv_all_shop_dev"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textSize="12sp"/>
+            <!--<View
+                android:id="@+id/v_all_shop_divider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_height"
+                android:layout_gravity="bottom"
+                android:background="?android:attr/listDivider" />-->
+        </FrameLayout>
+    </LinearLayout>
 
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/iv_all_shop_more"
-                android:layout_width="32dp"
-                android:layout_height="match_parent"
-                android:background="@drawable/music_list_more_bg_selector"
-                android:contentDescription="@null"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_music_list_icon_more" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/v_all_shop_divider"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/divider_height"
-            android:layout_gravity="bottom"
-            android:background="?android:attr/listDivider" />
-    </FrameLayout>
-</LinearLayout>
+</android.support.v7.widget.CardView>

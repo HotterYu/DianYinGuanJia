@@ -22,6 +22,15 @@ public class AlbumInfo implements Serializable
     private String remark;
     private String showFlag;
     private String status;
+    private int type = 0;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     private boolean isSelected = false;
 

@@ -10,17 +10,17 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE" />-->
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
+
 
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 用于提高GPS定位速度 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
         android:name=".application.MusicApplication"
@@ -70,11 +70,9 @@
         <!-- 高德定位设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="8bc712cf79e101d74861574411cc563e"/>
+            android:value="8bc712cf79e101d74861574411cc563e" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService">
-        </service>
-
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <activity
             android:name=".activity.OnlineMusicActivity"
@@ -148,9 +146,9 @@
         <activity
             android:name=".activity.AlbumSelectActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.AdListActivity"
-            android:windowSoftInputMode="adjustPan"
-            />
+        <activity
+            android:name=".activity.AdListActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.GroupListActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -166,15 +164,15 @@
         <activity
             android:name=".activity.SearchShopActivity"
             android:windowSoftInputMode="adjustPan" />
-
-        <activity android:name=".activity.ShopDetailActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".activity.AccountActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".activity.ShopSettingActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activity.ShopDetailActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.AccountActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.ShopSettingActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.UserListActivity"
             android:windowSoftInputMode="adjustPan" />
@@ -190,6 +188,9 @@
         <activity
             android:name=".activity.WifiListActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>

@@ -240,7 +240,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                                 userInfo.setPwd(mPasswordView.getText().toString());
                                 getLocalData().setUserInfor(userInfo);
                                 MusicApplication.isLogin = true;
-                                Intent intent = new Intent(LoginActivity.this, MusicActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 Bundle b = new Bundle();
                                 b.putSerializable("USER_INFO",userInfo);
                                 intent.putExtras(b);

@@ -32,7 +32,16 @@ public class Shopinfo implements Serializable
     private String linkmanPhone = "";
     private String status = "";
     private GroupInfo group ;
+    private int type = 0;
     private List<tmlRunStatus> tmlRunStatus = null;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getId() {
         return id;

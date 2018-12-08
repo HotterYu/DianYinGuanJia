@@ -27,6 +27,7 @@ public class LocalDataEntity
 	private final String WIFI_MAC = "WIFI_MAC";
 	private final String USER_ID = "USER_ID";
 	private final String USER_TYPE = "USER_TYPE";
+	private final String USER_TOKEN = "USER_TOKEN";
 	private final String THIRD_ID = "THIRD_ID";
 	private final String THIRD_TOKEN = "THIRD_TOKEN";
 	private final String USER_NAME = "USER_NAME";
@@ -146,6 +147,7 @@ public class LocalDataEntity
 		sharedPre.setData(USER_NAME, userInfor.getNickName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
 		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
+		sharedPre.setData(USER_TOKEN, userInfor.getToken());
 		//sharedPre.setData(USER_HEAD, userInfor.getHead());
 		//sharedPre.setData(USER_DEVICES, userInfor.getBindDevices());
 		//sharedPre.setData(ADMIN, userInfor.isAdmin());
@@ -162,14 +164,14 @@ public class LocalDataEntity
 		String userAccount = sharedPre.getData(USER_ACCOUNT, "");
 		String userType = sharedPre.getData(USER_TYPE, "");
 		String pcCode = sharedPre.getData(PC_CODE, "");
-
+		String token = sharedPre.getData(USER_TOKEN, "");
 		userInfor.setId(userId);
 		userInfor.setNickName(userName);
 		//userInfor.setHead(head);
 
 		if(userInfor.getMerchant() != null)
 			userInfor.getMerchant().setBindCode(pcCode);
-
+		userInfor.setToken(token);
 		userInfor.setPwd(userPwd);
 		userInfor.setType(userType);
 		userInfor.setUsername(userAccount);

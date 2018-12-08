@@ -153,7 +153,7 @@ public class WelcomeActivity extends Activity {
                         if(userInfo != null)
                         {
                             MusicApplication.isLogin = true;
-                            Intent intent = new Intent(WelcomeActivity.this, MusicActivity.class);
+                            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                             Bundle b = new Bundle();
                             b.putSerializable("USER_INFO",userInfo);
                             intent.putExtras(b);

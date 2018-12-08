@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <color name="white">@android:color/white</color>
     <color name="white_8p">#14FFFFFF</color>
     <color name="white_16p">#29FFFFFF</color>
@@ -23,8 +28,13 @@
     <color name="colorBackground">#f1f0f6</color>
     <color name="colorText">#9b9b9b</color>
 
-
-
+    <color name="nowhite">#EDEDED</color>
+    <color name="colorbttonfont">#5E5E5E</color>
+    <color name="colorblue">#2196f3</color>
+    <color name="colortitle">#474747</color>
+    <color name="colororange">#FFA500</color>
+    <color name="colorpurple">#7e57c2</color>
+    <color name="colorpurple2">#B23AEE</color>
 
 
 
