@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,14 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.OnlineMusicActivity;
+import com.znt.vodbox.activity.SearchMusicActivity;
 import com.znt.vodbox.adapter.SheetAdapter;
 import com.znt.vodbox.application.AppCache;
 import com.znt.vodbox.constants.Extras;
-import com.znt.vodbox.constants.Keys;
 import com.znt.vodbox.model.SheetInfo;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.xlistview.LJListView;
@@ -64,8 +64,7 @@ public class SheetListFragment extends BaseFragment implements LJListView.IXList
         adapter = new SheetAdapter(mSongLists);
         listView.setAdapter(adapter);
 
-        listView.onFresh();
-
+        loadData();
     }
 
     private void loadData()
@@ -84,6 +83,12 @@ public class SheetListFragment extends BaseFragment implements LJListView.IXList
         adapter.setDataList(mSongLists);
         listView.stopRefresh();
     }
+
+    public void goSearchMusicActivity(Context activity)
+    {
+        startActivity(new Intent(activity, SearchMusicActivity.class));
+    }
+
 
 
     @Override
@@ -113,8 +118,6 @@ public class SheetListFragment extends BaseFragment implements LJListView.IXList
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        if(listView !=null)
-            listView.onFresh();
     }
 
     @Override

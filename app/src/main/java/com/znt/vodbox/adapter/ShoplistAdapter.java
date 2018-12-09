@@ -69,7 +69,7 @@ public class ShoplistAdapter extends BaseAdapter {
         }
         //holder.vPlaying.setVisibility((isPlaylist && position == AudioPlayer.get().getPlayPosition()) ? View.VISIBLE : View.INVISIBLE);
         Shopinfo shopinfo = shopList.get(position);
-        holder.ivCover.setImageResource(R.drawable.icon_shop);
+        //holder.ivCover.setImageResource(R.drawable.icon_shop);
         holder.tvShopName.setText(shopinfo.getName());
 
         if(shopinfo.getGroup() != null && !TextUtils.isEmpty(shopinfo.getGroup().getGroupName()))
@@ -96,6 +96,7 @@ public class ShoplistAdapter extends BaseAdapter {
                 holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                 holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                 holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
+                holder.ivCover.setImageResource(R.drawable.icon_shop);
             }
             else
             {
@@ -103,6 +104,7 @@ public class ShoplistAdapter extends BaseAdapter {
                 holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
                 holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
                 holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_black_on));
+                holder.ivCover.setImageResource(R.drawable.icon_shop_offline);
             }
 
             if(!TextUtils.isEmpty(shopinfo.getTmlRunStatus().get(0).getPlayingSong()))
@@ -120,6 +122,7 @@ public class ShoplistAdapter extends BaseAdapter {
         {
             holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
             holder.tvOnlineTime.setVisibility(View.GONE);
+            holder.ivCover.setImageResource(R.drawable.icon_shop_offline);
         }
 
         if(!TextUtils.isEmpty(shopinfo.getAddress()))

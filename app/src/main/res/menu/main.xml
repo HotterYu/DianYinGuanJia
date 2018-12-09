@@ -5,12 +5,12 @@
 
     <item
         android:id="@+id/add"
-        android:icon="@drawable/icon_add_off"
+        android:icon="@drawable/icon_menu_add"
         app:showAsAction="ifRoom|collapseActionView"
         android:title=""></item>
     <item
         android:id="@+id/search"
-        android:icon="@drawable/search2"
+        android:icon="@drawable/icon_menu_search"
         app:showAsAction="ifRoom|collapseActionView"
         android:title=""></item>
 </menu>

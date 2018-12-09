@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -48,7 +49,7 @@ public class TypeActivity extends BaseActivity implements
 
     private TypeListAdapter mAdapter = null;
 
-    private String type = "";
+    private String type = "0";
 
 
 
@@ -62,7 +63,9 @@ public class TypeActivity extends BaseActivity implements
         mSearchView.showRecordView(false);
 
         type = getIntent().getStringExtra("TYPE");
-        if(type.equals("0"))
+        if(TextUtils.isEmpty(type))
+            type = "0";
+        if(isAlbumType())
             tvTopTitle.setText("歌单分类");
         else
             tvTopTitle.setText("广告分类");
@@ -116,6 +119,12 @@ public class TypeActivity extends BaseActivity implements
         });
 
     }
+
+    private boolean isAlbumType()
+    {
+        return TextUtils.isEmpty(type) || type.equals("0");
+    }
+
 
     public void getTypes(String type)
     {

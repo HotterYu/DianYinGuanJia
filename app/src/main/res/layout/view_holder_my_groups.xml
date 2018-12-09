@@ -7,11 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_my_groups_cover"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_marginLeft="10dp"
         android:scaleType="fitXY"
-        android:src="@drawable/default_cover" />
+        android:src="@drawable/icon_group_default" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -51,13 +51,13 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tv_my_groups_shop_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="3dp"
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:textColor="@color/grey"

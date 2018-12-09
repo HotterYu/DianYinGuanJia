@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
 import com.znt.vodbox.activity.SearchSystemMusicActivity;
@@ -61,14 +60,6 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     private int pageSize = 25;
     private int maxSize = 0;
     private String onlinestatus = "";
-
-    /*private static ShopFragment INSTANCE = null;
-    public static ShopFragment newInstance()
-    {
-        if(INSTANCE == null)
-            INSTANCE = new ShopFragment();
-        return INSTANCE;
-    }*/
 
     public void setOnlinestatus(String onlinestatus)
     {
@@ -135,7 +126,7 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
             public void onLoadMore() {
                 loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING);
 
-                if (dataList.size() < 52)
+                if (dataList.size() < maxSize)
                 {
 
                 }
@@ -147,13 +138,14 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
             }
         });
 
+        getData();
 
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        getData();
+
     }
 
     public void setOnCountGetCallBack(MusicActivity.OnCountGetCallBack mOnCountGetCallBack)

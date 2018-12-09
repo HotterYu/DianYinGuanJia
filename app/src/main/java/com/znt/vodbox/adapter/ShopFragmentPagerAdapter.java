@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.znt.vodbox.fragment.GroupFragment;
 import com.znt.vodbox.fragment.ShopFragment;
 
 
@@ -13,7 +14,7 @@ import com.znt.vodbox.fragment.ShopFragment;
  */
 
 public class ShopFragmentPagerAdapter extends FragmentPagerAdapter {
-    private String[] titles = new String[]{"全部","在线","离线"};
+    private String[] titles = new String[]{"全部店铺","在线店铺","离线店铺","分区查看"};
     public int COUNT = titles.length;
     private Context context;
 
@@ -25,12 +26,18 @@ public class ShopFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
 
+        if(position == 3)
+        {
+            GroupFragment mGroupFragment = new GroupFragment();
+            return mGroupFragment;
+        }
+
         ShopFragment mShopFragment = new ShopFragment();
         if(position == 0)
             mShopFragment.setOnlinestatus("");
         else if(position == 1)
             mShopFragment.setOnlinestatus("1");
-        else
+        else if(position == 2)
             mShopFragment.setOnlinestatus("0");
         return mShopFragment;
     }

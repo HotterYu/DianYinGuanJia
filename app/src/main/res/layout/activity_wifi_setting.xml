@@ -76,6 +76,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/sure"
+                android:textColor="@color/white"
+                android:background="@drawable/button_style_3"
                 android:textStyle="bold" />
 
         </LinearLayout>

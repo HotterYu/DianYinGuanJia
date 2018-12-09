@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.GroupInfo;
-import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -63,7 +61,7 @@ public class GroupListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         GroupInfo tempInfo = dataList.get(position);
-        holder.ivCover.setImageResource(R.drawable.default_cover);
+        //holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvAlbumName.setText(tempInfo.getGroupName());
         holder.tvAdminName.setText("管理员名称：" + tempInfo.getAdminName());
         holder.tvShopCount.setText("应用店铺数："+tempInfo.getStoreNumber());

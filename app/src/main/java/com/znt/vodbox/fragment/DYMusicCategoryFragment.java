@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.AlbumMusicActivity;
 import com.znt.vodbox.activity.MusicActivity;
 import com.znt.vodbox.adapter.DYMusicAlbumAdapter;
@@ -30,7 +29,6 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.ToastUtils;
-import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.StaggeredGridRecyclerView;
 import com.znt.vodbox.view.listener.EndlessRecyclerOnScrollListener;
@@ -132,7 +130,7 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
             public void onLoadMore() {
                 loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING);
 
-                if (dataList.size() < 52)
+                if (dataList.size() < 100)
                 {
 
                 }
@@ -143,13 +141,12 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
                 }
             }
         });
-
+        getData();
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
-        getData();
 
     }
 

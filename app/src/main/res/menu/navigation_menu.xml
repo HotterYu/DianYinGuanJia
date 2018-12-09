@@ -13,14 +13,19 @@
             android:id="@+id/action_my_albums"
             android:icon="@drawable/ic_menu_my_albums"
             android:title="@string/menu_my_albums" />
-        <item
-            android:id="@+id/action_sys_albums"
-            android:icon="@drawable/ic_menu_sys_albums"
-            android:title="@string/menu_sys_albums" />
+
         <item
             android:id="@+id/action_setting"
             android:icon="@drawable/ic_menu_ad"
             android:title="@string/menu_my_ads" />
+
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_sys_albums"
+            android:icon="@drawable/ic_menu_sys_albums"
+            android:title="@string/menu_sys_albums" />
         <item
             android:id="@+id/action_night"
             android:icon="@drawable/ic_menu_night"

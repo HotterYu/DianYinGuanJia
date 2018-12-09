@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="180dp"
     android:id="@+id/header"
     android:background="@drawable/home_view"
     android:orientation="vertical">
@@ -19,7 +19,7 @@
             android:id="@+id/profile_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/avatar"
+            android:src="@drawable/icon_album_default"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp" />
 
@@ -37,7 +37,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:paddingTop="15dp"
+            android:paddingTop="10dp"
             android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_weight="1"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/news"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/LargeTextSize"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@color/nowhite"
@@ -56,7 +56,7 @@
                 <TextView
                     android:textColor="@color/nowhite"
                     android:textSize="12dp"
-                    android:text="News"
+                    android:text="店铺"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/followers"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/LargeTextSize"
                     android:gravity="center"
                     android:text="1288"
                     android:textColor="@color/nowhite"
@@ -77,7 +77,7 @@
                 <TextView
                     android:textColor="@color/nowhite"
                     android:textSize="12dp"
-                    android:text="Follwers"
+                    android:text="歌单"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/following"
-                    android:textSize="25dp"
+                    android:textSize="@dimen/LargeTextSize"
                     android:gravity="center"
                     android:text="888"
                     android:textColor="@color/nowhite"
@@ -98,7 +98,7 @@
                 <TextView
                     android:textColor="@color/nowhite"
                     android:textSize="12dp"
-                    android:text="Follwing"
+                    android:text="积分"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>

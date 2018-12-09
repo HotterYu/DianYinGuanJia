@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/homefragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/tv_dymusic_category_more"
+            android:layout_marginRight="2dp"
+            android:layout_gravity="left"
+            app:tabSelectedTextColor="@color/colorPrimary"
+            app:tabTextAppearance="@style/TabLayoutTextStyle"></android.support.design.widget.TabLayout>
+
+        <TextView
+            android:id="@+id/tv_dymusic_category_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_alignTop="@+id/tablayout"
+            android:layout_alignBottom="@+id/tablayout"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/text_black_on"
+            android:textSize="14sp"
+            android:paddingLeft="8dp"
+            android:paddingRight="4dp"
+            android:text="@string/more"
+            android:background="@drawable/sel_item_bg"
+            />
+
+    </RelativeLayout>
+
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#fff">
+    </android.support.v4.view.ViewPager>
+</LinearLayout>

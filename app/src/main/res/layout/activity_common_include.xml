@@ -42,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="center"
+                android:textSize="@dimen/LargeTextSize"
                 android:gravity="center_vertical"
                 android:textColor="@color/white"
                 />
@@ -65,6 +66,7 @@
                 android:background="@drawable/btn_action_bg_selector"
                 android:contentDescription="@null"
                 android:scaleType="centerInside"
+                android:textSize="@dimen/LargeTextSize"
                 android:visibility="gone"
                 style="@style/AppTheme.Text" />
         </FrameLayout>
