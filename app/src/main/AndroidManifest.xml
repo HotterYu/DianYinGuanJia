@@ -190,7 +190,13 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".activity.UserLoginAndRegisterActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".activity.SearchSysAlbumActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

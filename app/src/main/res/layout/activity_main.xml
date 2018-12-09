@@ -39,8 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-
-        app:menu="@menu/drawer"
+        app:menu="@menu/navigation_menu"
         android:background="#444d56"
         app:itemTextColor="@color/white"
         />

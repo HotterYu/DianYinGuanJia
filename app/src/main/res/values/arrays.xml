@@ -14,6 +14,11 @@
         <item>删除</item>
     </string-array>
 
+    <string-array name="online_music_dialog">
+        <item>插播歌曲</item>
+        <item>复制链接</item>
+    </string-array>
+
     <string-array name="cur_play_music_dialog">
         <item>插播歌曲</item>
         <item>复制链接</item>
@@ -56,7 +61,10 @@
         <item>歌单详情</item>
     </string-array>
 
-
+    <string-array name="search_sys_album_dialog">
+    <item>搜索歌单</item>
+    <item>搜索歌曲</item>
+    </string-array>
 
     <string-array name="shop_list_dialog">
         <item>添加到分区</item>
@@ -74,12 +82,6 @@
         <item>设为铃声</item>
         <item>@string/music_info</item>
         <item>删除</item>
-    </string-array>
-
-    <string-array name="online_music_dialog">
-        <item>分享</item>
-        <item>查看歌手信息</item>
-        <item>下载</item>
     </string-array>
 
     <string-array name="online_music_dialog_without_download">

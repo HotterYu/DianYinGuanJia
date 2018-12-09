@@ -106,6 +106,7 @@
     <string name="add_shop">添加店铺</string>
     <string name="my_album">我的歌单</string>
     <string name="sys_album">系统歌单</string>
+    <string name="sys_album_search">歌单搜索</string>
     <string name="add_album">创建歌单</string>
     <string name="dev_wifi_set">WIFI设置</string>
     <string name="dev_wifi_select">选择WIFI</string>
