@@ -28,11 +28,13 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.ViewPagerAdapter;
+import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.fragment.SheetListFragment;
 import com.znt.vodbox.fragment.first.DYMusicFragment;
 import com.znt.vodbox.fragment.first.HomeFragment;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.view.SlideViewPager;
 
 import java.util.ArrayList;
@@ -94,6 +96,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName());
             /*followers.setText("");
             following.setText("");*/
+            headerlayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if( MusicApplication.isLogin)
+                        ViewUtils.startActivity(getApplicationContext(), AccountActivity.class,null);
+                    else
+                        ViewUtils.startActivity(getApplicationContext(), LoginActivity.class,null);
+                }
+            });
         }
     }
 
@@ -280,8 +291,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 break;
         }
     }
-
-
     @Override
     public void onTabUnselected(int position) {
 

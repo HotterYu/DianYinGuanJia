@@ -74,7 +74,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
     {
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
-        String pageSize = "20";
+        String pageSize = "50";
         String id = "";//计划id
         String merchId = Constant.mUserInfo.getMerchant().getId();
         String groupId = "";

@@ -128,7 +128,7 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
 
                 if (dataList.size() < maxSize)
                 {
-
+                    getData();
                 }
                 else
                 {

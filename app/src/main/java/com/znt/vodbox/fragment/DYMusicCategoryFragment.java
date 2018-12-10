@@ -130,9 +130,9 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
             public void onLoadMore() {
                 loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING);
 
-                if (dataList.size() < 100)
+                if (dataList.size() < maxSize)
                 {
-
+                    getData();
                 }
                 else
                 {
