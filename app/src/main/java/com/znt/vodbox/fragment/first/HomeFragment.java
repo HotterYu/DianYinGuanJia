@@ -15,6 +15,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AddShopActivity;
 import com.znt.vodbox.activity.SearchShopActivity;
 import com.znt.vodbox.adapter.ShopFragmentPagerAdapter;
+import com.znt.vodbox.fragment.ShopFragment;
 import com.znt.vodbox.utils.ViewUtils;
 
 
@@ -27,6 +28,12 @@ public class HomeFragment extends Fragment {
 
     public HomeFragment() {
 
+    }
+
+    private ShopFragment.OnShopCounUpdateListener mOnShopCounUpdateListener = null;
+    public void setOnShopCounUpdateListener(ShopFragment.OnShopCounUpdateListener mOnShopCounUpdateListener)
+    {
+        this.mOnShopCounUpdateListener = mOnShopCounUpdateListener;
     }
 
     public void goSearchShopActivity(Context activity)
@@ -52,6 +59,7 @@ public class HomeFragment extends Fragment {
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         //关键的一个知识点getChidFragmentManager
         adapter = new ShopFragmentPagerAdapter(getChildFragmentManager(), getContext());
+        adapter.setOnShopCounUpdateListener(mOnShopCounUpdateListener);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(7);
 
@@ -59,8 +67,11 @@ public class HomeFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) rootView.findViewById(R.id.tablayout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
         //显示当前那个标签页
 //        viewPager.setCurrentItem(1);
         tabLayout.setupWithViewPager(viewPager);
+
+
     }
 }

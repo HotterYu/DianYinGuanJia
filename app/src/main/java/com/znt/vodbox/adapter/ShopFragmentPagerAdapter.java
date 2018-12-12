@@ -13,10 +13,16 @@ import com.znt.vodbox.fragment.ShopFragment;
  * Created by LaravelChen on 2017/6/8.
  */
 
-public class ShopFragmentPagerAdapter extends FragmentPagerAdapter {
+public class ShopFragmentPagerAdapter extends FragmentPagerAdapter implements ShopFragment.OnShopCounUpdateListener {
     private String[] titles = new String[]{"全部店铺","在线店铺","离线店铺","分区查看"};
     public int COUNT = titles.length;
     private Context context;
+
+    private ShopFragment.OnShopCounUpdateListener mOnShopCounUpdateListener = null;
+    public void setOnShopCounUpdateListener(ShopFragment.OnShopCounUpdateListener mOnShopCounUpdateListener)
+    {
+        this.mOnShopCounUpdateListener = mOnShopCounUpdateListener;
+    }
 
     public ShopFragmentPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -39,6 +45,7 @@ public class ShopFragmentPagerAdapter extends FragmentPagerAdapter {
             mShopFragment.setOnlinestatus("1");
         else if(position == 2)
             mShopFragment.setOnlinestatus("0");
+        mShopFragment.setOnShopCounUpdateListener(this);
         return mShopFragment;
     }
 
@@ -52,4 +59,9 @@ public class ShopFragmentPagerAdapter extends FragmentPagerAdapter {
         return titles[position];
     }
 
+    @Override
+    public void onShopCounUpdate(int all, int online, int offline, int expire) {
+        titles = new String[]{"全部店铺(" + all+")","在线店铺(" + online+")","离线店铺(" + offline+")","分区查看"};
+        notifyDataSetChanged();
+    }
 }

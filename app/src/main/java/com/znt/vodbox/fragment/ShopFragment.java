@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +60,20 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     private int pageNo = 1;
     private int pageSize = 25;
     private int maxSize = 0;
+    private int onlinesize = 0;
+    private int expiredsize = 0;
     private String onlinestatus = "";
+
+    private OnShopCounUpdateListener mOnShopCounUpdateListener = null;
+    public interface OnShopCounUpdateListener
+    {
+        void onShopCounUpdate(int all, int online, int offline,int expire);
+    }
+
+    public void setOnShopCounUpdateListener(OnShopCounUpdateListener mOnShopCounUpdateListener)
+    {
+        this.mOnShopCounUpdateListener = mOnShopCounUpdateListener;
+    }
 
     public void setOnlinestatus(String onlinestatus)
     {
@@ -201,8 +215,20 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
                             pageNo ++;
 
                         dataList.addAll(tempList);
-                        if(maxSize == 0)
-                            maxSize = Integer.parseInt(resultBean.getMessage());
+
+                        maxSize = Integer.parseInt(resultBean.getMessage());
+
+                        if(resultBean.getExtendData() != null )
+                        {
+                            if(!TextUtils.isEmpty(resultBean.getExtendData().getOnlinesize()))
+                                onlinesize = Integer.parseInt(resultBean.getExtendData().getOnlinesize());
+                            if(!TextUtils.isEmpty(resultBean.getExtendData().getExpiredsize()))
+                                expiredsize = Integer.parseInt(resultBean.getExtendData().getExpiredsize());
+                            if(mOnShopCounUpdateListener != null)
+                            {
+                                mOnShopCounUpdateListener.onShopCounUpdate(maxSize,onlinesize,maxSize-onlinesize,expiredsize);
+                            }
+                        }
 
                         if(mOnCountGetCallBack != null)
                             mOnCountGetCallBack.onCountGetBack(resultBean.getMessage());

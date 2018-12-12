@@ -28,6 +28,16 @@ public class ShopListResultBean implements Serializable {
 
     private List<Shopinfo> data;
 
+    private ExtendDataBean extendData;
+
+    public ExtendDataBean getExtendData() {
+        return extendData;
+    }
+
+    public void setExtendData(ExtendDataBean extendData) {
+        this.extendData = extendData;
+    }
+
     public List<Shopinfo> getData() {
         return data;
     }
