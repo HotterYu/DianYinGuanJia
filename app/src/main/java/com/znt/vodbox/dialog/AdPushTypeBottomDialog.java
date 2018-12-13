@@ -135,7 +135,7 @@ public class AdPushTypeBottomDialog
                     return;
                 }
 
-                if(Integer.parseInt(oldContent) <= 0)
+                if(Integer.parseInt(newContent) <= 0)
                 {
                     Toast.makeText(mContext,"请输入正整数",Toast.LENGTH_LONG).show();
                     return;
