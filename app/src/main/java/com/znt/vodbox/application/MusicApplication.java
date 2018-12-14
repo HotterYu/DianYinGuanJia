@@ -26,8 +26,6 @@ public class MusicApplication extends Application {
         ForegroundObserver.init(this);
         DBManager.get().init(this);
 
-        /*Intent intent = new Intent(this, PlayService.class);
-        startService(intent);*/
 
         /* Bugly SDK初始化
         * 参数1：上下文对象
@@ -35,10 +33,6 @@ public class MusicApplication extends Application {
         * 参数3：是否开启调试模式，调试模式下会输出'CrashReport'tag的日志
         */
         CrashReport.initCrashReport(getApplicationContext(), "6207095b94", true);
-
-        /*String deviId = LocalDataEntity.newInstance(getApplicationContext()).getDeviceId();
-
-        CrashReport.putUserData(getApplicationContext(),"DeviceId",deviId);*/
 
         final String processName = getProcessName(android.os.Process.myPid());
         initBugly(processName);
