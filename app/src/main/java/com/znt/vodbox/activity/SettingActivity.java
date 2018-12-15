@@ -8,9 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.text.TextUtils;
 
-import com.hwangjr.rxbus.RxBus;
 import com.znt.vodbox.R;
-import com.znt.vodbox.constants.RxBusTags;
 import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.storage.preference.Preferences;
 import com.znt.vodbox.utils.MusicUtils;
@@ -90,13 +88,11 @@ public class SettingActivity extends BaseActivity {
                 Preferences.saveFilterSize((String) newValue);
                 mFilterSize.setSummary(getSummary(Preferences.getFilterSize(), R.array.filter_size_entries,
                         R.array.filter_size_entry_values));
-                RxBus.get().post(RxBusTags.SCAN_MUSIC, 1);
                 return true;
             } else if (preference == mFilterTime) {
                 Preferences.saveFilterTime((String) newValue);
                 mFilterTime.setSummary(getSummary(Preferences.getFilterTime(), R.array.filter_time_entries,
                         R.array.filter_time_entry_values));
-                RxBus.get().post(RxBusTags.SCAN_MUSIC, 1);
                 return true;
             }
             return false;

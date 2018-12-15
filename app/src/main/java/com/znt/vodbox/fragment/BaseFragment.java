@@ -14,7 +14,6 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.hwangjr.rxbus.RxBus;
 import com.znt.vodbox.R;
 import com.znt.vodbox.dialog.MusicPlayDialog;
 import com.znt.vodbox.dialog.MyAlertDialog;
@@ -97,7 +96,6 @@ public abstract class BaseFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         handler = new Handler(Looper.getMainLooper());
         ViewBinder.bind(this, getView());
-        RxBus.get().register(this);
     }
 
     @Override
@@ -117,7 +115,6 @@ public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        RxBus.get().unregister(this);
         initVariable();
         super.onDestroy();
     }
