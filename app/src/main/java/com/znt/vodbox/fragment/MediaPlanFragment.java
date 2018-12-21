@@ -45,7 +45,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
+        listView.getListView().setDivider(getResources().getDrawable(R.color.spacebar));
         listView.getListView().setDividerHeight(1);
         listView.setPullLoadEnable(true,"");
         listView.setPullRefreshEnable(true);

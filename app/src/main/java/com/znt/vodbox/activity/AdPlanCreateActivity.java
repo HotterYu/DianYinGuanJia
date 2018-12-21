@@ -117,6 +117,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         itvTimeSelect.getFirstView().setText(getResources().getString(R.string.play_time_space));
         itvInsetCount.getFirstView().setText(getResources().getString(R.string.push_mode_set));
         itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad));
+        itvInsertMusic.getFirstView().setTextColor(getResources().getColor(R.color.text_blue_on));
         itvWeekSelect.getFirstView().setText(getResources().getString(R.string.week_select));
         itvWeekSelect.getSecondView().setText(getResources().getString(R.string.week_every));
         itvPushTimeing.getFirstView().setText(getResources().getString(R.string.select_timeing));

@@ -219,6 +219,13 @@ public class DateUtils
 		String dateString = formatter.format(currentTime);
 		return dateString;
 	}
+	public static String getStringTimeEnd(long time)
+	{
+		Date currentTime = new Date(time);
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
 
 	/**
 	  * 寰楀埌鐜板湪灏忔椂
@@ -247,6 +254,7 @@ public class DateUtils
 		min = dateString.substring(14, 16);
 		return min;
 	}
+
 
 	/**
 	  * 鏍规嵁鐢ㄦ埛浼犲叆鐨勬椂闂磋〃绀烘牸寮忥紝杩斿洖褰撳墠鏃堕棿鐨勬牸寮� 濡傛灉鏄痽yyyMMdd锛屾敞鎰忓瓧姣峺涓嶈兘澶у啓銆�

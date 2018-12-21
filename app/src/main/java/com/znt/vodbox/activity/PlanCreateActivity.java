@@ -150,6 +150,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
         itvInsertMusic = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_broadcast_albums);
         itvInsertMusic.getFirstView().setText("选择歌单（必选）");
+        itvInsertMusic.getFirstView().setTextColor(getResources().getColor(R.color.text_blue_on));
         itvInsertMusic.showMoreButton(true);
         itvInsertMusic.getBgView().setOnClickListener(this);
 

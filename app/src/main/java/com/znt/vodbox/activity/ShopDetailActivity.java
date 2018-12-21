@@ -27,6 +27,7 @@ import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.MyCycleView;
 import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class ShopDetailActivity extends BaseActivity implements
     private TextView tvPlayStatus = null;
     private TextView tvPlayVolume = null;
     private TextView tvCurPlayCount = null;
+
+    private MyCycleView mMyCycleView = null;
 
     private Shopinfo mShopInfo = null;
     private List<MediaInfo> dataList = new ArrayList<>();
@@ -92,6 +95,7 @@ public class ShopDetailActivity extends BaseActivity implements
         tvTopTitle.setText(getResources().getString(R.string.dev_shop_detail));
 
         viewHeader = LayoutInflater.from(getActivity()).inflate(R.layout.view_shop_detail_header, null);
+        mMyCycleView = (MyCycleView)viewHeader.findViewById(R.id.mcv_play_icon);
         tvShopName = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_shop_name);
         tvShopGroup = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_shop_group);
         tvCurPlayName = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_song);
@@ -102,6 +106,8 @@ public class ShopDetailActivity extends BaseActivity implements
         tvPlayStatus = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_status);
         tvPlayVolume = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_volume);
         tvCurPlayCount = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_song_count);
+
+        mMyCycleView.initView();
 
         tvPushMedia.setOnClickListener(this);
         tvPlayMode.setOnClickListener(this);
@@ -135,15 +141,15 @@ public class ShopDetailActivity extends BaseActivity implements
                 tvShopGroup.setText(getResources().getString(R.string.dev_group_belong_hint) + mShopInfo.getGroup().getGroupName());
             else
                 tvShopGroup.setText(getResources().getString(R.string.dev_group_belong_none));
-            tvCurPlayName.setText(mShopInfo.getTmlRunStatus().get(0).getPlayingSong());
+            tvCurPlayName.setText(getResources().getString(R.string.dev_shop_play) + mShopInfo.getTmlRunStatus().get(0).getPlayingSong());
             if(mShopInfo.getTmlRunStatus().get(0).getOnlineStatus() != null
                     && mShopInfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
-                tvCurStatus.setText(getResources().getString(R.string.dev_status_online));
+                tvCurStatus.setText(getResources().getString(R.string.dev_status) + getResources().getString(R.string.dev_status_online));
             }
             else
             {
-                tvCurStatus.setText(getResources().getString(R.string.dev_status_offline));
+                tvCurStatus.setText(getResources().getString(R.string.dev_status) + getResources().getString(R.string.dev_status_offline));
             }
 
             if(mShopInfo.getTmlRunStatus().get(0).getPlayModel() != null
@@ -188,8 +194,10 @@ public class ShopDetailActivity extends BaseActivity implements
                         List<MediaInfo> mediaInfoList = resultBean.getMediaInfos();
                         if(mediaInfoList != null && mediaInfoList.size() > 0)
                         {
+                            dataList.clear();
                             dataList.addAll(mediaInfoList);
                             mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
+                            tvCurPlayCount.setText(getResources().getString(R.string.dev_shop_detail_cur_play_count) + "("+dataList.size()+")");
                         }
                     }
                     else
@@ -294,16 +302,7 @@ public class ShopDetailActivity extends BaseActivity implements
                     cm.setText(tempInfo.getMusicUrl());
                     showToast("复制成功");
                     break;
-                case 2://
-                    showAlertDialog(getActivity(), new View.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(View view)
-                        {
-                            //deleteMusic(music);
-                        }
-                    }, "", "确定删除该文件吗?");
-                    break;
+
             }
         });
         dialog.show();

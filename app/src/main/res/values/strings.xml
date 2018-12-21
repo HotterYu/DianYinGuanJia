@@ -185,16 +185,19 @@
     <string name="app_close_hint">再按一次退出店音</string>
 
 
+    <string name="dev_status">状态:</string>
     <string name="dev_status_online">在线</string>
     <string name="dev_status_offline">离线</string>
     <string name="dev_group_belong_hint">所属分区：</string>
     <string name="dev_group_belong_none">未分区</string>
     <string name="dev_shop_addr_none">位置未知</string>
+    <string name="dev_shop_play">当前播放:</string>
     <string name="dev_shop_play_none">未播放</string>
     <string name="dev_shop_none_device">该店铺下没有设备</string>
     <string name="dev_shop_detail">店铺详情</string>
     <string name="dev_shop_detail_push_hint">插播</string>
     <string name="dev_shop_detail_volume_hint">音量</string>
+    <string name="dev_shop_detail_play_mode">模式</string>
     <string name="dev_shop_detail_play_mode_order">顺序播放</string>
     <string name="dev_shop_detail_play_mode_radom">随机播放</string>
     <string name="dev_shop_detail_play_status">播放</string>

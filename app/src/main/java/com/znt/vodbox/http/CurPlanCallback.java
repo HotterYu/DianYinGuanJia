@@ -9,6 +9,7 @@ import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.PlanResultBean;
 import com.znt.vodbox.constants.HttpApi;
+import com.znt.vodbox.utils.DateUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,15 +61,25 @@ public abstract class CurPlanCallback<T>  extends Callback<T>
                 String tempStartTime = planInfo.getStartTimes().get(i);
                 String tempEndTime = planInfo.getEndTimes().get(i);
 
-                String tempCategoryIds = "";
-                int tempLen = planInfo.getCategoryIds().size();
-                for(int j=0;j<tempLen;j++)
+                int sLong = DateUtils.timeToInt(tempStartTime, ":");
+                int eLong = DateUtils.timeToInt(tempEndTime, ":");
+
+                String curTime = DateUtils.getStringTimeEnd(System.currentTimeMillis());
+                int dLong = DateUtils.timeToInt(curTime, ":");
+
+                if(isTimeOverlap(sLong,eLong, dLong))
                 {
-                    tempCategoryIds += planInfo.getCategoryIds().get(j) + ",";
+                    String tempCategoryIds = "";
+                    int tempLen = planInfo.getCategoryIds().size();
+                    for(int j=0;j<tempLen;j++)
+                    {
+                        tempCategoryIds += planInfo.getCategoryIds().get(j) + ",";
+                    }
+                    if(tempCategoryIds.endsWith(","))
+                        tempCategoryIds = tempCategoryIds.substring(0, tempCategoryIds.length() - 1);
+                    tempList = getScheduleMusics(planInfo.getId(),tempScheId,tempCategoryIds, tempStartTime,tempEndTime,tempCycleType);
+
                 }
-                if(tempCategoryIds.endsWith(","))
-                    tempCategoryIds = tempCategoryIds.substring(0, tempCategoryIds.length() - 1);
-                tempList = getScheduleMusics(planInfo.getId(),tempScheId,tempCategoryIds, tempStartTime,tempEndTime,tempCycleType);
 
             }
 
@@ -164,6 +175,22 @@ public abstract class CurPlanCallback<T>  extends Callback<T>
 
 
         return tempList;
+    }
+
+    private boolean isTimeOverlap(int start, int end, int dest)
+    {
+        if(start > end)
+        {
+            if(dest > start && dest < end + 24 * 60)
+                return true;
+        }
+        else
+        {
+            if(dest > start && dest < end)
+                return true;
+        }
+
+        return false;
     }
 
     protected String getInforFromJason(JSONObject json, String key)

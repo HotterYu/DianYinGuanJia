@@ -97,8 +97,14 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		itvWifiPwd.getFirstView().setText(getResources().getString(R.string.itv_shop_setting_wifi_pwd));
 		itvIp.getFirstView().setText(getResources().getString(R.string.itv_shop_setting_ip));
 		itvStorage.getFirstView().setText(getResources().getString(R.string.itv_shop_setting_storage));
-		
-		
+
+		/*itvName.showBottomLine(true);
+		itvAddr.showBottomLine(true);
+		itvOritation.showBottomLine(true);
+
+		itvLastOnline.showBottomLine(true);
+		itvIp.showBottomLine(true);*/
+
 		itvName.showMoreButton(true);
 		itvAddr.showMoreButton(true);
 		itvOritation.showMoreButton(true);

@@ -22,7 +22,7 @@
     <string-array name="cur_play_music_dialog">
         <item>插播歌曲</item>
         <item>复制链接</item>
-        <item>删除</item>
+
     </string-array>
 
     <string-array name="group_list_dialog">

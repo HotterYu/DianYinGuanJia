@@ -1,7 +1,6 @@
 package com.znt.vodbox.adapter;
 
 import android.app.Activity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +116,7 @@ public class PlanDetailAdapter  extends BaseAdapter
 
         SubPlanInfor infor = subPlanList.get(pos);
         vh.tvTime.setText(infor.getPlanTime());
-        vh.tvAlbum.setText("播放歌单：" + infor.getPlanAlbumName());
+        vh.tvAlbum.setText(infor.getPlanAlbumName().replace(";","\n"));
         vh.tvWeek.setText(DateUtils.getWeekByCycleType(activity,infor.getCycleType()));
 
 

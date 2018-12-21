@@ -12,51 +12,69 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
-        <LinearLayout 
-            android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:paddingLeft="12dp"
-	        android:paddingRight="12dp"
-	        android:paddingTop="12dp"
-	        android:paddingBottom="12dp"
-	        android:orientation="vertical"
-            >
 
-			<TextView
-				android:id="@+id/tv_shop_detail_header_shop_name"
-				android:layout_width="wrap_content"
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<com.znt.vodbox.view.MyCycleView
+				android:id="@+id/mcv_play_icon"
+				android:layout_width="112dp"
+				android:layout_height="112dp"
+				android:layout_alignParentLeft="true"
+				android:layout_margin="3dp"
+				></com.znt.vodbox.view.MyCycleView>
+
+			<LinearLayout
+				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
-				android:layout_marginTop="6dp"
-				android:textSize="@dimen/title_text_size"
-				android:textColor="@color/text_blue_on"
-				/>
+				android:layout_toRightOf="@+id/mcv_play_icon"
+				android:paddingLeft="6dp"
+				android:paddingRight="6dp"
+				android:paddingTop="12dp"
+				android:paddingBottom="12dp"
+				android:orientation="vertical"
+				>
 
-			<TextView
-				android:id="@+id/tv_shop_detail_header_shop_group"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="6dp"
-				android:textSize="@dimen/small_text_size"
-				android:textColor="@color/text_black_mid"
-				/>
+				<TextView
+					android:id="@+id/tv_shop_detail_header_shop_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="6dp"
+					android:textSize="@dimen/title_text_size"
+					android:textColor="@color/text_black_mid"
+					/>
 
-	        <TextView 
-	            android:id="@+id/tv_shop_detail_header_song"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="4dp"
-	            android:textSize="@dimen/small_text_size"
-	            android:textColor="@color/text_black_mid"
-	            />
-	        <TextView 
-	            android:id="@+id/tv_shop_detail_header_status"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:textSize="@dimen/small_text_size"
-	            android:textColor="@color/text_black_mid"
-	            android:layout_marginTop="4dp"
-	            />
-        </LinearLayout>
+				<TextView
+					android:id="@+id/tv_shop_detail_header_shop_group"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="6dp"
+					android:textSize="@dimen/small_text_size"
+					android:textColor="@color/text_black_mid"
+					android:visibility="gone"
+					/>
+
+				<TextView
+					android:id="@+id/tv_shop_detail_header_song"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="4dp"
+					android:textSize="@dimen/small_text_size"
+					android:textColor="@color/text_black_mid"
+					/>
+				<TextView
+					android:id="@+id/tv_shop_detail_header_status"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="@dimen/small_text_size"
+					android:textColor="@color/text_black_mid"
+					android:layout_marginTop="4dp"
+					/>
+			</LinearLayout>
+		</RelativeLayout>
+
+
         <View 
             android:layout_width="fill_parent"
             android:layout_height="1dp"
@@ -76,7 +94,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-			android:layout_margin="12dp"
+			android:layout_margin="6dp"
             >
 
 			<TextView
@@ -86,8 +104,8 @@
 				android:layout_marginLeft="6dp"
 				android:paddingLeft="16dp"
 				android:paddingRight="16dp"
-				android:paddingTop="6dp"
-				android:paddingBottom="6dp"
+				android:paddingTop="12dp"
+				android:paddingBottom="12dp"
 				android:layout_alignParentLeft="true"
 				android:text="@string/dev_shop_detail_push_hint"
 				android:background="@drawable/sel_item_bg"
@@ -107,8 +125,8 @@
 					android:layout_height="wrap_content"
 					android:paddingLeft="12dp"
 					android:paddingRight="12dp"
-					android:paddingTop="6dp"
-					android:paddingBottom="6dp"
+					android:paddingTop="12dp"
+					android:paddingBottom="12dp"
 					android:layout_alignParentRight="true"
 					android:text="@string/dev_shop_detail_play_mode_order"
 					android:background="@drawable/sel_item_bg"
@@ -122,11 +140,12 @@
 					android:layout_alignParentRight="true"
 					android:paddingLeft="12dp"
 					android:paddingRight="12dp"
-					android:paddingTop="6dp"
-					android:paddingBottom="6dp"
+					android:paddingTop="12dp"
+					android:paddingBottom="12dp"
 					android:text="@string/dev_shop_detail_play_status"
 					android:background="@drawable/sel_item_bg"
 					android:textColor="@color/text_blue_on"
+					android:visibility="gone"
 					/>
 
 				<TextView
@@ -136,11 +155,12 @@
 					android:layout_alignParentRight="true"
 					android:paddingLeft="12dp"
 					android:paddingRight="12dp"
-					android:paddingTop="6dp"
-					android:paddingBottom="6dp"
+					android:paddingTop="12dp"
+					android:paddingBottom="12dp"
 					android:text="@string/dev_shop_detail_play_next"
 					android:background="@drawable/sel_item_bg"
 					android:textColor="@color/text_blue_on"
+					android:visibility="gone"
 					/>
 
 			</LinearLayout>
@@ -154,8 +174,8 @@
 				android:layout_alignParentRight="true"
 				android:paddingLeft="16dp"
 				android:paddingRight="16dp"
-				android:paddingTop="6dp"
-				android:paddingBottom="6dp"
+				android:paddingTop="12dp"
+				android:paddingBottom="12dp"
 				android:text="@string/dev_shop_detail_volume_hint"
 				android:background="@drawable/sel_item_bg"
 				android:textColor="@color/text_blue_on"

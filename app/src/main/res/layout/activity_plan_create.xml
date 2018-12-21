@@ -13,6 +13,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="@color/spacebar"
         >
         <com.znt.vodbox.view.xlistview.LJListView
             android:id="@+id/ptrl_plan_create"

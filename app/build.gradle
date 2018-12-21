@@ -7,10 +7,9 @@ bugly {
     appKey = 'd935ac63-2cd5-405d-9615-0eb0aafca9c4'
 }
 android {
-
     signingConfigs {
         config {
-            keyAlias 'znt'
+            keyAlias 'zntvodbox'
             keyPassword 'zhunikeji1818'
             storeFile file('./keystore/vodbox.keystore')
             storePassword 'zhunikeji1818'
@@ -29,16 +28,22 @@ android {
         }
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.config
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    productFlavors {
     }
 }
 
@@ -61,19 +66,14 @@ dependencies {
     implementation 'com.zhy:okhttputils:2.6.2'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.bumptech.glide:glide:3.8.0'
-
     implementation 'org.greenrobot:greendao:3.2.2'
-
     implementation 'com.cjj.materialrefeshlayout:library:1.3.0'
-
     implementation 'com.tencent.bugly:crashreport:latest.release'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.amap.api:location:latest.integration'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.3'
     implementation 'com.tamic.novate:novate:1.5.0'
-
-
 }
 repositories {
     mavenCentral()

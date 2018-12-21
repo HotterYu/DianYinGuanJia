@@ -52,7 +52,7 @@ public class WifiSetActivity  extends BaseActivity{
         tvTopTitle.setText(getResources().getString(R.string.dev_wifi_set));
         ivTopMore.setVisibility(View.GONE);
         tvTopTopRight.setVisibility(View.VISIBLE);
-        tvTopTopRight.setText("选择WIFI");
+        tvTopTopRight.setText("选择");
         ivTopReturn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

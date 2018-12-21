@@ -1,5 +1,7 @@
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -93,7 +95,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             TextView tv_header = (TextView) headerlayout.findViewById(R.id.tv_header);
             TextView followers = (TextView) headerlayout.findViewById(R.id.followers);
             TextView following = (TextView) headerlayout.findViewById(R.id.following);
+            TextView tvCode = (TextView) headerlayout.findViewById(R.id.tv_act_code);
             tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName());
+            tvCode.setText("激活码:"+LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
             /*followers.setText("");
             following.setText("");*/
             headerlayout.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +107,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         ViewUtils.startActivity(getApplicationContext(), AccountActivity.class,null);
                     else
                         ViewUtils.startActivity(getApplicationContext(), LoginActivity.class,null);
+                }
+            });
+            tvCode.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String pcCode = LocalDataEntity.newInstance(getApplicationContext()).getPcCode();
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    // 将文本内容放到系统剪贴板里。
+                    cm.setText(pcCode);
+                    Toast.makeText(getApplicationContext(),"激活码复制成功",Toast.LENGTH_SHORT).show();
                 }
             });
         }

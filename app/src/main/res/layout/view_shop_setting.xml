@@ -9,23 +9,36 @@
     <ScrollView 
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+		android:background="@color/spacebar_0"
         >
         
         <LinearLayout 
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+			android:background="@color/white"
+
             >
             <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_name"
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_addr"
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_oritation"
 		        android:layout_width="fill_parent"
@@ -47,11 +60,21 @@
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_dead_time"
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_version"
 		        android:layout_width="fill_parent"
@@ -73,17 +96,28 @@
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar_0"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_wifi_pwd"
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		    	android:visibility="gone"
 		        ></com.znt.vodbox.view.ItemTextView>
+
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_ip"
 		        android:layout_width="fill_parent"
 		    	android:layout_height="wrap_content"
 		        ></com.znt.vodbox.view.ItemTextView>
+			<View
+				android:layout_width="fill_parent"
+				android:layout_height="1dp"
+				android:background="@color/spacebar"
+				/>
 		    <com.znt.vodbox.view.ItemTextView
 		        android:id="@+id/itv_shop_setting_storage"
 		        android:layout_width="fill_parent"
