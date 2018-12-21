@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'bugly'
+
 bugly {
     appId = '6207095b94'
     appKey = 'd935ac63-2cd5-405d-9615-0eb0aafca9c4'
@@ -27,7 +28,9 @@ android {
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         signingConfig signingConfigs.config
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -66,6 +69,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.3'
     implementation 'com.tamic.novate:novate:1.5.0'
+
 }
 repositories {
     mavenCentral()
