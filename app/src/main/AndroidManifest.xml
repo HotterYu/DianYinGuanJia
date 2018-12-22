@@ -79,22 +79,27 @@
         <activity
             android:name=".activity.ArtistInfoActivity"
             android:label="@string/artist_info"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SearchMusicActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.Search" />
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/menu_setting"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/menu_about"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.MusicInfoActivity"
             android:label="@string/music_info"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.PlaylistActivity"
@@ -103,7 +108,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MusicActivity"
@@ -189,13 +193,13 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activity.UserLoginAndRegisterActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activity.SearchSysAlbumActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

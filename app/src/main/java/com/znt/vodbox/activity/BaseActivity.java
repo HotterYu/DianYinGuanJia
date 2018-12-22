@@ -64,6 +64,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         handler = new Handler(Looper.getMainLooper());
         bindService();
         localData = new LocalDataEntity(getActivity());
+
     }
 
     public LocalDataEntity getLocalData()
