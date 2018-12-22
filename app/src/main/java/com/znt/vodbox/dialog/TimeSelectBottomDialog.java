@@ -103,7 +103,7 @@ public class TimeSelectBottomDialog
             initEndData(getHourFromTime(curHourInt), getMinFromTime(curMinInt));
         }
 
-        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext);
+        final BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext);
 
         bottomInterPasswordDialog.setCancelable(false);
 

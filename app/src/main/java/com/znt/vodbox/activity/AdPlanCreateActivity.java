@@ -3,6 +3,7 @@ package com.znt.vodbox.activity;
 import android.app.TimePickerDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -379,23 +380,26 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     }
 
     @Override
-    public void onMoreClick(int position) {
-        AdMediaInfo tempInfo = selectAdList.get(position);
+    public void onMoreClick(final int position) {
+        final AdMediaInfo tempInfo = selectAdList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getAdname());
-        dialog.setItems(R.array.plan_ad_list_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getAdname() + "\n" + tempInfo.getUrl());
-                    showToast("复制成功");
-                    break;
-                case 1://
-                    selectAdList.remove(position);
-                    mAdListAdapter.notifyDataSetChanged(selectAdList);
-                    break;
 
+        dialog.setItems(R.array.plan_ad_list_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 将文本内容放到系统剪贴板里。
+                        cm.setText(tempInfo.getAdname() + "\n" + tempInfo.getUrl());
+                        showToast("复制成功");
+                        break;
+                    case 1://
+                        selectAdList.remove(position);
+                        mAdListAdapter.notifyDataSetChanged(selectAdList);
+                        break;
+                }
             }
         });
         dialog.show();
@@ -439,7 +443,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
 
     private void showWeekSelectDialog()
     {
-        List<String> data = new ArrayList<>();
+        final List<String> data = new ArrayList<>();
         data.add(getResources().getString(R.string.week_every));
         data.add(getResources().getString(R.string.week_monday));
         data.add(getResources().getString(R.string.week_tuesday));
@@ -449,7 +453,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         data.add(getResources().getString(R.string.week_saturday));
         data.add(getResources().getString(R.string.week_sunday));
 
-        WheelListDialog dialog = new WheelListDialog(getActivity(),data);
+        final WheelListDialog dialog = new WheelListDialog(getActivity(),data);
         dialog.setListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

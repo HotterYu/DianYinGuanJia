@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AlbumInfo;
-import com.znt.vodbox.model.Shopinfo;
-import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -69,9 +67,12 @@ public class MyAlbumlistAdapter extends BaseAdapter {
         holder.tvAlbumName.setText(albumInfo.getName());
         holder.tvDesc.setText(albumInfo.getDescription());
         holder.tvCount.setText(albumInfo.getMusicNum());
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

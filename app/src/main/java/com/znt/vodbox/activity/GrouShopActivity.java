@@ -1,5 +1,6 @@
 package com.znt.vodbox.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -177,7 +178,7 @@ public class GrouShopActivity extends BaseActivity  implements
 
     }
 
-    public void removeGroupShop(String shopIds)
+    public void removeGroupShop(final String shopIds)
     {
         try
         {
@@ -319,24 +320,27 @@ public class GrouShopActivity extends BaseActivity  implements
 
     @Override
     public void onMoreClick(int position) {
-        Shopinfo tempShop = shopinfoList.get(position);
+        final Shopinfo tempShop = shopinfoList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempShop.getName());
-        dialog.setItems(R.array.group_shop_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    removeGroupShop(tempShop.getId());
-                    break;
-                case 1://
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("SHOP_INFO",tempShop);
-                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
-                    break;
-                case 2://
-                    Bundle bundle1 = new Bundle();
-                    bundle1.putSerializable("SHOP_INFO",tempShop);
-                    ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
-                    break;
+        dialog.setItems(R.array.group_shop_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        removeGroupShop(tempShop.getId());
+                        break;
+                    case 1://
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("SHOP_INFO",tempShop);
+                        ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
+                        break;
+                    case 2://
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable("SHOP_INFO",tempShop);
+                        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
+                        break;
+                }
             }
         });
         dialog.show();

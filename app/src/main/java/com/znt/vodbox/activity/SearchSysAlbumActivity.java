@@ -1,11 +1,11 @@
 package com.znt.vodbox.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -18,12 +18,10 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.bean.TypeInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.ToastUtils;
-import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
@@ -233,22 +231,25 @@ public class SearchSysAlbumActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        AlbumInfo tempInfo = albumInfos.get(position);
+        final AlbumInfo tempInfo = albumInfos.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.sys_album_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    collectAlbum(tempInfo.getId());
-                    break;
-                case 1://
-                    Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("ALBUM_INFO",tempInfo);
-                    b.putBoolean("IS_SYSTEM_ALBUM",true);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                    break;
+        dialog.setItems(R.array.sys_album_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        collectAlbum(tempInfo.getId());
+                        break;
+                    case 1://
+                        Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("ALBUM_INFO",tempInfo);
+                        b.putBoolean("IS_SYSTEM_ALBUM",true);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        break;
+                }
             }
         });
         dialog.show();

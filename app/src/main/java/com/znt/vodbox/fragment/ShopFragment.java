@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -273,29 +274,33 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     }
     @Override
     public void onMoreClick(final int position) {
-        Shopinfo tempShop = dataList.get(position);
+        final Shopinfo tempShop = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
         dialog.setTitle(tempShop.getName());
-        dialog.setItems(R.array.shop_list_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("IS_EDIT", true);
-                    if(tempShop.getGroup() != null)
-                        bundle.putString("GROUP_ID",tempShop.getGroup().getId());
-                    bundle.putString("SHOP_IDS",tempShop.getId());
-                    ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
-                    break;
-                case 1://
-                    Bundle bundle2 = new Bundle();
-                    bundle2.putSerializable("SHOP_INFO",tempShop);
-                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
-                    break;
-                case 2://
-                    Bundle bundle1 = new Bundle();
-                    bundle1.putSerializable("SHOP_INFO",tempShop);
-                    ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
-                    break;
+
+        dialog.setItems(R.array.shop_list_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("IS_EDIT", true);
+                        if(tempShop.getGroup() != null)
+                            bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+                        bundle.putString("SHOP_IDS",tempShop.getId());
+                        ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
+                        break;
+                    case 1://
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("SHOP_INFO",tempShop);
+                        ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
+                        break;
+                    case 2://
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putSerializable("SHOP_INFO",tempShop);
+                        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
+                        break;
+                }
             }
         });
         dialog.show();

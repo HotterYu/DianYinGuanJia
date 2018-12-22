@@ -65,9 +65,12 @@ public class GroupListAdapter extends BaseAdapter {
         holder.tvAlbumName.setText(tempInfo.getGroupName());
         holder.tvAdminName.setText("管理员名称：" + tempInfo.getAdminName());
         holder.tvShopCount.setText("应用店铺数："+tempInfo.getStoreNumber());
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

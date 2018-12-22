@@ -1,5 +1,6 @@
 package com.znt.vodbox.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -243,26 +244,29 @@ public class AlbumSelectActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        AlbumInfo tempInfo = albumInfos.get(position);
+        final AlbumInfo tempInfo = albumInfos.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.my_album_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    Intent intent = new Intent(getActivity(), ModifyAlbumActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("ALBUM_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivityForResult(intent,1);
-                    break;
-                case 1://
-                    Bundle bundle = new Bundle();
-                    bundle.putString("ALBUM_ID", tempInfo.getId());
-                    ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
-                    break;
-                case 2://
-                    deleteAlbum(tempInfo.getId());
-                    break;
+        dialog.setItems(R.array.my_album_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        Intent intent = new Intent(getActivity(), ModifyAlbumActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("ALBUM_INFO",tempInfo);
+                        intent.putExtras(b);
+                        startActivityForResult(intent,1);
+                        break;
+                    case 1://
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ALBUM_ID", tempInfo.getId());
+                        ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle);
+                        break;
+                    case 2://
+                        deleteAlbum(tempInfo.getId());
+                        break;
+                }
             }
         });
         dialog.show();

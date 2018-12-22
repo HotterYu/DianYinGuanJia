@@ -31,16 +31,16 @@ public class TextInputBottomDialog
         public void onConfirmDismiss(String content);
     }
 
-    public void show(String titleName, String oldContent, final OnDismissResultListener mOnDismissResultListener)
+    public void show(String titleName, final String oldContent, final OnDismissResultListener mOnDismissResultListener)
     {
         View view = View.inflate(mContext, R.layout.dialog_bottom_text_input, null);
 
-        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext, R.style.BottomSheetEdit);
+        final BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext, R.style.BottomSheetEdit);
         bottomInterPasswordDialog.setContentView(view);
         bottomInterPasswordDialog.show();
 
         TextView title = (TextView) view.findViewById(R.id.tibd_title);
-        EditText content = (EditText) view.findViewById(R.id.tibd_content);
+        final EditText content = (EditText) view.findViewById(R.id.tibd_content);
         Button btnCancel = (Button) view.findViewById(R.id.tibd_cancel);
         Button btnConfirm = (Button) view.findViewById(R.id.tibd_confirm);
 

@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -185,35 +186,39 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
 
     @Override
     public void onMoreClick(int position) {
-        AdPlanInfo tempInfo = dataList.get(position);
+        final AdPlanInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.plan_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    Intent intent = new Intent(getActivity(), AdPlanDetailActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("AD_PLAN_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivityForResult(intent, 2);
-                    break;
-                case 1://
-                    AdPlanInfo copyInfo = null;
-                    try {
-                        copyInfo = (AdPlanInfo) tempInfo.clone();
-                        copyInfo.setId("");
-                        copyInfo.setName(copyInfo.getName() + "_复制");
-                        dataList.add(0,copyInfo);
-                        mPlanlistAdapter.notifyDataSetChanged(dataList);
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case 2://
-                    deleteAdPlan(tempInfo);
-                    break;
+        dialog.setItems(R.array.plan_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        Intent intent = new Intent(getActivity(), AdPlanDetailActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("AD_PLAN_INFO",tempInfo);
+                        intent.putExtras(b);
+                        startActivityForResult(intent, 2);
+                        break;
+                    case 1://
+                        AdPlanInfo copyInfo = null;
+                        try {
+                            copyInfo = (AdPlanInfo) tempInfo.clone();
+                            copyInfo.setId("");
+                            copyInfo.setName(copyInfo.getName() + "_复制");
+                            dataList.add(0,copyInfo);
+                            mPlanlistAdapter.notifyDataSetChanged(dataList);
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case 2://
+                        deleteAdPlan(tempInfo);
+                        break;
+                }
             }
         });
+
         dialog.show();
     }
 

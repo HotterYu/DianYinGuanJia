@@ -52,10 +52,10 @@ public class PlaylistActivity extends BaseActivity implements AdapterView.OnItem
         Music music = AudioPlayer.get().getMusicList().get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(music.getTitle());
-        dialog.setItems(items, (dialog1, which) -> {
+        /*dialog.setItems(items, (dialog1, which) -> {
             AudioPlayer.get().delete(position);
             adapter.notifyDataSetChanged();
-        });
+        });*/
         dialog.show();
     }
 

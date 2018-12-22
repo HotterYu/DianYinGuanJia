@@ -8,9 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.ZoneInfo;
-import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -66,9 +64,12 @@ public class ZoneListAdapter extends BaseAdapter {
         holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvName.setText(tempInfo.getGroupName());
         holder.tvAccount.setText(tempInfo.getAdminId());
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

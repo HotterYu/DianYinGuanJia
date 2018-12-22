@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -262,34 +263,37 @@ public class GroupFragment extends BaseFragment  implements
 
     @Override
     public void onMoreClick(int position) {
-        GroupInfo tempInfo = dataList.get(position);
+        final GroupInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getGroupName());
-        dialog.setItems(R.array.group_list_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
+        dialog.setItems(R.array.group_list_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
 
-                    TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
-                    mTextInputBottomDialog.show("请输入分区名称", tempInfo.getGroupName(), new TextInputBottomDialog.OnDismissResultListener() {
-                        @Override
-                        public void onConfirmDismiss(String content) {
+                        TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+                        mTextInputBottomDialog.show("请输入分区名称", tempInfo.getGroupName(), new TextInputBottomDialog.OnDismissResultListener() {
+                            @Override
+                            public void onConfirmDismiss(String content) {
 
-                            renameGroupName(content, tempInfo.getId());
-                        }
-                    });
-                    break;
-                case 1://
+                                renameGroupName(content, tempInfo.getId());
+                            }
+                        });
+                        break;
+                    case 1://
                     /*Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
                     Bundle b = new Bundle();
                     b.putSerializable("MEDIA_INFO",tempInfo);
                     intent.putExtras(b);
                     startActivity(intent);*/
-                    //requestSetRingtone(music);
-                    break;
-                case 2://
-                    deleteGroup(tempInfo.getId());
-                    break;
+                        //requestSetRingtone(music);
+                        break;
+                    case 2://
+                        deleteGroup(tempInfo.getId());
+                        break;
 
+                }
             }
         });
         dialog.show();

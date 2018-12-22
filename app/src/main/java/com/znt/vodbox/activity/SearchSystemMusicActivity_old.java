@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -223,73 +224,57 @@ public class SearchSystemMusicActivity_old extends BaseActivity implements Searc
 
     @Override
     public void onMoreClick(int position) {
-        MediaInfo tempInfo = dataList.get(position);
+        final MediaInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.album_music_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    if(TextUtils.isEmpty(albumId))
-                    {
-                        Intent i = new Intent(getActivity(), MyAlbumActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("MUSIC_IDS",tempInfo.getId());
-                        i.putExtras(bundle);
-                        startActivity(i);
-                    }
-                    else
-                    {
-                        addMusicToAlbum(albumId,tempInfo.getId());
-                    }
-
-                    break;
-                case 1://
-                    if(mShopinfo == null)
-                    {
-                        Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString("MEDIA_NAME",tempInfo.getMusicName());
-                        b.putString("MEDIA_ID",tempInfo.getId());
-                        b.putString("MEDIA_URL",tempInfo.getMusicUrl());
-                        intent.putExtras(b);
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
-                    }
-
-                    //requestSetRingtone(music);
-                    break;
-                case 2://
-                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getMusicUrl());
-                    showToast("复制成功");
-                    break;
-                case 3://
-                    //deleteMusic(music);
-                    break;
+        dialog.setItems(R.array.album_music_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        if(TextUtils.isEmpty(albumId))
+                        {
+                            Intent i = new Intent(getActivity(), MyAlbumActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("MUSIC_IDS",tempInfo.getId());
+                            i.putExtras(bundle);
+                            startActivity(i);
+                        }
+                        else
+                        {
+                            addMusicToAlbum(albumId,tempInfo.getId());
+                        }
+                        break;
+                    case 1://
+                        if(mShopinfo == null)
+                        {
+                            Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("MEDIA_NAME",tempInfo.getMusicName());
+                            b.putString("MEDIA_ID",tempInfo.getId());
+                            b.putString("MEDIA_URL",tempInfo.getMusicUrl());
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            pushMedia(mShopinfo.getTmlRunStatus().get(0).getTerminalId());
+                        }
+                        //requestSetRingtone(music);
+                        break;
+                    case 2://
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 将文本内容放到系统剪贴板里。
+                        cm.setText(tempInfo.getMusicUrl());
+                        showToast("复制成功");
+                        break;
+                    case 3://
+                        //deleteMusic(music);
+                        break;
+                }
             }
         });
         dialog.show();
-        /*final MediaInfo song = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(song.getMusicName());
-        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getMusicSing(), song.getSongname());
-        File file = new File(path);
-        int itemsId = file.exists() ? R.array.search_music_dialog_no_download : R.array.search_music_dialog;
-        dialog.setItems(itemsId, (dialog1, which) -> {
-            switch (which) {
-                case 0:// 分享
-                    share(song);
-                    break;
-                case 1:// 下载
-                    download(song);
-                    break;
-            }
-        });
-        dialog.show();*/
     }
 
     public void addMusicToAlbum(String id, String musicIds)

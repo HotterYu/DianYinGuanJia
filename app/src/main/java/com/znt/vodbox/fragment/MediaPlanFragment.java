@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -192,35 +193,38 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
 
     @Override
     public void onMoreClick(int position) {
-        PlanInfo tempInfo = dataList.get(position);
+        final PlanInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getPlanName());
-        dialog.setItems(R.array.plan_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    Intent intent = new Intent(getActivity(), PlanDetailActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("PLAN_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivityForResult(intent, 1);
-                    break;
-                case 1://
+        dialog.setItems(R.array.plan_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        Intent intent = new Intent(getActivity(), PlanDetailActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("PLAN_INFO",tempInfo);
+                        intent.putExtras(b);
+                        startActivityForResult(intent, 1);
+                        break;
+                    case 1://
 
-                    PlanInfo copyInfo = null;
-                    try {
-                        copyInfo = (PlanInfo) tempInfo.clone();
-                        copyInfo.setId("");
-                        copyInfo.setPlanName(copyInfo.getPlanName() + "_复制");
-                        dataList.add(0,copyInfo);
-                        mPlanlistAdapter.notifyDataSetChanged(dataList);
-                    } catch (CloneNotSupportedException e) {
-                        e.printStackTrace();
-                    }
+                        PlanInfo copyInfo = null;
+                        try {
+                            copyInfo = (PlanInfo) tempInfo.clone();
+                            copyInfo.setId("");
+                            copyInfo.setPlanName(copyInfo.getPlanName() + "_复制");
+                            dataList.add(0,copyInfo);
+                            mPlanlistAdapter.notifyDataSetChanged(dataList);
+                        } catch (CloneNotSupportedException e) {
+                            e.printStackTrace();
+                        }
 
-                    break;
-                case 2://
-                    deletePlan(tempInfo);
-                    break;
+                        break;
+                    case 2://
+                        deletePlan(tempInfo);
+                        break;
+                }
             }
         });
         dialog.show();

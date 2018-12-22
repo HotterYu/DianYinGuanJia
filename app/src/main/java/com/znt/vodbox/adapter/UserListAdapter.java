@@ -65,9 +65,12 @@ public class UserListAdapter extends BaseAdapter {
         //holder.ivMore.setVisibility(View.GONE);
         holder.tvAlbumName.setText(tempInfo.getNickName());
         holder.tvDesc.setText(tempInfo.getUsername());
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

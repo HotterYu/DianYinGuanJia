@@ -1,5 +1,6 @@
 package com.znt.vodbox.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -275,22 +276,25 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
     }
     @Override
     public void onMoreClick(final int position) {
-        AlbumInfo tempInfo = dataList.get(position);
+        final AlbumInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.sys_album_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    collectAlbum(tempInfo.getId());
-                    break;
-                case 1://
-                    Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("ALBUM_INFO",tempInfo);
-                    b.putBoolean("IS_SYSTEM_ALBUM",true);
-                    intent.putExtras(b);
-                    startActivity(intent);
-                    break;
+        dialog.setItems(R.array.sys_album_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        collectAlbum(tempInfo.getId());
+                        break;
+                    case 1://
+                        Intent intent = new Intent(getActivity(), AlbumMusicActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable("ALBUM_INFO",tempInfo);
+                        b.putBoolean("IS_SYSTEM_ALBUM",true);
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        break;
+                }
             }
         });
         dialog.show();

@@ -287,9 +287,15 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
         //drawerLayout.closeDrawers();
-        handler.postDelayed(() -> item.setChecked(false), 500);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                item.setChecked(false);
+            }
+        },500);
+
         return naviMenuExecutor.onNavigationItemSelected(item);
     }
 
@@ -412,12 +418,14 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
-        mViewPager.post(() -> {
-            mViewPager.setCurrentItem(savedInstanceState.getInt(Keys.VIEW_PAGER_INDEX), false);
-            //mAllShopFragment.onRestoreInstanceState(savedInstanceState);
-            //mMyAlbumFragment.onRestoreInstanceState(savedInstanceState);
-            //mSheetListFragment.onRestoreInstanceState(savedInstanceState);
+
+        mViewPager.post(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(savedInstanceState.getInt(Keys.VIEW_PAGER_INDEX), false);
+            }
         });
+
     }
 
     @Override

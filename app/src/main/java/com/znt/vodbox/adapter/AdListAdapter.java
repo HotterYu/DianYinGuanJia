@@ -105,13 +105,14 @@ public class AdListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_ad_list, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-
-            holder.ivMore.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onMoreClick(position);
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onMoreClick(position);
+                    }
                 }
             });
-
             holder.ivItemSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

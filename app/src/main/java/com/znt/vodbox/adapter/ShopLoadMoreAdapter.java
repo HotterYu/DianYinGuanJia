@@ -75,7 +75,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder vh, int position)
+    public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position)
     {
 
         if(vh instanceof RecyclerViewHolder)
@@ -142,9 +142,12 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             else
                 holder.tvAddr.setText(mContext.getResources().getString(R.string.dev_shop_addr_none));
 
-            holder.ivMore.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onMoreClick(position);
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onMoreClick(position);
+                    }
                 }
             });
 

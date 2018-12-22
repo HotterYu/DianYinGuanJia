@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -27,12 +28,10 @@ import com.znt.vodbox.model.DownloadInfo;
 import com.znt.vodbox.model.Music;
 import com.znt.vodbox.model.SearchMusic;
 import com.znt.vodbox.service.AudioPlayer;
-import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.ToastUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -116,7 +115,8 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
                 searchMusicList.addAll(response.getSong());
                 mAdapter.notifyDataSetChanged();
                 lvSearchMusic.requestFocus();
-                handler.post(() -> lvSearchMusic.setSelection(0));
+                lvSearchMusic.setSelection(0);
+                //handler.post(() -> lvSearchMusic.setSelection(0));
             }
 
             @Override
@@ -150,45 +150,44 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
     }
 
     @Override
-    public void onMoreClick(int position) {
+    public void onMoreClick(final int position) {
         final SearchMusic.Song song = searchMusicList.get(position);
         // 获取歌曲下载链接
         HttpClient.getMusicDownloadInfo(song.getSongid(), new HttpCallback<DownloadInfo>() {
             @Override
-            public void onSuccess(DownloadInfo response) {
+            public void onSuccess(final DownloadInfo response) {
                 if (response == null || response.getBitrate() == null) {
                     onFail(null);
                     ToastUtils.show("获取数据失败");
                     return;
                 }
-
-
                 AlertDialog.Builder dialog = new AlertDialog.Builder(SearchMusicActivity.this);
                 dialog.setTitle(searchMusicList.get(position).getSongname());
                 /*String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getArtist_name(), song.getSongname());
                 File file = new File(path);*/
                 //int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
-                int itemsId = R.array.online_music_dialog;
-                dialog.setItems(itemsId, (dialog1, which) -> {
-                    switch (which) {
+                dialog.setItems(R.array.online_music_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog1, int which) {
+                        switch (which) {
 
-                        case 0://
-                            Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                            Bundle b = new Bundle();
-                            b.putString("MEDIA_NAME",song.getSongname());
-                            b.putString("MEDIA_ID",song.getSongid());
-                            b.putString("MEDIA_URL",response.getBitrate().getFile_link());
-                            intent.putExtras(b);
-                            startActivity(intent);
-                            //requestSetRingtone(music);
-                            break;
-                        case 1://
-                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                            // 将文本内容放到系统剪贴板里。
-                            cm.setText(song.getSongname() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
-                            showToast("复制成功");
-                            break;
-
+                            case 0://
+                                Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString("MEDIA_NAME",song.getSongname());
+                                b.putString("MEDIA_ID",song.getSongid());
+                                b.putString("MEDIA_URL",response.getBitrate().getFile_link());
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                //requestSetRingtone(music);
+                                break;
+                            case 1://
+                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                // 将文本内容放到系统剪贴板里。
+                                cm.setText(song.getSongname() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
+                                showToast("复制成功");
+                                break;
+                        }
                     }
                 });
                 dialog.show();

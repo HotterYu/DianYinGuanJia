@@ -459,7 +459,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
     private void showWeekSelectDialog()
     {
-        List<String> data = new ArrayList<>();
+        final List<String> data = new ArrayList<>();
         data.add(getResources().getString(R.string.week_every));
         data.add(getResources().getString(R.string.week_monday));
         data.add(getResources().getString(R.string.week_tuesday));
@@ -469,7 +469,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         data.add(getResources().getString(R.string.week_saturday));
         data.add(getResources().getString(R.string.week_sunday));
 
-        WheelListDialog dialog = new WheelListDialog(getActivity(),data);
+        final WheelListDialog dialog = new WheelListDialog(getActivity(),data);
         dialog.setListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -47,7 +47,7 @@ public class VolumeSetBottomDialog
 
         View view = View.inflate(mContext, R.layout.dialog_volume_set, null);
 
-        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext);
+        final BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext);
         bottomInterPasswordDialog.setContentView(view);
         bottomInterPasswordDialog.show();
 

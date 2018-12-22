@@ -130,9 +130,12 @@ public class ShoplistAdapter extends BaseAdapter {
         else
             holder.tvAddr.setText(mContext.getResources().getString(R.string.dev_shop_addr_none));
 
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         return convertView;

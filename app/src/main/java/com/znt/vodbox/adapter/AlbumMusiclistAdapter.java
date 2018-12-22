@@ -66,9 +66,12 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
         holder.tvAlbumName.setText(tempInfo.getMusicName());
         String artist = FileUtils.getArtistAndAlbum(tempInfo.getMusicSing(), tempInfo.getMusicAlbum());
         holder.tvDesc.setText(artist);
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

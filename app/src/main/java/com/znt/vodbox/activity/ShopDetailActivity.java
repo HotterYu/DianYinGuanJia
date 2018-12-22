@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -281,28 +282,31 @@ public class ShopDetailActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        MediaInfo tempInfo = dataList.get(position);
+        final MediaInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
         dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.cur_play_music_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                    Bundle b = new Bundle();
-                    b.putString("MEDIA_NAME",tempInfo.getMusicName());
-                    b.putString("MEDIA_ID",tempInfo.getId());
-                    b.putString("MEDIA_URL",tempInfo.getMusicUrl());
-                    intent.putExtras(b);
-                    startActivity(intent);
-                    //requestSetRingtone(music);
-                    break;
-                case 1://
-                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                    // 将文本内容放到系统剪贴板里。
-                    cm.setText(tempInfo.getMusicUrl());
-                    showToast("复制成功");
-                    break;
+        dialog.setItems(R.array.cur_play_music_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("MEDIA_NAME",tempInfo.getMusicName());
+                        b.putString("MEDIA_ID",tempInfo.getId());
+                        b.putString("MEDIA_URL",tempInfo.getMusicUrl());
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        //requestSetRingtone(music);
+                        break;
+                    case 1://
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 将文本内容放到系统剪贴板里。
+                        cm.setText(tempInfo.getMusicUrl());
+                        showToast("复制成功");
+                        break;
 
+                }
             }
         });
         dialog.show();

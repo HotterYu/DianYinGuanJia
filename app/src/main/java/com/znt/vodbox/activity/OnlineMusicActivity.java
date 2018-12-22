@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -144,14 +145,14 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     @Override
-    public void onMoreClick(int position)
+    public void onMoreClick(final int position)
     {
         final OnlineMusic onlineMusic = mMusicList.get(position);
 
         // 获取歌曲下载链接
         HttpClient.getMusicDownloadInfo(onlineMusic.getSong_id(), new HttpCallback<DownloadInfo>() {
             @Override
-            public void onSuccess(DownloadInfo response) {
+            public void onSuccess(final DownloadInfo response) {
                 if (response == null || response.getBitrate() == null) {
                     onFail(null);
                     ToastUtils.show("获取数据失败");
@@ -165,27 +166,30 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                 String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(onlineMusic.getArtist_name(), onlineMusic.getTitle());
                 File file = new File(path);
                 //int itemsId = file.exists() ? R.array.online_music_dialog_without_download : R.array.online_music_dialog;
-                int itemsId = R.array.online_music_dialog;
-                dialog.setItems(itemsId, (dialog1, which) -> {
-                    switch (which) {
 
-                        case 0://
-                            Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                            Bundle b = new Bundle();
-                            b.putString("MEDIA_NAME",onlineMusic.getTitle());
-                            b.putString("MEDIA_ID",onlineMusic.getSong_id());
-                            b.putString("MEDIA_URL",response.getBitrate().getFile_link());
-                            intent.putExtras(b);
-                            startActivity(intent);
-                            //requestSetRingtone(music);
-                            break;
-                        case 1://
-                            ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                            // 将文本内容放到系统剪贴板里。
-                            cm.setText(onlineMusic.getTitle() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
-                            showToast("复制成功");
-                            break;
+                dialog.setItems(R.array.online_music_dialog, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog1, int which) {
+                        switch (which) {
 
+                            case 0://
+                                Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                                Bundle b = new Bundle();
+                                b.putString("MEDIA_NAME",onlineMusic.getTitle());
+                                b.putString("MEDIA_ID",onlineMusic.getSong_id());
+                                b.putString("MEDIA_URL",response.getBitrate().getFile_link());
+                                intent.putExtras(b);
+                                startActivity(intent);
+                                //requestSetRingtone(music);
+                                break;
+                            case 1://
+                                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                // 将文本内容放到系统剪贴板里。
+                                cm.setText(onlineMusic.getTitle() + "\n" + URLDecoder.decode(response.getBitrate().getFile_link()));
+                                showToast("复制成功");
+                                break;
+
+                        }
                     }
                 });
                 dialog.show();

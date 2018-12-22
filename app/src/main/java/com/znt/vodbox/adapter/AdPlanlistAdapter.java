@@ -76,9 +76,12 @@ public class AdPlanlistAdapter extends BaseAdapter {
             holder.tvDate.setText("播放时间："+tempInfo.getStartDate() + "至" + tempInfo.getEndDate());
         if(!TextUtils.isEmpty(tempInfo.getAddTime()))
             holder.tvCreateTime.setText("创建时间:"+DateUtils.getDateFromLong(Long.parseLong(tempInfo.getAddTime())));
-        holder.ivMore.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onMoreClick(position);
+        holder.ivMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onMoreClick(position);
+                }
             }
         });
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);

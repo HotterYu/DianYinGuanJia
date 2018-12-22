@@ -2,6 +2,7 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -268,14 +269,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("请选择搜索类型");
-        dialog.setItems(R.array.search_sys_album_dialog, (dialog1, which) -> {
-            switch (which) {
-                case 0://
-                    mDYMusicFragment.goSearchAlbumActivity(getApplicationContext());
-                    break;
-                case 1://
-                    mDYMusicFragment.goSearchMusicActivity(getApplicationContext());
-                    break;
+        dialog.setItems(R.array.search_sys_album_dialog, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog1, int which) {
+                switch (which) {
+                    case 0://
+                        mDYMusicFragment.goSearchAlbumActivity(getApplicationContext());
+                        break;
+                    case 1://
+                        mDYMusicFragment.goSearchMusicActivity(getApplicationContext());
+                        break;
+                }
             }
         });
         dialog.show();

@@ -73,7 +73,7 @@ public class DYMusicAlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder vh, int position)
+    public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position)
     {
 
         if(vh instanceof RecyclerViewHolder)
@@ -87,9 +87,12 @@ public class DYMusicAlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(!TextUtils.isEmpty(tempInfo.getImageUrl()))
                 Glide.with(mContext).load(tempInfo.getImageUrl()).placeholder(R.drawable.default_cover)
                 .error(R.drawable.default_cover).into(holder.imageView);
-            holder.ivMore.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onMoreClick(position);
+            holder.ivMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        listener.onMoreClick(position);
+                    }
                 }
             });
 

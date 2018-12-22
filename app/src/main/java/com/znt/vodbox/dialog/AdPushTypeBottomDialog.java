@@ -42,11 +42,11 @@ public class AdPushTypeBottomDialog
         public void onConfirmDismiss(String content,String type);
     }
 
-    public void show(String titleName, String oldContent, String mode, final OnAdPushDismissResultListener mOnDismissResultListener)
+    public void show(String titleName, final String oldContent, final String mode, final OnAdPushDismissResultListener mOnDismissResultListener)
     {
         View view = View.inflate(mContext, R.layout.dialog_bottom_ad_push_type, null);
 
-        BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext, R.style.BottomSheetEdit);
+        final BottomSheetDialog bottomInterPasswordDialog = new BottomSheetDialog(mContext, R.style.BottomSheetEdit);
         bottomInterPasswordDialog.setContentView(view);
         bottomInterPasswordDialog.show();
 

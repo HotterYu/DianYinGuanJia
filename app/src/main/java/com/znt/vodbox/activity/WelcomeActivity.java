@@ -127,7 +127,7 @@ public class WelcomeActivity extends Activity {
 
         // Store values at the time of the login attempt.
         String email = userInfo.getUsername();
-        String password = userInfo.getPwd();
+        final String password = userInfo.getPwd();
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password))
             return false;
