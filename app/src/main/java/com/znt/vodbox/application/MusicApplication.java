@@ -1,9 +1,9 @@
 package com.znt.vodbox.application;
 
-import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.qihoo360.replugin.RePluginApplication;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.znt.vodbox.storage.db.DBManager;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
  * 自定义Application
  * Created by wcy on 2015/11/27.
  */
-public class MusicApplication extends Application {
+public class MusicApplication extends RePluginApplication {
 
     @Override
     public void onCreate() {

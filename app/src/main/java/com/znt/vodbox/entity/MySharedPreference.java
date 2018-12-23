@@ -21,7 +21,7 @@ public class MySharedPreference
 	{
 		this.context = context;
 		if((sharedPreferencesName == null) || (sharedPreferencesName.length() <= 0))
-			sharedPreferencesName = "wifi_speaker";
+			sharedPreferencesName = "dianyinguanjia";
 		sp = context.getSharedPreferences(sharedPreferencesName, context.MODE_PRIVATE);
 		edit = sp.edit();
 	}

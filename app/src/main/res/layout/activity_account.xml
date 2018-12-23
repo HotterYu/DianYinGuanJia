@@ -99,6 +99,31 @@
 	            style="@style/ButtonRed"
 	            android:text="注销"
 	            />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="44dp"
+					style="?android:textAppearanceSmall"
+					android:textColor="@color/text_blue_on"
+					android:text="@string/old_login_hint"
+					/>
+
+				<TextView
+					android:id="@+id/btn_login_old"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:text="@string/old_login"
+					android:textColor="@color/white"
+					style="@style/ButtonNormal" />
+
+			</LinearLayout>
+
 	    </LinearLayout>
 	    
 	    

@@ -94,6 +94,8 @@
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登录</string>
     <string name="user_login">用户登录</string>
+    <string name="old_login_hint">注意：2018年之前接入店音系统的从这里登录</string>
+    <string name="old_login">旧版入口</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">密码太短了</string>

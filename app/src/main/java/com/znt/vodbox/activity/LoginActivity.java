@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
@@ -76,6 +77,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private View mProgressView;
     private View mLoginFormView;
     private Button mEmailSignInButton = null;
+    private Button btnOldLogin = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             }
         });
 
+        btnOldLogin  = (Button) findViewById(R.id.btn_login_old);
         mEmailSignInButton  = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -115,12 +118,40 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
             }
         });
-
+        btnOldLogin.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadPlugin();
+                String pluginName = "DianYinGuanJiaOld";
+                RePlugin.startActivity(LoginActivity.this, RePlugin.createIntent(pluginName,
+                        "com.znt.vodbox.activity.LoginActivity"));
+            }
+        });
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
         attemptLogin();
 
+    }
+
+    private void loadPlugin()
+    {
+
+        /*File file = new File(dirFv2.getAbsolutePath() + "/app-debug.apk");
+        if(file.exists())
+        {
+            PluginInfo pluginInfo = RePlugin.install(file.getAbsolutePath());
+            if(pluginInfo != null)
+            {
+                RePlugin.preload(pluginInfo);//耗时
+                String pluginName2 = pluginInfo.getName();
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(),"加载失败",Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }*/
     }
 
     private void populateAutoComplete() {

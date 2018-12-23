@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.model.UserInfo;
@@ -44,7 +45,8 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 	private ImageView ivQQLogin = null;
 	private ImageView ivSinaLogin = null;
 	private ImageView ivWeiXinLogin = null;
-	
+	private TextView btnOldVersion = null;
+
 	private UserInfo userInfor = null;
 	private boolean isInit = true;
 
@@ -59,7 +61,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		tvTopTitle.setText("个人中心");
 		ivTopMore.setVisibility(View.GONE);
 		tvConfirm.setVisibility(View.VISIBLE);
-		tvConfirm.setText("切换账户");
+		tvConfirm.setText("切换");
 
 		ivTopReturn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -139,7 +141,9 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		ivQQLogin = (ImageView)findViewById(R.id.iv_login_qq);
 		ivWeiXinLogin = (ImageView)findViewById(R.id.iv_login_weixin);
 		ivSinaLogin = (ImageView)findViewById(R.id.iv_login_sina);
-		
+
+		btnOldVersion = (TextView) findViewById(R.id.btn_login_old);
+
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
 	}
@@ -166,7 +170,10 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		ivQQLogin.setOnClickListener(this);
 		ivWeiXinLogin.setOnClickListener(this);
 		ivSinaLogin.setOnClickListener(this);
-		
+
+
+		btnOldVersion.setOnClickListener(this);
+
 	}
 	public int getAppVersionName(Context context) {
 	    int versioncode = 0;  
@@ -266,6 +273,12 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		else if(v == accountLogin)
 		{
 			
+		}
+		else if(v == btnOldVersion)
+		{
+			String pluginName = "DianYinGuanJiaOld";
+			RePlugin.startActivity(AccountActivity.this, RePlugin.createIntent(pluginName,
+					"com.znt.vodbox.activity.LoginActivity"));
 		}
 	}
 	
