@@ -3,13 +3,22 @@ package com.znt.vodbox.utils;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 /**
  * Created by hzwangchenyan on 2016/3/22.
@@ -66,6 +75,137 @@ public class SystemUtils {
     public static String getDeviceId(Context context)
     {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+    /**
+     * @Description: 鑾峰彇鎵�鏈夌殑瀛樺偍璁惧鍒楄〃
+     * @param @return
+     * @return ArrayList<String>
+     * @throws
+     */
+    public static ArrayList<String> getStorageDirectoriesArrayList()
+    {
+        ArrayList<String> list = new ArrayList<String>();
+        BufferedReader bufReader = null;
+        try
+        {
+            bufReader = new BufferedReader(new FileReader("/proc/mounts"));
+            list.add(Environment.getExternalStorageDirectory().getPath());
+            String line;
+            while((line = bufReader.readLine()) != null)
+            {
+                if(line.contains("vfat") || line.contains("exfat") ||
+                        line.contains("/mnt") || line.contains("/Removable"))
+                {
+                    StringTokenizer tokens = new StringTokenizer(line, " ");
+                    String s = tokens.nextToken();
+                    s = tokens.nextToken(); // Take the second token, i.e. mount point
+
+                    if (list.contains(s))
+                        continue;
+
+                    if (line.contains("/dev/block/vold"))
+                    {
+                        if (!line.startsWith("tmpfs") &&
+                                !line.startsWith("/dev/mapper") &&
+                                !s.startsWith("/mnt/secure") &&
+                                !s.startsWith("/mnt/shell") &&
+                                !s.startsWith("/mnt/asec") &&
+                                !s.startsWith("/mnt/obb")
+                                )
+                        {
+                            list.add(s);
+                        }
+                    }
+                }
+            }
+        }
+        catch (FileNotFoundException e) {}
+        catch (IOException e) {}
+        finally
+        {
+            if (bufReader != null)
+            {
+                try
+                {
+                    bufReader.close();
+                }
+                catch (IOException e) {}
+            }
+        }
+        return list;
+    }
+
+    /**
+     * @Description: 鍒ゆ柇褰撳墠鐩綍鏄惁鍙敤
+     * @param @param file
+     * @param @return
+     * @return boolean
+     * @throws
+     */
+    public static boolean isStorageAvailable(File file)
+    {
+        if(getSDspace(file)[1] > 0)
+            return true;
+        return false;
+    }
+
+    /**
+     * @Description: 鑾峰彇鏈湴缂撳瓨鐩綍
+     * @param @param uniqueName
+     * @param @return
+     * @return File
+     * @throws
+     */
+    public static File getAvailableDir(Context context, String uniqueName)
+    {
+		/*鑾峰彇澶栭儴瀛樺偍璁惧鍒楄〃*/
+        List<String> sdList = getStorageDirectoriesArrayList();
+
+		/*閫夋嫨绗竴涓湁鏁堢殑瀛樺偍璁惧浣滀负鏈湴缂撳瓨*/
+        for(int i=0;i<sdList.size();i++)
+        {
+            File file = new File(sdList.get(i));
+            if(isStorageAvailable(file) && file.canWrite())
+            {
+                if(!TextUtils.isEmpty(uniqueName))
+                    return new File(sdList.get(i) + File.separator + uniqueName);
+                else
+                    return new File(sdList.get(i) + File.separator);
+            }
+        }
+		/*濡傛灉娌℃湁澶栬灏变娇鐢ㄥ唴閮ㄥ瓨鍌�*/
+        return context.getCacheDir();
+    }
+
+    /**
+     * @Description: 鑾峰彇鏈湴瀛樺偍璁惧瀛樺偍绌洪棿
+     * @param @param file
+     * @param @return
+     * @return long[]
+     * @throws
+     */
+    public static long[] getSDspace(File file)
+    {
+        StatFs statfs = new StatFs(file.getAbsolutePath());
+
+        long[] result = new long[3];
+
+        long blocSize = statfs.getBlockSize();
+        //鑾峰彇BLOCK鏁伴噺
+        long totalBlocks = statfs.getBlockCount();
+        //宸变娇鐢ㄧ殑Block鐨勬暟閲�
+        long availaBlock = statfs.getAvailableBlocks();
+
+        String total = StringUtils.getFormatSize(totalBlocks*blocSize);
+        String availale = StringUtils.getFormatSize(availaBlock*blocSize);
+
+        result[0] = blocSize;
+        result[1] = totalBlocks;
+        result[2] = availaBlock;
+
+        return result;
     }
 
 }

@@ -180,6 +180,9 @@
             android:name=".activity.UserListActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".activity.UserRecordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".activity.LoginRecordActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity

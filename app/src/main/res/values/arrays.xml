@@ -38,6 +38,11 @@
         <item>删除</item>
     </string-array>
 
+    <string-array name="change_account">
+        <item>切换到子账户</item>
+        <item>切换到历史记录</item>
+    </string-array>
+
     <string-array name="plan_ad_list_dialog">
         <item>复制链接</item>
         <item>移除</item>

@@ -161,4 +161,40 @@ public class FileUtils {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @Description: 创建文件
+     * @param @param fileUrl
+     * @param @return
+     * @return int
+     * @throws
+     */
+    public static int createFile(String fileUrl)
+    {
+        String tempStr = fileUrl;
+        if(tempStr.contains("/"))
+            tempStr = StringUtils.getHeadByTag("/", tempStr);
+        File tempDir = new File(tempStr);
+        if(!tempDir.exists())
+        {
+            if(!tempDir.mkdirs())
+                return 1;
+        }
+
+        File tempFile = new File(fileUrl);
+        if(tempFile.exists())
+            tempFile.delete();
+        try
+        {
+            if(tempFile.createNewFile())
+                return 0;
+        } catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return 1;
+    }
+
 }

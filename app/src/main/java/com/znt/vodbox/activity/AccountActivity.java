@@ -1,15 +1,18 @@
 package com.znt.vodbox.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,7 +48,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 	private ImageView ivQQLogin = null;
 	private ImageView ivSinaLogin = null;
 	private ImageView ivWeiXinLogin = null;
-	private TextView btnOldVersion = null;
+	private Button btnOldVersion = null;
 
 	private UserInfo userInfor = null;
 	private boolean isInit = true;
@@ -72,8 +75,9 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		tvConfirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				showChangeAccountDialog();
 				//ViewUtils.startActivity(getActivity(),LoginRecordActivity.class,null,1);
-				ViewUtils.startActivity(getActivity(),UserListActivity.class,null,1);
+
 			}
 		});
 
@@ -103,6 +107,27 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 				itvPwd.setVisibility(View.INVISIBLE);
 			}
 		}
+	}
+
+	private void showChangeAccountDialog()
+	{
+		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+		dialog.setTitle("切换账户");
+
+		dialog.setItems(R.array.change_account, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog1, int which) {
+				switch (which) {
+					case 0://
+						ViewUtils.startActivity(getActivity(),UserListActivity.class,null,1);
+						break;
+					case 1://
+						ViewUtils.startActivity(getActivity(),UserRecordActivity.class,null,1);
+						break;
+				}
+			}
+		});
+		dialog.show();
 	}
 	
 	/**
@@ -142,7 +167,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		ivWeiXinLogin = (ImageView)findViewById(R.id.iv_login_weixin);
 		ivSinaLogin = (ImageView)findViewById(R.id.iv_login_sina);
 
-		btnOldVersion = (TextView) findViewById(R.id.btn_login_old);
+		btnOldVersion = (Button) findViewById(R.id.btn_login_old);
 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		

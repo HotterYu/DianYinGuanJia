@@ -34,6 +34,7 @@ import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
+import com.znt.vodbox.db.DBManager;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -270,6 +271,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                                 DBManager.get().getMusicDao().insert(tempInfo);*/
 
                                 userInfo.setPwd(mPasswordView.getText().toString());
+                                DBManager.newInstance(getApplicationContext()).insertUser(userInfo);
                                 getLocalData().setUserInfor(userInfo);
                                 MusicApplication.isLogin = true;
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
