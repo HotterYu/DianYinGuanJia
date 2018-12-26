@@ -4,17 +4,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.PlanDetailActivity;
+import com.znt.vodbox.adapter.LoadMoreWrapper;
 import com.znt.vodbox.adapter.OnMoreClickListener;
-import com.znt.vodbox.adapter.PlanlistAdapter;
+import com.znt.vodbox.adapter.PlanLoadMoreAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.PlanListResultBean;
@@ -22,19 +24,27 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
-import com.znt.vodbox.view.xlistview.LJListView;
+import com.znt.vodbox.view.StaggeredGridRecyclerView;
+import com.znt.vodbox.view.listener.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MediaPlanFragment extends BaseFragment implements LJListView.IXListViewListener, AdapterView.OnItemClickListener, OnMoreClickListener {
-    @Bind(R.id.ptrl_plan_list)
-    private LJListView listView = null;
+public class MediaPlanFragment extends BaseFragment implements OnMoreClickListener {
+    @Bind(R.id.rv)
+    private StaggeredGridRecyclerView mRecyclerView;
+    @Bind(R.id.refresh)
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private LoadMoreWrapper loadMoreWrapper;
 
     private List<PlanInfo> dataList = new ArrayList<>();
 
-    private PlanlistAdapter mPlanlistAdapter = null;
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -46,36 +56,96 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listView.getListView().setDivider(getResources().getDrawable(R.color.spacebar));
-        listView.getListView().setDividerHeight(1);
-        listView.setPullLoadEnable(true,"");
-        listView.setPullRefreshEnable(true);
-        listView.setIsAnimation(true);
-        listView.setXListViewListener(this);
-        listView.showFootView(false);
-        listView.setRefreshTime();
-        listView.setOnItemClickListener(this);
+        // 设置下拉进度的背景颜色，默认就是白色的
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        // 设置下拉进度的主题颜色
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.main_bg, R.color.colorPrimaryDark);
 
-        mPlanlistAdapter = new PlanlistAdapter(dataList);
+        PlanLoadMoreAdapter shopLoadMoreAdapter = new PlanLoadMoreAdapter(getActivity(), dataList);
+        loadMoreWrapper = new LoadMoreWrapper(shopLoadMoreAdapter);
+        shopLoadMoreAdapter.setOnMoreClickListener(this);
+        shopLoadMoreAdapter.setOnItemClickListener(new PlanLoadMoreAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view) {
+                int index = (int) view.getTag();
+                PlanInfo tempInfo = dataList.get(index);
 
-        mPlanlistAdapter.setOnMoreClickListener(this);
+                Intent intent = new Intent(getActivity(), PlanDetailActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("PLAN_INFO",tempInfo);
+                intent.putExtras(b);
+                startActivityForResult(intent, 1);
+            }
+        });
 
-        listView.setAdapter(mPlanlistAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(loadMoreWrapper);
 
-        listView.onFresh();
+        // 设置下拉刷新
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadMoreWrapper.showFooterView(false);
+                // 刷新数据
+                if(dataList != null && dataList.size() > 0)
+                    dataList.clear();
+                pageNo = 1;
+                refreshData();
+            }
+        });
 
+        // 设置加载更多监听
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING);
+
+                if (dataList.size() < maxSize)
+                {
+                    refreshData();
+                }
+                else
+                {
+                    // 显示加载到底的提示
+                    loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
+                }
+            }
+        });
+        refreshData();
     }
 
     public void refreshData()
     {
-        listView.onFresh();
+        getPlanList();
+    }
+
+    private void refreshUi()
+    {
+        if(loadMoreWrapper != null)
+            loadMoreWrapper.notifyDataSetChanged();
+        if(swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+        if(loadMoreWrapper != null)
+            loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
     }
 
     public void getPlanList()
     {
+
+        if(pageNo == 1)
+        {
+            swipeRefreshLayout.setRefreshing(true);
+            loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_COMPLETE);
+        }
+        else
+        {
+            swipeRefreshLayout.setRefreshing(false);
+            loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
+        }
+
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
-        String pageSize = "50";
+        String pageSize = "25";
         String id = "";//计划id
         String merchId = Constant.mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -88,32 +158,34 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
             // Simulate network access.
             HttpClient.getPlanList(token,pageNo, pageSize,id,merchId,groupId,planName, new HttpCallback<PlanListResultBean>() {
                 @Override
-                public void onSuccess(PlanListResultBean resultBean) {
-                    listView.stopRefresh();
+                public void onSuccess(PlanListResultBean resultBean)
+                {
                     if(resultBean != null)
                     {
-                        dataList = resultBean.getData();
-
-                        mPlanlistAdapter.notifyDataSetChanged(dataList);
-
+                        int lastSize = dataList.size();
+                        List<PlanInfo> tempList = resultBean.getData();
+                        dataList.addAll(tempList);
+                        maxSize = Integer.parseInt(resultBean.getMessage());
+                        loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
                     }
                     else
                     {
                         showToast(resultBean.getMessage());
                         //shopinfoList.clear();
                     }
-
+                    refreshUi();
                 }
 
                 @Override
                 public void onFail(Exception e) {
-                    listView.stopRefresh();
+                    refreshUi();
                     showToast(e.getMessage());
                 }
             });
         }
         catch (Exception e)
         {
+            refreshUi();
             if(e!=null)
                 showToast(e.getMessage());
             else
@@ -131,7 +203,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
             HttpClient.deletePlan(token,info.getId(),new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
-                    listView.stopRefresh();
+
                     if(resultBean != null)
                     {
                         getPlanList();
@@ -145,7 +217,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
 
                 @Override
                 public void onFail(Exception e) {
-                    listView.stopRefresh();
+
                     showToast(e.getMessage());
                 }
             });
@@ -174,22 +246,6 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-        if(position > 0)
-            position = position - 1;
-
-        PlanInfo tempInfo = dataList.get(position);
-
-        Intent intent = new Intent(getActivity(), PlanDetailActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable("PLAN_INFO",tempInfo);
-        intent.putExtras(b);
-        startActivityForResult(intent, 1);
-
-    }
 
     @Override
     public void onMoreClick(int position) {
@@ -215,7 +271,7 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
                             copyInfo.setId("");
                             copyInfo.setPlanName(copyInfo.getPlanName() + "_复制");
                             dataList.add(0,copyInfo);
-                            mPlanlistAdapter.notifyDataSetChanged(dataList);
+                            loadMoreWrapper.notifyDataSetChanged();
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
                         }
@@ -230,13 +286,5 @@ public class MediaPlanFragment extends BaseFragment implements LJListView.IXList
         dialog.show();
     }
 
-    @Override
-    public void onRefresh() {
-        getPlanList();
-    }
 
-    @Override
-    public void onLoadMore() {
-        getPlanList();
-    }
 }

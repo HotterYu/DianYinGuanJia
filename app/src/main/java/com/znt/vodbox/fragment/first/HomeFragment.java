@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AddShopActivity;
+import com.znt.vodbox.activity.AllPlanListActivity;
 import com.znt.vodbox.activity.SearchShopActivity;
 import com.znt.vodbox.adapter.ShopFragmentPagerAdapter;
 import com.znt.vodbox.fragment.ShopFragment;
@@ -44,6 +45,11 @@ public class HomeFragment extends Fragment {
     public void goAddShopActivity(Context activity)
     {
         ViewUtils.startActivity(getActivity(),AddShopActivity.class,null,1);
+    }
+
+    public void goPlanActivity(Context activity)
+    {
+        ViewUtils.startActivity(getActivity(),AllPlanListActivity.class,null,1);
     }
 
 

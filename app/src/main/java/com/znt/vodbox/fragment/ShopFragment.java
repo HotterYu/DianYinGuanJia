@@ -207,6 +207,9 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
 
                     if(resultBean.getResultcode().equals("1"))
                     {
+
+                        int lastSize = dataList.size();
+
                         List<Shopinfo> tempList = resultBean.getData();
 
                         if(pageNo == 1)
@@ -233,7 +236,10 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
 
                         if(mOnCountGetCallBack != null)
                             mOnCountGetCallBack.onCountGetBack(resultBean.getMessage());
-                        loadMoreWrapper.notifyDataSetChanged();
+
+                        maxSize = Integer.parseInt(resultBean.getMessage());
+                        loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
+
                     }
                     else
                     {

@@ -29,6 +29,17 @@ public class AdPlanInfo implements Serializable, Cloneable
     private String groupName;
     private String groupId;
     private String addTime;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    private int type;
+
     public String getAddTime() {
         return addTime;
     }

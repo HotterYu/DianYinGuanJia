@@ -4,16 +4,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AdPlanDetailActivity;
-import com.znt.vodbox.adapter.AdPlanlistAdapter;
+import com.znt.vodbox.adapter.AdPlanLoadMoreAdapter;
+import com.znt.vodbox.adapter.LoadMoreWrapper;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdPlanInfo;
 import com.znt.vodbox.bean.AdPlanListResultBean;
@@ -22,20 +24,27 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
-import com.znt.vodbox.view.xlistview.LJListView;
+import com.znt.vodbox.view.StaggeredGridRecyclerView;
+import com.znt.vodbox.view.listener.EndlessRecyclerOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AdPlanFragment extends BaseFragment implements LJListView.IXListViewListener, AdapterView.OnItemClickListener, OnMoreClickListener {
-    @Bind(R.id.ptrl_plan_list)
-    private LJListView listView = null;
+public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener {
+    @Bind(R.id.rv)
+    private StaggeredGridRecyclerView mRecyclerView;
+    @Bind(R.id.refresh)
+    private SwipeRefreshLayout swipeRefreshLayout;
 
+    private LoadMoreWrapper loadMoreWrapper;
 
     private List<AdPlanInfo> dataList = new ArrayList<>();
 
-    private AdPlanlistAdapter mPlanlistAdapter = null;
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -48,29 +57,78 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
         super.onActivityCreated(savedInstanceState);
 
 
-        listView.getListView().setDivider(getResources().getDrawable(R.color.spacebar));
-        listView.getListView().setDividerHeight(1);
-        listView.setPullLoadEnable(true,"");
-        listView.setPullRefreshEnable(true);
-        listView.setIsAnimation(true);
-        listView.setXListViewListener(this);
-        listView.showFootView(false);
-        listView.setRefreshTime();
-        listView.setOnItemClickListener(this);
+        // 设置下拉进度的背景颜色，默认就是白色的
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        // 设置下拉进度的主题颜色
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.main_bg, R.color.colorPrimaryDark);
 
-        mPlanlistAdapter = new AdPlanlistAdapter(dataList);
+        AdPlanLoadMoreAdapter shopLoadMoreAdapter = new AdPlanLoadMoreAdapter(getActivity(), dataList);
+        loadMoreWrapper = new LoadMoreWrapper(shopLoadMoreAdapter);
+        shopLoadMoreAdapter.setOnMoreClickListener(this);
+        shopLoadMoreAdapter.setOnItemClickListener(new AdPlanLoadMoreAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view) {
+                int index = (int) view.getTag();
+                AdPlanInfo tempInfo = dataList.get(index);
 
-        mPlanlistAdapter.setOnMoreClickListener(this);
+                Intent intent = new Intent(getActivity(), AdPlanDetailActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("AD_PLAN_INFO",tempInfo);
+                intent.putExtras(b);
+                startActivityForResult(intent, 2);
+            }
+        });
 
-        listView.setAdapter(mPlanlistAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setAdapter(loadMoreWrapper);
 
-        listView.onFresh();
+        // 设置下拉刷新
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadMoreWrapper.showFooterView(false);
+                // 刷新数据
+                if(dataList != null && dataList.size() > 0)
+                    dataList.clear();
+                pageNo = 1;
+                refreshData();
+            }
+        });
+
+        // 设置加载更多监听
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING);
+
+                if (dataList.size() < maxSize)
+                {
+                    refreshData();
+
+                }
+                else
+                {
+                    // 显示加载到底的提示
+                    loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
+                }
+            }
+        });
+        refreshData();
 
     }
 
     public void refreshData()
     {
-        listView.onFresh();
+        getAdPlanList();
+    }
+    private void refreshUi()
+    {
+        if(loadMoreWrapper != null)
+            loadMoreWrapper.notifyDataSetChanged();
+        if(swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+        if(loadMoreWrapper != null)
+            loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
     }
 
     public void getAdPlanList()
@@ -91,12 +149,14 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
             HttpClient.getAdPlanList(token,pageNo, pageSize,id,merchId,groupId,planName, new HttpCallback<AdPlanListResultBean>() {
                 @Override
                 public void onSuccess(AdPlanListResultBean resultBean) {
-                    listView.stopRefresh();
+                    refreshUi();
                     if(resultBean != null)
                     {
-                        dataList = resultBean.getData();
-
-                        mPlanlistAdapter.notifyDataSetChanged(dataList);
+                        int lastSize = dataList.size();
+                        List<AdPlanInfo> tempList = resultBean.getData();
+                        dataList.addAll(tempList);
+                        maxSize = Integer.parseInt(resultBean.getMessage());
+                        loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
 
                     }
                     else
@@ -108,13 +168,13 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
 
                 @Override
                 public void onFail(Exception e) {
-                    listView.stopRefresh();
+                    refreshUi();
                 }
             });
         }
         catch (Exception e)
         {
-
+            refreshUi();
         }
     }
 
@@ -128,7 +188,6 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
             HttpClient.deleteAdPlan(token,info.getId(),new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
-                    listView.stopRefresh();
                     if(resultBean != null)
                     {
                         getAdPlanList();
@@ -142,7 +201,7 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
 
                 @Override
                 public void onFail(Exception e) {
-                    listView.stopRefresh();
+
                 }
             });
         }
@@ -168,23 +227,6 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-        if(position > 0)
-            position = position - 1;
-
-        AdPlanInfo tempInfo = dataList.get(position);
-
-        Intent intent = new Intent(getActivity(), AdPlanDetailActivity.class);
-        Bundle b = new Bundle();
-        b.putSerializable("AD_PLAN_INFO",tempInfo);
-        intent.putExtras(b);
-        startActivityForResult(intent, 2);
-
-    }
-
-    @Override
     public void onMoreClick(int position) {
         final AdPlanInfo tempInfo = dataList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
@@ -207,7 +249,7 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
                             copyInfo.setId("");
                             copyInfo.setName(copyInfo.getName() + "_复制");
                             dataList.add(0,copyInfo);
-                            mPlanlistAdapter.notifyDataSetChanged(dataList);
+                            loadMoreWrapper.notifyDataSetChanged();
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();
                         }
@@ -220,15 +262,5 @@ public class AdPlanFragment extends BaseFragment implements LJListView.IXListVie
         });
 
         dialog.show();
-    }
-
-    @Override
-    public void onRefresh() {
-        getAdPlanList();
-    }
-
-    @Override
-    public void onLoadMore() {
-        getAdPlanList();
     }
 }

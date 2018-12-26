@@ -27,6 +27,15 @@ public class PlanInfo implements Serializable, Cloneable
     private List<String>  categoryNames = new ArrayList<>();
     private String addTime;
 
+    private int type = 0;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {

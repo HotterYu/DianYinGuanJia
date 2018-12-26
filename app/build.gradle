@@ -40,7 +40,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 2
-        versionName "20181221"
+        versionName "20181225"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/rxjava.properties'

@@ -55,11 +55,17 @@ public class PlanlistAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null)
+        {
+
+            //view_holder_plan_list_category
+
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_plan_list, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        } else {
+        }
+        else
+        {
             holder = (ViewHolder) convertView.getTag();
         }
         PlanInfo tempInfo = dataList.get(position);

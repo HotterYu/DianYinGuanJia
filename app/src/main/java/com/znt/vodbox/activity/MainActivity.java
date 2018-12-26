@@ -247,6 +247,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                 return false;
             }
         });
+        MenuItem planItem = menu.findItem(R.id.plan);
+        planItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                homeFragment.goPlanActivity(getApplicationContext());
+                return false;
+            }
+        });
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         /*MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {

@@ -8,6 +8,12 @@
         android:icon="@drawable/icon_menu_add"
         app:showAsAction="ifRoom|collapseActionView"
         android:title=""></item>
+
+    <item
+        android:id="@+id/plan"
+        android:icon="@drawable/icon_menu_plan"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:title=""></item>
     <item
         android:id="@+id/search"
         android:icon="@drawable/icon_menu_search"
