@@ -84,14 +84,26 @@ public class PlanLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             holder.ivCover.setImageResource(R.drawable.default_cover);
             holder.tvPlanName.setText(tempInfo.getPlanName());
             if(tempInfo.isGroupPlan())
+            {
                 holder.tvForShop.setText("指定分区:"+tempInfo.getGroupName());
+                holder.tvForShop.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
+            }
             else
+            {
+                holder.tvForShop.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
                 holder.tvForShop.setText("无分区");
+            }
 
             if(TextUtils.isEmpty(tempInfo.getStartDate()))
+            {
                 holder.tvDate.setText("播放时间：每天");
+
+            }
             else
+            {
                 holder.tvDate.setText("播放时间："+tempInfo.getStartDate() + "至" + tempInfo.getEndDate());
+            }
+
             if(!TextUtils.isEmpty(tempInfo.getAddTime()))
                 holder.tvCreateTime.setText("创建时间:"+ DateUtils.getDateFromLong(Long.parseLong(tempInfo.getAddTime())));
             holder.ivMore.setOnClickListener(new View.OnClickListener() {
