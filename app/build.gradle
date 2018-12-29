@@ -24,6 +24,7 @@ repluginHostConfig {
 bugly {
     appId = '6207095b94'
     appKey = 'd935ac63-2cd5-405d-9615-0eb0aafca9c4'
+
 }
 android {
     signingConfigs {
@@ -40,7 +41,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 2
-        versionName "20181225"
+        versionName "20181229"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/rxjava.properties'

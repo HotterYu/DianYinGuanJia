@@ -164,9 +164,11 @@ public class ShopDetailActivity extends BaseActivity implements
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
 
+
         getPlan();
 
     }
+
 
     public void getPlan()
     {
@@ -258,6 +260,11 @@ public class ShopDetailActivity extends BaseActivity implements
             Log.e("",e.getMessage());
         }
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
