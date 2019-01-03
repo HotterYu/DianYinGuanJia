@@ -76,6 +76,8 @@ public class GroupFragment extends BaseFragment  implements
 
     public void getGroupList()
     {
+        if(Constant.mUserInfo == null)
+            return;
         String token = Constant.mUserInfo.getToken();
         String pageNo = "1";
         String pageSize = "100";

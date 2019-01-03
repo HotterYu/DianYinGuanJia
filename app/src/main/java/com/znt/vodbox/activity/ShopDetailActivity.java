@@ -212,7 +212,10 @@ public class ShopDetailActivity extends BaseActivity implements
 
                 @Override
                 public void onFail(Exception e) {
-                    showToast(e.getMessage());
+                    if(e != null)
+                        showToast(e.getMessage());
+                    else
+                        showToast("load data error");
                     listView.stopRefresh();
                 }
             });
@@ -220,7 +223,10 @@ public class ShopDetailActivity extends BaseActivity implements
         catch (Exception e)
         {
             listView.stopRefresh();
-            showToast(e.getMessage());
+            if(e != null)
+                showToast(e.getMessage());
+            else
+                showToast("load data error");
             Log.e("",e.getMessage());
         }
 

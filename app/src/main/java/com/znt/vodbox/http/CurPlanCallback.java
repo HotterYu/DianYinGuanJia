@@ -49,42 +49,41 @@ public abstract class CurPlanCallback<T>  extends Callback<T>
         {
             String jsonString = response.body().string();
             PlanResultBean curPlanResultBean = (PlanResultBean) gson.fromJson(jsonString, clazz);
-
-            PlanInfo planInfo = curPlanResultBean.getData();
-            List<MediaInfo> tempList = new ArrayList<>();
-            int count = planInfo.getScheIds().size();
-            for(int i=0;i<count;i++)
+            if(curPlanResultBean.isSuccess())
             {
-                String tempScheId = planInfo.getScheIds().get(i);
-
-                String tempCycleType = planInfo.getCycleTypes().get(i);
-                String tempStartTime = planInfo.getStartTimes().get(i);
-                String tempEndTime = planInfo.getEndTimes().get(i);
-
-                int sLong = DateUtils.timeToInt(tempStartTime, ":");
-                int eLong = DateUtils.timeToInt(tempEndTime, ":");
-
-                String curTime = DateUtils.getStringTimeEnd(System.currentTimeMillis());
-                int dLong = DateUtils.timeToInt(curTime, ":");
-
-                if(isTimeOverlap(sLong,eLong, dLong))
+                PlanInfo planInfo = curPlanResultBean.getData();
+                List<MediaInfo> tempList = new ArrayList<>();
+                int count = planInfo.getScheIds().size();
+                for(int i=0;i<count;i++)
                 {
-                    String tempCategoryIds = "";
-                    int tempLen = planInfo.getCategoryIds().size();
-                    for(int j=0;j<tempLen;j++)
+                    String tempScheId = planInfo.getScheIds().get(i);
+
+                    String tempCycleType = planInfo.getCycleTypes().get(i);
+                    String tempStartTime = planInfo.getStartTimes().get(i);
+                    String tempEndTime = planInfo.getEndTimes().get(i);
+
+                    int sLong = DateUtils.timeToInt(tempStartTime, ":");
+                    int eLong = DateUtils.timeToInt(tempEndTime, ":");
+
+                    String curTime = DateUtils.getStringTimeEnd(System.currentTimeMillis());
+                    int dLong = DateUtils.timeToInt(curTime, ":");
+
+                    if(isTimeOverlap(sLong,eLong, dLong))
                     {
-                        tempCategoryIds += planInfo.getCategoryIds().get(j) + ",";
+                        String tempCategoryIds = "";
+                        int tempLen = planInfo.getCategoryIds().size();
+                        for(int j=0;j<tempLen;j++)
+                        {
+                            tempCategoryIds += planInfo.getCategoryIds().get(j) + ",";
+                        }
+                        if(tempCategoryIds.endsWith(","))
+                            tempCategoryIds = tempCategoryIds.substring(0, tempCategoryIds.length() - 1);
+                        tempList = getScheduleMusics(planInfo.getId(),tempScheId,tempCategoryIds, tempStartTime,tempEndTime,tempCycleType);
+
                     }
-                    if(tempCategoryIds.endsWith(","))
-                        tempCategoryIds = tempCategoryIds.substring(0, tempCategoryIds.length() - 1);
-                    tempList = getScheduleMusics(planInfo.getId(),tempScheId,tempCategoryIds, tempStartTime,tempEndTime,tempCycleType);
-
+                    curPlanResultBean.setMediaList(tempList);
                 }
-
             }
-
-            curPlanResultBean.setMediaList(tempList);
-
             return (T) curPlanResultBean;
         }
         catch (Exception e)
