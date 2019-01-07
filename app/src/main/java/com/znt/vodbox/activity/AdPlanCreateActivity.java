@@ -432,6 +432,10 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         // TODO Auto-generated method stub
         if(arg2 > 1)
             arg2 = arg2 - 2;
+
+        if(selectAdList.size() <= 0)
+            return;
+
         AdMediaInfo infor = selectAdList.get(arg2);
         showPlayDialog(infor.getAdname(),infor.getUrl(),infor.getId());
         /*Bundle bundle = new Bundle();
