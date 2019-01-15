@@ -91,7 +91,14 @@ dependencies {
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.3'
     implementation 'com.tamic.novate:novate:1.5.0'
 
-    compile 'com.qihoo360.replugin:replugin-host-lib:2.2.4'
+    implementation 'com.qihoo360.replugin:replugin-host-lib:2.2.4'
+
+
+    //高仿IOS 提示框 https://github.com/Bigkoo/Android-AlertView
+    implementation 'com.bigkoo:alertview:1.0.3'
+
+    //仿IOS 时间，日期，周 滚轮选择控件
+    //https://github.com/lvfaqiang/Android-PickerView-master
 
 }
 repositories {

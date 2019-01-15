@@ -70,10 +70,10 @@ public class AdPlanInfo implements Serializable, Cloneable
         return !TextUtils.isEmpty(groupName) && !TextUtils.isEmpty(groupId);
     }
 
-    private int selectedPlanIndex = 0;
+    private int selectedPlanIndex = -1;
     public SubAdPlanInfo getSelelctPlanInfor()
     {
-        if(getSubPlanList().size() > 0)
+        if(getSubPlanList().size() > 0 && selectedPlanIndex >= 0)
             return getSubPlanList().get(selectedPlanIndex);
         else
             return null;

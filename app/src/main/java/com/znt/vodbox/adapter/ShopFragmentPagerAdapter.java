@@ -14,7 +14,7 @@ import com.znt.vodbox.fragment.ShopFragment;
  */
 
 public class ShopFragmentPagerAdapter extends FragmentPagerAdapter implements ShopFragment.OnShopCounUpdateListener {
-    private String[] titles = new String[]{"全部店铺","在线店铺","离线店铺","分区查看"};
+    private String[] titles = new String[]{"全部店铺","在线","离线","分区查看"};
     public int COUNT = titles.length;
     private Context context;
 
@@ -61,7 +61,7 @@ public class ShopFragmentPagerAdapter extends FragmentPagerAdapter implements Sh
 
     @Override
     public void onShopCounUpdate(int all, int online, int offline, int expire) {
-        titles = new String[]{"全部店铺(" + all+")","在线店铺(" + online+")","离线店铺(" + offline+")","分区查看"};
+        titles = new String[]{"全部店铺(" + all+")","在线(" + online+")","离线(" + offline+")","分区查看"};
         notifyDataSetChanged();
     }
 }

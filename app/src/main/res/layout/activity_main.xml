@@ -39,11 +39,11 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
-        android:layout_width="match_parent"
+        android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
         app:menu="@menu/navigation_menu"
-        android:background="#444d56"
+        android:background="#b0444d56"
         app:itemTextColor="@color/white"
         />
 </android.support.v4.widget.DrawerLayout>

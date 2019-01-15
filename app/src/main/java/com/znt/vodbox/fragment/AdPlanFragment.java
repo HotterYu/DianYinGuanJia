@@ -87,9 +87,7 @@ public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener
             @Override
             public void onRefresh() {
                 loadMoreWrapper.showFooterView(false);
-                // 刷新数据
-                if(dataList != null && dataList.size() > 0)
-                    dataList.clear();
+
                 pageNo = 1;
                 refreshData();
             }
@@ -134,8 +132,7 @@ public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener
     public void getAdPlanList()
     {
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "50";
+
         String id = "";//计划id
         String merchId = Constant.mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -146,13 +143,15 @@ public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener
         try
         {
             // Simulate network access.
-            HttpClient.getAdPlanList(token,pageNo, pageSize,id,merchId,groupId,planName, new HttpCallback<AdPlanListResultBean>() {
+            HttpClient.getAdPlanList(token,pageNo+"", pageSize+"",id,merchId,groupId,planName, new HttpCallback<AdPlanListResultBean>() {
                 @Override
                 public void onSuccess(AdPlanListResultBean resultBean) {
                     refreshUi();
                     if(resultBean != null)
                     {
                         int lastSize = dataList.size();
+                        if(pageNo == 1)
+                            dataList.clear();
                         List<AdPlanInfo> tempList = resultBean.getData();
                         dataList.addAll(tempList);
                         maxSize = Integer.parseInt(resultBean.getMessage());

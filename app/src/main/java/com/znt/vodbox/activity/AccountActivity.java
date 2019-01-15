@@ -20,6 +20,7 @@ import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.CircleImageView;
@@ -304,6 +305,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 			String pluginName = "DianYinGuanJiaOld";
 			RePlugin.startActivity(AccountActivity.this, RePlugin.createIntent(pluginName,
 					"com.znt.vodbox.activity.LoginActivity"));
+			ActivityManager.getInstance().finishAllActivity();
 		}
 	}
 	

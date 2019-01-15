@@ -1,11 +1,14 @@
 package com.znt.vodbox.application;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.qihoo360.replugin.RePluginApplication;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.znt.vodbox.storage.db.DBManager;
+import com.znt.vodbox.utils.ActivityManager;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -36,6 +39,43 @@ public class MusicApplication extends RePluginApplication {
 
         final String processName = getProcessName(android.os.Process.myPid());
         initBugly(processName);
+
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                ActivityManager.getInstance().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                ActivityManager.getInstance().removeActivity(activity);
+            }
+        });
 
     }
 

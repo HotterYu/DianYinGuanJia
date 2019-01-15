@@ -128,8 +128,8 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
             public void onRefresh() {
                 loadMoreWrapper.showFooterView(false);
                 // 刷新数据
-                if(dataList != null && dataList.size() > 0)
-                    dataList.clear();
+                /*if(dataList != null && dataList.size() > 0)
+                    dataList.clear();*/
                 pageNo = 1;
                 getData();
             }
@@ -220,6 +220,8 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
 
                         dataList.addAll(tempList);
 
+                        loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
+
                         maxSize = Integer.parseInt(resultBean.getMessage());
 
                         if(resultBean.getExtendData() != null )
@@ -238,7 +240,7 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
                             mOnCountGetCallBack.onCountGetBack(resultBean.getMessage());
 
                         maxSize = Integer.parseInt(resultBean.getMessage());
-                        loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
+
 
                     }
                     else

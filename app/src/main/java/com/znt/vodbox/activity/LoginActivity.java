@@ -39,6 +39,7 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.binding.Bind;
 
 import java.util.ArrayList;
@@ -126,6 +127,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 String pluginName = "DianYinGuanJiaOld";
                 RePlugin.startActivity(LoginActivity.this, RePlugin.createIntent(pluginName,
                         "com.znt.vodbox.activity.LoginActivity"));
+                ActivityManager.getInstance().finishAllActivity();
             }
         });
         mLoginFormView = findViewById(R.id.login_form);
@@ -133,6 +135,36 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
         attemptLogin();
 
+        UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("USER_INFO");
+        if(userInfo != null)
+            loginByRecord(userInfo);
+        else
+            initDataFromLocal();
+
+    }
+
+    private void loginByRecord(UserInfo userInfo)
+    {
+
+        String account = userInfo.getUsername();
+        String pwd = userInfo.getPwd();
+        if(!TextUtils.isEmpty(account))
+            mEmailView.setText(account);
+        if(!TextUtils.isEmpty(pwd))
+            mPasswordView.setText(pwd);
+        mEmailSignInButton.callOnClick();
+    }
+
+
+    private void initDataFromLocal()
+    {
+        UserInfo userInfo = getLocalData().getUserInfor();
+        String account = userInfo.getUsername();
+        String pwd = userInfo.getPwd();
+        if(!TextUtils.isEmpty(account))
+            mEmailView.setText(account);
+        if(!TextUtils.isEmpty(pwd))
+            mPasswordView.setText(pwd);
     }
 
     private void loadPlugin()

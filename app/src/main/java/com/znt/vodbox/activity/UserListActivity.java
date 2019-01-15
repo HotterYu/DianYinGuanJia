@@ -18,6 +18,8 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.utils.ActivityManager;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
@@ -195,9 +197,24 @@ public class UserListActivity extends BaseActivity implements
         ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         // 将文本内容放到系统剪贴板里。
         cm.setText(tempInfor.getUsername());
-        showToast("复制账户成功");
 
-        /*showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());*/
+        if(isCurCanLogin(tempInfor))
+        {
+            Bundle b = new Bundle();
+            b.putSerializable("USER_INFO",tempInfor);
+            ViewUtils.startActivity(getActivity(),LoginActivity.class,b);
+            ActivityManager.getInstance().finishOthersActivity(UserRecordActivity.class);
+        }
+        else
+            showToast("该账户已登录");
+    }
+
+    private boolean isCurCanLogin(UserInfo infor)
+    {
+        String userId = getLocalData().getUserId();
+        if(userId.equals(infor.getId()))
+            return false;
+        return true;
     }
 
     @Override

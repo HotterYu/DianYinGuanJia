@@ -10,6 +10,8 @@
 
 package com.znt.vodbox.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,6 +31,8 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.utils.ActivityManager;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.xlistview.LJListView;
 
@@ -160,7 +164,18 @@ public class UserRecordActivity extends BaseActivity implements LJListView.IXLis
 			arg2 = arg2 - 1;
 		userInfor = userList.get(arg2);
 		if(isCurCanLogin(userInfor))
-			login();
+		{
+			getLocalData().setUserInfor(userInfor);
+
+			ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+			// 将文本内容放到系统剪贴板里。
+			cm.setText(userInfor.getUsername());
+
+			Bundle b = new Bundle();
+			b.putSerializable("USER_INFO",userInfor);
+			ViewUtils.startActivity(getActivity(),LoginActivity.class,b);
+			ActivityManager.getInstance().finishOthersActivity(UserRecordActivity.class);
+		}
 		else
 			showToast("该账户已登录");
 	}

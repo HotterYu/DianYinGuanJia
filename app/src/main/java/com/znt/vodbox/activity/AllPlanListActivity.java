@@ -43,7 +43,7 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
         mMediaPlanFragment = new MediaPlanFragment();
         mAdPlanFragment = new AdPlanFragment();
 
-        fab.setOnClickListener(new View.OnClickListener()
+        ivSearch.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -63,9 +63,6 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
                     intent.putExtras(b);
                     startActivityForResult(intent, 1);
                 }
-
-
-
             }
         });
 
@@ -79,8 +76,9 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
 
         tvMediaPlan.setSelected(true);
 
+        ivSearch.setImageResource(R.drawable.icon_menu_add);
+
         ivBack.setOnClickListener(this);
-        ivSearch.setOnClickListener(this);
         tvMediaPlan.setOnClickListener(this);
         tvAdPlan.setOnClickListener(this);
 
@@ -135,9 +133,6 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.iv_return:
                 finish();
-                break;
-            case R.id.iv_search:
-                //startActivity(new Intent(this, SearchMusicActivity.class));
                 break;
             case R.id.tv_plan_media_plan:
                 mViewPager.setCurrentItem(0);

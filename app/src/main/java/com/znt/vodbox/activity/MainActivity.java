@@ -37,6 +37,7 @@ import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.fragment.SheetListFragment;
 import com.znt.vodbox.fragment.first.DYMusicFragment;
 import com.znt.vodbox.fragment.first.HomeFragment;
+import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.view.SlideViewPager;
 
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             TextView following = (TextView) headerlayout.findViewById(R.id.following);
             TextView tvCode = (TextView) headerlayout.findViewById(R.id.tv_act_code);
             tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName());
-            tvCode.setText("激活码:"+LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
+            tvCode.setText("复制激活码:"+LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
             /*followers.setText("");
             following.setText("");*/
             headerlayout.setOnClickListener(new View.OnClickListener() {
@@ -389,8 +390,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private long touchTime = 0;
     private void closeApp()
     {
-        //closeAllActivity();
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(0);
+        ActivityManager.getInstance().exitApp();
     }
 }
