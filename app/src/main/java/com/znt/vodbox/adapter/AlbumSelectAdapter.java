@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AlbumInfo;
 
@@ -179,11 +180,13 @@ public class AlbumSelectAdapter extends BaseAdapter
             vh.ivEdit.setImageResource(R.drawable.icon_selected_off);
 		
 		vh.tvName.setText(infor.getName() + "(" + infor.getMusicNum() + ")");
-		/*if(!TextUtils.isEmpty(infor.getCover()))
-			Picasso.with(baseActivity).load(infor.getCover()).into(vh.ivCover);
-		else
-			Picasso.with(baseActivity).load("http://img5.imgtn.bdimg.com/it/u=698076066,2006876975&fm=21&gp=0.jpg").into(vh.ivCover);*/
-		
+
+		Glide.with(baseActivity)
+				.load(infor.getImageUrl())
+				.placeholder(R.drawable.icon_album_sys)
+				.error(R.drawable.icon_album_sys)
+				.into(vh.ivCover);
+
 		// TODO Auto-generated method stub
 		return convertView;
 	}

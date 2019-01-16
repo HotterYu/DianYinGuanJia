@@ -79,8 +79,8 @@ public class MyAlbumlistAdapter extends BaseAdapter {
 
         Glide.with(parent.getContext())
                 .load(albumInfo.getImageUrl())
-                .placeholder(R.drawable.default_cover)
-                .error(R.drawable.default_cover)
+                .placeholder(R.drawable.icon_album_sys)
+                .error(R.drawable.icon_album_sys)
                 .into(holder.ivCover);
 
         return convertView;

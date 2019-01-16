@@ -156,6 +156,11 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             String defaultName = DateUtils.getStringTimeChinese(System.currentTimeMillis()) + "计划";
             mAdPlanInfo.setName(defaultName);
             itvName.getSecondView().setText(mAdPlanInfo.getName());
+
+            switchButton.setChecked(false);
+            showShops(false);
+            switchButtonDate.setChecked(false);
+            showDateSelect(false);
         }
 
         /*listView.onFresh();
@@ -181,18 +186,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         itvShops.getBgView().setOnClickListener(this);
         itvDateStart.getBgView().setOnClickListener(this);
         itvDateEnd.getBgView().setOnClickListener(this);
-
-        if(mAdPlanInfo != null && mAdPlanInfo.isGroupPlan())
-        {
-            switchButton.setChecked(true);
-            showShops(true);
-            itvShops.getSecondView().setText(mAdPlanInfo.getGroupName());
-        }
-        else
-        {
-            switchButton.setChecked(false);
-            showShops(false);
-        }
 
         switchButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -243,15 +236,6 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         }, null, getResources().getString(R.string.plan_detail_end_time));
     }
 
-    private void finishAndFeedBack()
-    {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
-
     private void updatePlanData()
     {
         itvName.getSecondView().setText(mAdPlanInfo.getName());
@@ -259,12 +243,25 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         {
             itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + mAdPlanInfo.getStartDate());
             itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": " + mAdPlanInfo.getEndDate());
+            showDateSelect(true);
         }
         else
         {
             switchButtonDate.setChecked(false);
+            showDateSelect(false);
         }
 
+        if(mAdPlanInfo.isGroupPlan())
+        {
+            switchButton.setChecked(true);
+            showShops(true);
+            itvShops.getSecondView().setText(mAdPlanInfo.getGroupName());
+        }
+        else
+        {
+            switchButton.setChecked(false);
+            showShops(false);
+        }
         mAdPlanDetailAdapter.notifyDataSetChanged(mAdPlanInfo.getSubPlanList());
     }
 
@@ -390,7 +387,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
                         {
                             if(resultBean.isSuccess())
                             {
-                                finish();
+                                finishAndFeedBack();
                             }
                             showToast(resultBean.getMessage());
                             Log.d("","");
@@ -417,6 +414,17 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         if(src.contains("]"))
             src = src.replace("]","");
         return src;
+    }
+
+    private void finishAndFeedBack()
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("AD_PLAN_INFO", mAdPlanInfo);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+
     }
 
 

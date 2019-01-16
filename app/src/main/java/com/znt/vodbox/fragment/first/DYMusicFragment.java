@@ -89,6 +89,9 @@ public class DYMusicFragment extends Fragment {
     public void getTypes()
     {
 
+        if(Constant.mUserInfo == null)
+            return;
+        //LocalDataEntity.newInstance(getActivity()).getUserInfor();
         String searchWord = "";
         String token = Constant.mUserInfo.getToken();
         String merchId = Constant.mUserInfo.getMerchant().getId();

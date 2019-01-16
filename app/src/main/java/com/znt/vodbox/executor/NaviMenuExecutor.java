@@ -1,21 +1,18 @@
 package com.znt.vodbox.executor;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AboutActivity;
 import com.znt.vodbox.activity.AdListActivity;
 import com.znt.vodbox.activity.AllPlanListActivity;
+import com.znt.vodbox.activity.ExportShopActivity;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MyAlbumActivity;
 import com.znt.vodbox.activity.SystemAlbumActivity;
-import com.znt.vodbox.service.QuitTimer;
 import com.znt.vodbox.storage.preference.Preferences;
-import com.znt.vodbox.utils.ToastUtils;
 
 
 /**
@@ -49,11 +46,11 @@ public class NaviMenuExecutor {
                 //startActivity(SettingActivity.class);
                 startActivity(AdListActivity.class);
                 return true;
-            case R.id.action_night:
+            /*case R.id.action_night:
                 nightMode();
-                break;
-            case R.id.action_timer:
-                timerDialog();
+                break;*/
+            case R.id.action_export:
+                startActivity(ExportShopActivity.class);
                 return true;
             case R.id.action_exit:
                 /*activity.finish();
@@ -77,24 +74,5 @@ public class NaviMenuExecutor {
         activity.recreate();
     }
 
-    private void timerDialog() {
-        new AlertDialog.Builder(activity)
-                .setTitle(R.string.menu_timer)
-                .setItems(activity.getResources().getStringArray(R.array.timer_text), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int which) {
-                        int[] times = activity.getResources().getIntArray(R.array.timer_int);
-                        startTimer(times[which]);
-                    }
-                }).show();
-    }
 
-    private void startTimer(int minute) {
-        QuitTimer.get().start(minute * 60 * 1000);
-        if (minute > 0) {
-            ToastUtils.show(activity.getString(R.string.timer_set, String.valueOf(minute)));
-        } else {
-            ToastUtils.show(R.string.timer_cancel);
-        }
-    }
 }

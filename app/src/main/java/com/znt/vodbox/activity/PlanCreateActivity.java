@@ -153,6 +153,8 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         itvInsertMusic.getFirstView().setTextColor(getResources().getColor(R.color.text_blue_on));
         itvInsertMusic.showMoreButton(true);
         itvInsertMusic.getBgView().setOnClickListener(this);
+        itvInsertMusic.getSecondView().setText("选择要播放的歌单");
+        itvInsertMusic.getMoreView().setImageResource(R.drawable.icon_add_on);
 
         itvWeekSelect = (ItemTextView)headerView.findViewById(R.id.itv_plan_detail_push_week);
         itvWeekSelect.getFirstView().setText(getResources().getString(R.string.week_select));

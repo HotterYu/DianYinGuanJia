@@ -58,7 +58,6 @@
         android:paddingBottom="8dp"
         android:orientation="horizontal"
         style="@style/AppTheme.Text"
-        android:visibility="gone"
         >
         <TextView
             android:id="@+id/sb_plan_detail_push_time"

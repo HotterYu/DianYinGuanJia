@@ -53,13 +53,14 @@
 	        <com.znt.vodbox.view.SwitchButton
 		     	style="@style/SwitchButton"
 		        android:id="@+id/sb_plan_detail"
-		        android:checked="true"
+		        android:checked="false"
 		        app:withTextInterval="12dp"
 		        app:frameDrawable="@drawable/switch_frame"
 		        app:stateDrawable="@drawable/selector_switch_state"
 		        app:stateMaskDrawable="@drawable/switch_state_mask"
 		        app:sliderDrawable="@drawable/selector_switch_slider"
 		        android:layout_width="fill_parent"
+				android:layout_height="32dp"
 		        android:layout_gravity="center_vertical"
 		        android:layout_marginLeft="10dp"
 		        android:layout_marginRight="8dp"
@@ -114,7 +115,7 @@
         <com.znt.vodbox.view.SwitchButton
 	     	style="@style/SwitchButton"
 	        android:id="@+id/sb_plan_detail_date"
-	        android:checked="true"
+	        android:checked="false"
 	        app:withTextInterval="12dp"
 	        app:frameDrawable="@drawable/switch_frame"
 	        app:stateDrawable="@drawable/selector_switch_state"
@@ -170,7 +171,7 @@
 	        android:layout_marginLeft="10dp"
 	        android:textSize="@dimen/title_text_size"
             style="@style/AppTheme.Text"
-	        android:text="计划时间"
+	        android:text="添加播放时段(支持多个)"
 			android:background="@color/white_8p"
 			android:clickable="false"
 			android:focusable="false"
@@ -202,6 +203,7 @@
 			        android:textSize="@dimen/title_text_size"
 			        android:layout_gravity="center_vertical"
 			        android:text="添加"
+				  	android:textColor="@color/text_blue_on"
                   	style="@style/AppTheme.Text"
 			        />
           </LinearLayout>

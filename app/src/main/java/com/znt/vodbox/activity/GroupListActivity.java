@@ -63,9 +63,10 @@ public class GroupListActivity extends BaseActivity implements
         setContentView(R.layout.activity_group_list);
 
         tvTopTitle.setText("我的分区");
-        ivTopMore.setVisibility(View.GONE);
+        ivTopMore.setVisibility(View.VISIBLE);
+        ivTopMore.setImageResource(R.drawable.icon_menu_add);
         ivTopConfirm.setVisibility(View.GONE);
-        ivTopConfirm.setText("选择");
+
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,11 +74,18 @@ public class GroupListActivity extends BaseActivity implements
             }
         });
 
-        ivTopConfirm.setOnClickListener(new View.OnClickListener() {
+        ivTopMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
+                mTextInputBottomDialog.show("请输入分区名称", "", new TextInputBottomDialog.OnDismissResultListener() {
+                    @Override
+                    public void onConfirmDismiss(String content) {
 
+                        addGroup(content);
+                    }
+                });
             }
         });
 

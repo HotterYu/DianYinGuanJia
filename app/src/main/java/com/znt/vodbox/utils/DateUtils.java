@@ -43,14 +43,13 @@ public class DateUtils
 	  * 
 	  * @return杩斿洖鐭椂闂存牸寮� yyyy-MM-dd
 	  */
-	public static Date getNowDateShort() 
+	public static String getNowDateShort()
 	{
 		Date currentTime = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		String dateString = formatter.format(currentTime);
-		ParsePosition pos = new ParsePosition(8);
-		Date currentTime_2 = formatter.parse(dateString, pos);
-		return currentTime_2;
+
+		return dateString;
 	}
 
 	/**
@@ -79,11 +78,6 @@ public class DateUtils
 		return dateString;
 	}
 
-	/**
-	  * 鑾峰彇鏃堕棿 灏忔椂:鍒�;绉� HH:mm:ss
-	  * 
-	  * @return
-	  */
 	public static String getTimeShort()
 	{
 		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");

@@ -151,7 +151,7 @@ public class AdListAdapter extends BaseAdapter {
         if(isSelect)
         {
             holder.ivItemSelect.setVisibility(View.VISIBLE);
-            //holder.ivMore.setVisibility(View.GONE);
+            holder.ivMore.setVisibility(View.GONE);
 
             if(tempInfo.isSelected())
                 holder.ivItemSelect.setImageResource(R.drawable.icon_selected_on);
@@ -160,7 +160,7 @@ public class AdListAdapter extends BaseAdapter {
         }
         else
         {
-            //holder.ivMore.setVisibility(View.VISIBLE);
+            holder.ivMore.setVisibility(View.VISIBLE);
             holder.ivItemSelect.setVisibility(View.GONE);
         }
 

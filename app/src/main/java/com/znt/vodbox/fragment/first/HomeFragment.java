@@ -1,6 +1,7 @@
 package com.znt.vodbox.fragment.first;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,14 +43,14 @@ public class HomeFragment extends Fragment {
         startActivity(new Intent(activity, SearchShopActivity.class));
     }
 
-    public void goAddShopActivity(Context activity)
+    public void goAddShopActivity(Activity activity)
     {
-        ViewUtils.startActivity(getActivity(),AddShopActivity.class,null,1);
+        ViewUtils.startActivity(activity,AddShopActivity.class,null,1);
     }
 
-    public void goPlanActivity(Context activity)
+    public void goPlanActivity(Activity activity)
     {
-        ViewUtils.startActivity(getActivity(),AllPlanListActivity.class,null,1);
+        ViewUtils.startActivity(activity,AllPlanListActivity.class,null,1);
     }
 
 

@@ -26,22 +26,21 @@ import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.executor.ControlPanel;
 import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.executor.UserInfoExecutor;
-import com.znt.vodbox.fragment.ShopFragment;
 import com.znt.vodbox.fragment.OfflineShopFragment;
 import com.znt.vodbox.fragment.OnlineShopFragment;
 import com.znt.vodbox.fragment.PlayFragment;
+import com.znt.vodbox.fragment.ShopFragment;
 import com.znt.vodbox.location.LocationModel;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.permission.PermissionHelper;
 import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.service.AudioPlayer;
 import com.znt.vodbox.service.QuitTimer;
-import com.znt.vodbox.utils.SystemUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 
-public class MusicActivity extends BaseActivity implements View.OnClickListener, QuitTimer.OnTimerListener,
+public class MusicActivity extends BaseActivity implements View.OnClickListener,
         NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener,PermissionInterface {
     @Bind(R.id.drawer_layout)
     private DrawerLayout drawerLayout;
@@ -164,7 +163,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         controlPanel = new ControlPanel(flPlayBar);
         naviMenuExecutor = new NaviMenuExecutor(this);
         AudioPlayer.get().addOnPlayEventListener(controlPanel);
-        QuitTimer.get().setOnTimerListener(this);
+
         parseIntent();
     }
 
@@ -247,14 +246,7 @@ public class MusicActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
-    @Override
-    public void onTimer(long remain) {
-        if (timerItem == null) {
-            timerItem = navigationView.getMenu().findItem(R.id.action_timer);
-        }
-        String title = getString(R.string.menu_timer);
-        timerItem.setTitle(remain == 0 ? title : SystemUtils.formatTime(title + "(mm:ss)", remain));
-    }
+
 
     @Override
     public void onClick(View v) {

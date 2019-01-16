@@ -20,7 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.znt.vodbox.R;
-import com.znt.vodbox.adapter.AdListAdapter;
+import com.znt.vodbox.adapter.AdSelectListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdPlanInfo;
@@ -69,11 +69,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     private String loopAddNum = "1";
     private String cycleType = "0";
     private String pushTime = "";
+    private String playModel = "1";//1间隔时间插播   2定时插播  3间隔时间插播
     private boolean isEdit = false;
 
     private AdPlanInfo mAdPlanInfo = null;
 
-    private AdListAdapter mAdListAdapter = null;
+    private AdSelectListAdapter mAdSelectListAdapter = null;
     private List<AdMediaInfo> selectAdList = new ArrayList<AdMediaInfo>();
 
     /**
@@ -84,7 +85,6 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_ad_plan_create);
 
@@ -118,7 +118,10 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         itvTimeSelect.getFirstView().setText(getResources().getString(R.string.play_time_space));
         itvInsetCount.getFirstView().setText(getResources().getString(R.string.push_mode_set));
         itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad));
+        itvInsertMusic.getSecondView().setText("请选择要插播的文件");
         itvInsertMusic.getFirstView().setTextColor(getResources().getColor(R.color.text_blue_on));
+        itvInsertMusic.getMoreView().setImageResource(R.drawable.icon_add_on);
+
         itvWeekSelect.getFirstView().setText(getResources().getString(R.string.week_select));
         itvWeekSelect.getSecondView().setText(getResources().getString(R.string.week_every));
         itvPushTimeing.getFirstView().setText(getResources().getString(R.string.select_timeing));
@@ -157,11 +160,9 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         listView.setVisibility(View.VISIBLE);
         listView.setOnItemClickListener(this);
 
-        mAdListAdapter = new AdListAdapter(getApplicationContext(),selectAdList);
+        mAdSelectListAdapter = new AdSelectListAdapter(getApplicationContext(),selectAdList);
 
-        mAdListAdapter.setOnMoreClickListener(this);
-
-        listView.setAdapter(mAdListAdapter);
+        listView.setAdapter(mAdSelectListAdapter);
 
         isEdit = getIntent().getBooleanExtra("IS_EDIT", false);
         mAdPlanInfo = (AdPlanInfo)getIntent().getSerializableExtra("AD_PLAN_INFO");
@@ -174,6 +175,17 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else
         {
             showCurPlanInfor();
+        }
+
+        if(mAdPlanInfo != null && mAdPlanInfo.getPlanModel().equals("2"))//定时播放
+        {
+            switchButtonTimeing.setChecked(true);
+            showTimeingPushSet(true);
+        }
+        else
+        {
+            switchButtonTimeing.setChecked(false);
+            showTimeingPushSet(true);
         }
 
         //listView.onFresh();
@@ -205,19 +217,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         if(isShow)
         {
             itvPushTimeing.setVisibility(View.VISIBLE);
-
-            /*itvTimeSelect.setVisibility(View.INVISIBLE);
-            itvInsetCount.setVisibility(View.INVISIBLE);*/
             itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad));
         }
         else
         {
             itvPushTimeing.setVisibility(View.GONE);
-
-            /*itvTimeSelect.setVisibility(View.VISIBLE);
-            itvInsetCount.setVisibility(View.VISIBLE);*/
             itvInsertMusic.getFirstView().setText(getResources().getString(R.string.select_push_ad_timeing));
-
         }
     }
 
@@ -311,12 +316,17 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         }
         else
         {
-            //正常间隔广播
-            tempInfor.setPlayModel("1");
 
+            tempInfor.setPlayModel(playModel);
+
+            if(TextUtils.isEmpty(startTimes) || TextUtils.isEmpty(endTimes))
+            {
+                showToast("请选择起始播放时段");
+                return null;
+            }
             if(startTimes.equals(endTimes))
             {
-                showToast("起始时间不能一样的哦");
+                showToast("播放时段起始时间不能一样的哦");
                 return null;
             }
             if(TextUtils.isEmpty(startTimes))
@@ -375,7 +385,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else if(requestCode == 3)
         {
             selectAdList = (List<AdMediaInfo>) data.getSerializableExtra("AD_SELECTED_LIST");
-            mAdListAdapter.notifyDataSetChanged(selectAdList);
+            mAdSelectListAdapter.notifyDataSetChanged(selectAdList);
         }
     }
 
@@ -397,7 +407,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
                         break;
                     case 1://
                         selectAdList.remove(position);
-                        mAdListAdapter.notifyDataSetChanged(selectAdList);
+                        mAdSelectListAdapter.notifyDataSetChanged(selectAdList);
                         break;
                 }
             }
@@ -519,12 +529,13 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else if(v == itvInsetCount.getBgView())
         {
             AdPushTypeBottomDialog mAdPushTypeBottomDialog = new AdPushTypeBottomDialog(getActivity());
-            String mode = loopAddNum.startsWith("0")?"1":"0";
-            mAdPushTypeBottomDialog.show("广告插播设置", loopAddNum,mode, new AdPushTypeBottomDialog.OnAdPushDismissResultListener() {
+
+            mAdPushTypeBottomDialog.show("广告插播设置", loopAddNum,playModel, new AdPushTypeBottomDialog.OnAdPushDismissResultListener() {
                 @Override
                 public void onConfirmDismiss(String content, String type) {
                     //mode = type;
                     loopAddNum = content;
+                    playModel = type;
                     showCountInternalPush(loopAddNum);
                 }
             });

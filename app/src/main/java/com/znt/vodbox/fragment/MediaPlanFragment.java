@@ -231,6 +231,17 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != getActivity().RESULT_OK)
+            return;
+        if(requestCode == 1)
+        {
+            refreshData();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long

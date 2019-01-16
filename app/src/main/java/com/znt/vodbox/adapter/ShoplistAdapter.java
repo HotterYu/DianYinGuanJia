@@ -123,6 +123,11 @@ public class ShoplistAdapter extends BaseAdapter {
             holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
             holder.tvOnlineTime.setVisibility(View.GONE);
             holder.ivCover.setImageResource(R.drawable.icon_shop_offline);
+            holder.tvStatus.setText(mContext.getResources().getString(R.string.dev_status_offline));
+            holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
+            holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
+            holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_black_on));
+
         }
 
         if(!TextUtils.isEmpty(shopinfo.getAddress()))

@@ -58,9 +58,9 @@ public class AdPushTypeBottomDialog
         rbCount = (RadioButton) view.findViewById(R.id.rb_ad_push_type_count);
         rbTime = (RadioButton) view.findViewById(R.id.rb_ad_push_type_time);
 
-        if(mode.equals("0"))
+        if(mode.equals("1"))
             rbCount.setChecked(true);
-        else
+        else if(mode.equals("3"))
             rbTime.setChecked(true);
 
         rbCount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -83,10 +83,7 @@ public class AdPushTypeBottomDialog
 
         if(oldContent != null)
         {
-            if(oldContent.startsWith("0"))
-                content.setText(oldContent.substring(1));
-            else
-                content.setText(oldContent);
+            content.setText(oldContent);
         }
 
         bottomInterPasswordDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -96,13 +93,9 @@ public class AdPushTypeBottomDialog
                 {
                     if(mOnDismissResultListener != null)
                     {
-                        String type = rbCount.isChecked()?"0":"1";
+                        String type = rbCount.isChecked()?"1":"3";
                         String musicNum = content.getText().toString().trim();
-                        if(musicNum.startsWith("0"))
-                            musicNum = musicNum.substring(1);
 
-                        if(rbTime.isChecked())
-                            musicNum = "0"+musicNum;
                         mOnDismissResultListener.onConfirmDismiss(musicNum,type);
                     }
                 }
@@ -127,13 +120,13 @@ public class AdPushTypeBottomDialog
                     return;
                 }
 
-                String curType = rbCount.isChecked()?"0":"1";
+                /*String curType = rbCount.isChecked()?"1":"3";
 
                 if(oldContent != null && oldContent.equals(newContent) && mode.equals(curType))
                 {
                     Toast.makeText(mContext,"内容无变化",Toast.LENGTH_LONG).show();
                     return;
-                }
+                }*/
 
                 if(Integer.parseInt(newContent) <= 0)
                 {

@@ -100,7 +100,7 @@ public class PlanDetailActivity extends BaseActivity  implements
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishAndFeedBack();
             }
         });
         tvConfirm.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +156,12 @@ public class PlanDetailActivity extends BaseActivity  implements
             String defaultName = DateUtils.getStringTimeChinese(System.currentTimeMillis()) + "计划";
             mPlanInfo.setPlanName(defaultName);
             itvName.getSecondView().setText(mPlanInfo.getPlanName());
+
+            switchButton.setChecked(false);
+            showShops(false);
+            switchButtonDate.setChecked(false);
+            showDateSelect(false);
+
         }
 
         /*listView.onFresh();
@@ -246,14 +252,14 @@ public class PlanDetailActivity extends BaseActivity  implements
         itvName.getSecondView().setText(mPlanInfo.getPlanName());
         if(!TextUtils.isEmpty(mPlanInfo.getStartDate()))
         {
-            /*long startDateLong = Long.parseLong(mPlanInfo.getStartDate());
-            itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_date) + ": " + DateUtils.getStringTimeHead(startDateLong) );*/
             itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + mPlanInfo.getStartDate());
             itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": " + mPlanInfo.getEndDate());
+            showDateSelect(true);
         }
         else
         {
             switchButtonDate.setChecked(false);
+            showDateSelect(false);
         }
         mPlanDetailAdapter.notifyDataSetChanged(mPlanInfo.getSubPlanList());
     }
@@ -323,7 +329,7 @@ public class PlanDetailActivity extends BaseActivity  implements
                         {
                             if(resultBean.isSuccess())
                             {
-                                finish();
+                                finishAndFeedBack();
                             }
                             showToast(resultBean.getMessage());
                             Log.d("","");
@@ -376,7 +382,7 @@ public class PlanDetailActivity extends BaseActivity  implements
                         {
                             if(resultBean.isSuccess())
                             {
-                                finish();
+                                finishAndFeedBack();
                             }
                             showToast(resultBean.getMessage());
                             Log.d("","");
@@ -394,6 +400,17 @@ public class PlanDetailActivity extends BaseActivity  implements
         {
 
         }
+    }
+
+    private void finishAndFeedBack()
+    {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("PLAN_INFO", mPlanInfo);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+
     }
 
     private String removeTags(String src)

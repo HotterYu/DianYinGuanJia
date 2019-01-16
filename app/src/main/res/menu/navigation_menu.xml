@@ -26,14 +26,14 @@
             android:id="@+id/action_sys_albums"
             android:icon="@drawable/ic_menu_sys_albums"
             android:title="@string/menu_sys_albums" />
-        <item
+        <!--<item
             android:id="@+id/action_night"
             android:icon="@drawable/ic_menu_night"
-            android:title="@string/menu_night" />
+            android:title="@string/menu_night" />-->
         <item
-            android:id="@+id/action_timer"
-            android:icon="@drawable/ic_menu_timer"
-            android:title="@string/menu_timer" />
+            android:id="@+id/action_export"
+            android:icon="@drawable/ic_menu_export"
+            android:title="@string/menu_export" />
         <item
             android:id="@+id/action_exit"
             android:icon="@drawable/ic_menu_exit"

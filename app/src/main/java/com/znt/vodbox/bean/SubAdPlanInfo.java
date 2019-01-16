@@ -31,7 +31,7 @@ public class SubAdPlanInfo implements Serializable {
 
     public boolean isTimePushModel()
     {
-        return !TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) &&  startTime.equals(endTime);
+        return !TextUtils.isEmpty(startTime) && !TextUtils.isEmpty(endTime) &&  startTime.equals(endTime) && playModel.equals("2");
     }
 
     public String getId() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -11,14 +11,17 @@
         android:id="@+id/iv_my_groups_cover"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="6dp"
         android:scaleType="fitXY"
         android:src="@drawable/icon_group_default" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp">
+        android:layout_toRightOf="@+id/iv_my_groups_cover"
+        android:layout_alignTop="@+id/iv_my_groups_cover"
+        android:layout_marginLeft="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +29,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="6dp"
-            android:paddingTop="6dp"
+            android:paddingTop="2dp"
             >
 
             <LinearLayout
@@ -85,4 +88,4 @@
             android:layout_gravity="bottom"
             android:background="?android:attr/listDivider" />
     </FrameLayout>
-</LinearLayout>
+</RelativeLayout>

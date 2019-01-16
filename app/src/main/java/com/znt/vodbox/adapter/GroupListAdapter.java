@@ -1,5 +1,6 @@
 package com.znt.vodbox.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,12 @@ public class GroupListAdapter extends BaseAdapter {
         GroupInfo tempInfo = dataList.get(position);
         //holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvAlbumName.setText(tempInfo.getGroupName());
-        holder.tvAdminName.setText("管理员名称：" + tempInfo.getAdminName());
+
+        if(!TextUtils.isEmpty(tempInfo.getAdminName()))
+            holder.tvAdminName.setText("管理员名称：" + tempInfo.getAdminName());
+        else
+            holder.tvAdminName.setText("管理员名称：未知");
+
         holder.tvShopCount.setText("应用店铺数："+tempInfo.getStoreNumber());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override

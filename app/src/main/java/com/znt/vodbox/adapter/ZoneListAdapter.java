@@ -1,5 +1,6 @@
 package com.znt.vodbox.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,11 @@ public class ZoneListAdapter extends BaseAdapter {
         ZoneInfo tempInfo = dataList.get(position);
         holder.ivCover.setImageResource(R.drawable.default_cover);
         holder.tvName.setText(tempInfo.getGroupName());
-        holder.tvAccount.setText(tempInfo.getAdminId());
+        if(!TextUtils.isEmpty(tempInfo.getAdminId()))
+            holder.tvAccount.setText(tempInfo.getAdminId());
+        else
+            holder.tvAccount.setText("无");
+
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

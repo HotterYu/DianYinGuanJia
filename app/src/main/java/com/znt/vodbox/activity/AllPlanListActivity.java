@@ -88,23 +88,6 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK)
-            return;
-        if(requestCode == 1)
-        {
-            mMediaPlanFragment.refreshData();
-        }
-        else if(requestCode == 2)
-        {
-            mAdPlanFragment.refreshData();
-        }
-
-    }
-
-    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
@@ -118,9 +101,7 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
         else if (position == 1){
             tvMediaPlan.setSelected(false);
             tvAdPlan.setSelected(true);
-
         }
-
     }
 
     @Override

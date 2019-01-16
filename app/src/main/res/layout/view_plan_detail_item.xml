@@ -96,8 +96,8 @@
 			>
 			<ImageView
 				android:id="@+id/iv_plan_item_delete"
-				android:layout_width="26dp"
-				android:layout_height="26dp"
+				android:layout_width="22dp"
+				android:layout_height="22dp"
 				android:layout_alignParentRight="true"
 				android:layout_centerInParent="true"
 				android:src="@drawable/icon_song_item_delete"

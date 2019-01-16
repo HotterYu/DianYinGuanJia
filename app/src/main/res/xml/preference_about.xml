@@ -5,9 +5,9 @@
             android:key="version"
             android:summary="v 1.0"
             android:title="当前版本" />
-        <Preference
+        <!--<Preference
             android:key="share"
-            android:title="@string/menu_share" />
+            android:title="@string/menu_share" />-->
         <Preference
             android:key="star"
             android:summary="在线申请免费试用系统"
@@ -27,12 +27,12 @@
             android:summary="@string/about_github"
             android:title="PC播放器下载" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="版权">
+    <!--<PreferenceCategory android:title="版权">
         <Preference
             android:summary="百度音乐"
             android:title="在线音乐" />
         <Preference
             android:summary="高德地图"
             android:title="天气数据" />
-    </PreferenceCategory>
+    </PreferenceCategory>-->
 </PreferenceScreen>

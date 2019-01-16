@@ -19,12 +19,12 @@
             android:layout_marginLeft="2dp"
             android:scaleType="fitXY"
             android:layout_gravity="start"
-            android:src="@drawable/default_cover" />
+            android:src="@drawable/icon_plan_type_off" />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,8 +36,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingTop="6dp"
-                    android:paddingBottom="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -48,7 +48,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:textColor="@color/main_bg"
-                        android:textSize="@dimen/text_size_common" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/tv_plan_for_shop"

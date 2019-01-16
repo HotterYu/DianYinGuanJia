@@ -1,5 +1,7 @@
 package com.znt.vodbox.activity;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,8 @@ import com.znt.vodbox.executor.NaviMenuExecutor;
 import com.znt.vodbox.fragment.SheetListFragment;
 import com.znt.vodbox.fragment.first.DYMusicFragment;
 import com.znt.vodbox.fragment.first.HomeFragment;
+import com.znt.vodbox.permission.PermissionHelper;
+import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.view.SlideViewPager;
@@ -46,7 +51,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationBar.OnTabSelectedListener
+        , View.OnClickListener,PermissionInterface {
 
     private Toolbar mtoolbar;
     private HomeFragment homeFragment;
@@ -65,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private BottomSheetDialog dialog;
     private SharedPreferences.Editor editor;
 
+    private PermissionHelper mPermissionHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
         //初始化
         initView();
+
+        mPermissionHelper = new PermissionHelper(MainActivity.this, this);
+        mPermissionHelper.requestPermissions();
+
     }
 
     //获取用户信息并且判断是否登录
@@ -242,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             public boolean onMenuItemClick(MenuItem menuItem) {
                 if(bottomNavigationBar.getCurrentSelectedPosition() == 0)
                 {
-                    homeFragment.goAddShopActivity(getApplicationContext());
+                    homeFragment.goAddShopActivity(MainActivity.this);
                 }
 
                 return false;
@@ -252,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
         planItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                homeFragment.goPlanActivity(getApplicationContext());
+                homeFragment.goPlanActivity(MainActivity.this);
                 return false;
             }
         });
@@ -391,5 +403,77 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
     private void closeApp()
     {
         ActivityManager.getInstance().exitApp();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(mPermissionHelper.requestPermissionsResult(requestCode, permissions, grantResults)){
+            //权限请求结果，并已经处理了该回调
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public int getPermissionsRequestCode() {
+        return 10000;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+
+        };
+    }
+    @Override
+    public void requestPermissionsSuccess()
+    {
+        //权限请求用户已经全部允许
+
+    }
+
+    @Override
+    public void requestPermissionsFail() {
+        //权限请求不被用户允许。可以提示并退出或者提示权限的用途并重新发起权限申请。
+        showPermissions();
+        //mPermissionHelper.requestPermissions();
+        //close();
+    }
+
+    private void showPermissions(){
+        final Dialog dialog=new android.app.AlertDialog.Builder(this).create();
+        View v=LayoutInflater.from(this).inflate(R.layout.dialog_permissions,null);
+        dialog.show();
+        dialog.setContentView(v);
+
+        Button btn_add= (Button) v.findViewById(R.id.btn_add);
+        Button btn_diss= (Button) v.findViewById(R.id.btn_diss);
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPermissionHelper.toPermissionSetting(MainActivity.this);
+                dialog.dismiss();
+                close();
+            }
+        });
+
+        btn_diss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                close();
+            }
+        });
+    }
+
+    private void close()
+    {
+        System.exit(0);
     }
 }

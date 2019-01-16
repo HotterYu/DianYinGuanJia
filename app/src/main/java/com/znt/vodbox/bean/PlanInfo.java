@@ -42,6 +42,48 @@ public class PlanInfo implements Serializable, Cloneable
         return super.clone();
     }
 
+    public boolean isValidNow()
+    {
+        if(!TextUtils.isEmpty(startDate) && !TextUtils.isEmpty(endDate))
+        {
+            String sD = startDate.replace("-","");
+            String sE = endDate.replace("-","");
+            String sC = DateUtils.getNowDateShort().replace("-","");
+            long lS = Long.parseLong(sD);
+            long lE = Long.parseLong(sE);
+            long lC = Long.parseLong(sC);
+
+            if(lE > lS)
+            {
+                if (lC >= lS && lC <= lE)
+                    return false;
+            }
+            else if(lE < lS)
+            {
+                if (lC >= lE && lC <= lS)
+                    return false;
+            }
+        }
+
+        if(startTimes.size() == 0 || endTimes.size() == 0)
+            return false;
+
+        boolean isValid = false;
+        int curTime = DateUtils.timeToInt(DateUtils.getTimeShortHead(), ":");
+        for(int i=0;i<startTimes.size();i++)
+        {
+            int tempS = DateUtils.timeToInt(startTimes.get(i), ":");
+            int tempE = DateUtils.timeToInt(endTimes.get(i), ":");
+            if(isTimeOverlap(tempS, tempE, curTime))
+            {
+                isValid = true;
+                break;
+            }
+        }
+
+        return isValid;
+    }
+
     public String getAddTime() {
         return addTime;
     }

@@ -91,6 +91,11 @@ dependencies {
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.4.3'
     implementation 'com.tamic.novate:novate:1.5.0'
 
+    implementation files('libs/jxl.jar')
+    implementation files('libs/mail.jar')
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
+
     implementation 'com.qihoo360.replugin:replugin-host-lib:2.2.4'
 
 
