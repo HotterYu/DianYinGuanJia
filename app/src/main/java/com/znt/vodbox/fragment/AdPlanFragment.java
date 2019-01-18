@@ -1,17 +1,17 @@
 package com.znt.vodbox.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AdPlanDetailActivity;
 import com.znt.vodbox.adapter.AdPlanLoadMoreAdapter;
@@ -240,11 +240,16 @@ public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener
     @Override
     public void onMoreClick(int position) {
         final AdPlanInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.plan_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        showPlanOperationDialog(tempInfo);
+    }
+
+    private AlertView tempAlertView = null;
+    private void showPlanOperationDialog(final AdPlanInfo tempInfo)
+    {
+        tempAlertView = new AlertView(tempInfo.getName(),null, "取消", null,
+                getResources().getStringArray(R.array.plan_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         Intent intent = new Intent(getActivity(), AdPlanDetailActivity.class);
@@ -266,12 +271,19 @@ public class AdPlanFragment extends BaseFragment implements  OnMoreClickListener
                         }
                         break;
                     case 2://
-                        deleteAdPlan(tempInfo);
+
+                        tempAlertView.dismissImmediately();
+                        new AlertView("提示", "确定删除该计划吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if(position == 0)
+                                    deleteAdPlan(tempInfo);
+                            }
+                        }).setCancelable(true).show();
                         break;
                 }
             }
-        });
-
-        dialog.show();
+        });tempAlertView.show();
     }
+
 }

@@ -1,10 +1,8 @@
 package com.znt.vodbox.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
@@ -12,12 +10,15 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.MyAlbumlistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
+import com.znt.vodbox.bean.TypeInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -34,6 +35,10 @@ public class SearchSysAlbumActivity extends BaseActivity implements
         LJListView.IXListViewListener, AdapterView.OnItemClickListener,OnMoreClickListener
 {
 
+    @Bind(R.id.view_common_title)
+    private View viewTopTitle = null;
+    @Bind(R.id.tv_common_title_sub)
+    private TextView tvTopTitleSub = null;
     @Bind(R.id.tv_common_title)
     private TextView tvTopTitle = null;
     @Bind(R.id.iv_common_back)
@@ -53,6 +58,11 @@ public class SearchSysAlbumActivity extends BaseActivity implements
 
     private MyAlbumlistAdapter mMyAlbumlistAdapter = null;
 
+    private int pageNo = 1;
+    private int pageSize = 25;
+    private int maxSize = 0;
+
+    private String typeId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,6 +73,8 @@ public class SearchSysAlbumActivity extends BaseActivity implements
         tvTopTitle.setText(getResources().getString(R.string.sys_album_search));
         ivTopMore.setVisibility(View.GONE);
         tvTopConfirm.setVisibility(View.GONE);
+        tvTopTitleSub.setVisibility(View.VISIBLE);
+        tvTopTitleSub.setText("全部");
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,13 +92,10 @@ public class SearchSysAlbumActivity extends BaseActivity implements
             }
         });
 
-        tvTopTitle.setOnClickListener(new View.OnClickListener() {
+        viewTopTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), TypeActivity.class);
-                Bundle b = new Bundle();
-                b.putString("TYPE","0");
-                intent.putExtras(b);
+                Intent intent = new Intent(getActivity(), MediaCategoryActivity.class);
                 startActivityForResult(intent,2);
             }
         });
@@ -145,24 +154,34 @@ public class SearchSysAlbumActivity extends BaseActivity implements
             return;
         }
         String token = Constant.mUserInfo.getToken();
-        String pageNo = "1";
-        String pageSize = "20";
+
         String merchId = Constant.mUserInfo.getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
-        String typeId = "";
 
         try
         {
             // Simulate network access.
-            HttpClient.getSystemAlbums(token, pageNo, pageSize,typeId,name, new HttpCallback<AlbumListResultBean>() {
+            HttpClient.getSystemAlbums(token, pageNo+"", pageSize+"",typeId,name, new HttpCallback<AlbumListResultBean>() {
                 @Override
                 public void onSuccess(AlbumListResultBean resultBean) {
 
                     if(resultBean != null)
                     {
-                        albumInfos = resultBean.getData();
+                        if(pageNo == 1)
+                            albumInfos.clear();
+                        List<AlbumInfo> tempList = resultBean.getData();
+
+                        if(tempList.size() == pageSize)
+                            pageNo ++;
+
+                        albumInfos.addAll(tempList);
+
                         mMyAlbumlistAdapter.notifyDataSetChanged(albumInfos);
-                        tvTopTitle.setText(getResources().getString(R.string.sys_album) + "("+resultBean.getMessage() + ")");
+
+                        if(!TextUtils.isEmpty(resultBean.getMessage()))
+                            maxSize = Integer.parseInt(resultBean.getMessage());
+
+                        tvTopTitle.setText(getResources().getString(R.string.sys_album) + "("+ maxSize + ")");
                     }
                     else
                     {
@@ -182,7 +201,6 @@ public class SearchSysAlbumActivity extends BaseActivity implements
         {
 
         }
-
     }
 
     @Override
@@ -190,7 +208,7 @@ public class SearchSysAlbumActivity extends BaseActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode != RESULT_OK)
             return;
-        /*if(requestCode == 1)
+        if(requestCode == 1)
         {
             listView.onFresh();
         }
@@ -199,18 +217,27 @@ public class SearchSysAlbumActivity extends BaseActivity implements
 
             TypeInfo tempInfor = (TypeInfo)data.getSerializableExtra("TYPE_INFO");
 
-            loadMyAlbums(tempInfor.getId());
-        }*/
+            tvTopTitleSub.setText(tempInfor.getName());
+            typeId = tempInfor.getId();
+            if(typeId == null)
+                typeId = "";
+            pageNo = 1;
+            loadMyAlbums();
+        }
     }
 
     @Override
     public void onRefresh() {
+        pageNo = 1;
         loadMyAlbums();
     }
 
     @Override
     public void onLoadMore() {
-        loadMyAlbums();
+        if(maxSize > albumInfos.size())
+            loadMyAlbums();
+        else
+            showToast("没有更多数据了");
     }
 
     @Override
@@ -232,11 +259,15 @@ public class SearchSysAlbumActivity extends BaseActivity implements
     @Override
     public void onMoreClick(int position) {
         final AlbumInfo tempInfo = albumInfos.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.sys_album_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        showMusicOperationDialog(tempInfo);
+    }
+
+    private void showMusicOperationDialog(final AlbumInfo tempInfo)
+    {
+        new AlertView(tempInfo.getName(),null, "取消", null,
+                getResources().getStringArray(R.array.sys_album_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         collectAlbum(tempInfo.getId());
@@ -251,8 +282,7 @@ public class SearchSysAlbumActivity extends BaseActivity implements
                         break;
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     public void collectAlbum(String albumId)

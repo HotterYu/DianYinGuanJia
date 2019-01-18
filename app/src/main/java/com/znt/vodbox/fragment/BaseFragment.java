@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -129,7 +130,7 @@ public abstract class BaseFragment extends Fragment {
      *                  false 可见  -> 不可见
      */
     protected void onFragmentVisibleChange(boolean isVisible) {
-
+        Log.d("","");
     }
 
     /**
@@ -140,7 +141,7 @@ public abstract class BaseFragment extends Fragment {
      * 最后在 onFragmentVisibleChange() 里根据数据下载状态来控制下载进度ui控件的显示与隐藏
      */
     protected void onFragmentFirstVisible() {
-
+        Log.d("","");
     }
 
     protected boolean isFragmentVisible() {

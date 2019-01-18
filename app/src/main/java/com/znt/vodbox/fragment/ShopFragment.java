@@ -1,6 +1,5 @@
 package com.znt.vodbox.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,13 +7,14 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.GroupListActivity;
 import com.znt.vodbox.activity.MusicActivity;
@@ -282,14 +282,23 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     }
     @Override
     public void onMoreClick(final int position) {
-        final Shopinfo tempShop = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-        dialog.setTitle(tempShop.getName());
+        Shopinfo tempShop = dataList.get(position);
+        showShopOperationDialog(tempShop);
+    }
 
-        dialog.setItems(R.array.shop_list_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
-                switch (which) {
+    private void showShopOperationDialog(final Shopinfo tempShop)
+    {
+        if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
+        {
+            showToast("该店铺下没有安装设备");
+            return;
+        }
+
+        new AlertView(tempShop.getName(),tempShop.getAddress(), "取消", null,
+                new String[]{"添加到分区", "插播歌曲"},
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int position){
+                switch (position) {
                     case 0://
                         Bundle bundle = new Bundle();
                         bundle.putBoolean("IS_EDIT", true);
@@ -303,17 +312,10 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
                         bundle2.putSerializable("SHOP_INFO",tempShop);
                         ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
                         break;
-                    case 2://
-                        Bundle bundle1 = new Bundle();
-                        bundle1.putSerializable("SHOP_INFO",tempShop);
-                        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
-                        break;
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

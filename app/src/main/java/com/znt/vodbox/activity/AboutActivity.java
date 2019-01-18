@@ -1,14 +1,14 @@
 package com.znt.vodbox.activity;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.znt.vodbox.BuildConfig;
 import com.znt.vodbox.R;
+import com.znt.vodbox.config.Config;
 import com.znt.vodbox.constants.HttpApi;
+import com.znt.vodbox.utils.ViewUtils;
 
 
 public class AboutActivity extends BaseActivity {
@@ -23,7 +23,6 @@ public class AboutActivity extends BaseActivity {
 
     public static class AboutFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
         private Preference mVersion;
-        private Preference mShare;
         private Preference mStar;
         private Preference mWeibo;
         private Preference mJianshu;
@@ -35,7 +34,6 @@ public class AboutActivity extends BaseActivity {
             addPreferencesFromResource(R.xml.preference_about);
 
             mVersion = findPreference("version");
-            mShare = findPreference("share");
             mStar = findPreference("star");
             mWeibo = findPreference("weibo");
             mJianshu = findPreference("jianshu");
@@ -49,7 +47,6 @@ public class AboutActivity extends BaseActivity {
         }
 
         private void setListener() {
-            mShare.setOnPreferenceClickListener(this);
             mStar.setOnPreferenceClickListener(this);
             mWeibo.setOnPreferenceClickListener(this);
             mJianshu.setOnPreferenceClickListener(this);
@@ -58,30 +55,22 @@ public class AboutActivity extends BaseActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            if (preference == mShare) {
-                share();
-                return true;
-            } else if (preference == mStar) {
-                openUrl(getString(R.string.about_project_url));
+            if (preference == mStar) {
+                openUrl("申请试用",getString(R.string.about_project_url));
                 return true;
             } else if (preference == mWeibo || preference == mJianshu || preference == mGithub) {
-                openUrl(preference.getSummary().toString());
+                openUrl("店音-StoreSound",preference.getSummary().toString());
                 return true;
             }
             return false;
         }
 
-        private void share() {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app, getString(R.string.app_name)));
-            startActivity(Intent.createChooser(intent, getString(R.string.share)));
-        }
+        private void openUrl(String title,String url) {
 
-        private void openUrl(String url) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
+            Bundle b = new Bundle();
+            b.putString(Config.Key.ACTIVITY_TITLE,title);
+            b.putString(Config.Key.ACTIVITY_WEB_URL,url);
+            ViewUtils.startActivity(getActivity(), WebViewActivity.class,b);
         }
     }
 }

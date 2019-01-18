@@ -14,6 +14,12 @@
         <item>删除</item>
     </string-array>
 
+    <string-array name="sys_album_music_dialog">
+        <item>添加到歌单</item>
+        <item>插播歌曲</item>
+        <item>复制链接</item>
+    </string-array>
+
     <string-array name="online_music_dialog">
         <item>插播歌曲</item>
         <item>复制链接</item>
@@ -27,7 +33,6 @@
 
     <string-array name="group_list_dialog">
         <item>修改名称</item>
-        <item>查看计划</item>
         <item>删除</item>
     </string-array>
 

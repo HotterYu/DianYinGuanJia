@@ -118,6 +118,10 @@ public class LocalDataEntity
 	{
 		sharedPre.setData(USER_NAME, name);
 	}
+	public void setUserPwd(String pwd)
+	{
+		sharedPre.setData(USER_PWD, pwd);
+	}
 	public String getUserName()
 	{
 		return sharedPre.getData(USER_NAME, "DG-" + Build.MODEL);

@@ -2,10 +2,8 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
@@ -13,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
@@ -172,7 +172,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                                 if(pageNo == 1)
                                     dataList.clear();
 
-                                if(tempList.size() <= pageSize)
+                                if(tempList.size() == pageSize)
                                     pageNo ++;
 
                                 dataList.addAll(tempList);
@@ -323,12 +323,55 @@ public class AlbumMusicActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        final MediaInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.album_music_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        MediaInfo tempInfo = dataList.get(position);
+        if(isSystemAlbum)
+            showSysMusicOperationDialog(tempInfo);
+        else
+            showMusicOperationDialog(tempInfo);
+    }
+
+    private void showSysMusicOperationDialog(final MediaInfo tempInfo)
+    {
+        new AlertView(tempInfo.getMusicName(),null, "取消", null,
+                getResources().getStringArray(R.array.sys_album_music_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
+                switch (which) {
+                    case 0://
+                        Intent i = new Intent(getActivity(), MyAlbumActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("MUSIC_IDS",tempInfo.getId());
+                        i.putExtras(bundle);
+                        startActivity(i);
+                        break;
+                    case 1://
+                        Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString("MEDIA_NAME",tempInfo.getMusicName());
+                        b.putString("MEDIA_ID",tempInfo.getId());
+                        b.putString("MEDIA_URL",tempInfo.getMusicUrl());
+                        intent.putExtras(b);
+                        startActivity(intent);
+                        //requestSetRingtone(music);
+                        break;
+                    case 2://
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        // 将文本内容放到系统剪贴板里。
+                        cm.setText(tempInfo.getMusicName() + "\n" + URLDecoder.decode(tempInfo.getMusicUrl()));
+                        showToast("复制成功");
+                        break;
+                }
+            }
+        }).show();
+    }
+
+    private AlertView mAlertView = null;
+    private void showMusicOperationDialog(final MediaInfo tempInfo)
+    {
+        mAlertView = new AlertView(tempInfo.getMusicName(),null, "取消", null,
+                getResources().getStringArray(R.array.album_music_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         Intent i = new Intent(getActivity(), MyAlbumActivity.class);
@@ -354,22 +397,18 @@ public class AlbumMusicActivity extends BaseActivity implements
                         showToast("复制成功");
                         break;
                     case 3://
-                        showAlertDialog(getActivity(), new View.OnClickListener()
-                        {
+                        mAlertView.dismissImmediately();
+                        new AlertView("提示", "确定删除该文件吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
                             @Override
-                            public void onClick(View view)
-                            {
-                                deleteAlbumMusic(tempInfo.getId());
+                            public void onItemClick(Object o, int position) {
+                                if(position == 0)
+                                    deleteAlbumMusic(tempInfo.getId());
                             }
-                        }, "", "确定删除该文件吗?");
+                        }).setCancelable(true).show();
                         break;
                 }
             }
-        });
-        dialog.show();
-
-
-
+        });mAlertView.show();
     }
 
     @Override

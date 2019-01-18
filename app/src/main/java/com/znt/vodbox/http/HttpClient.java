@@ -500,19 +500,38 @@ public class HttpClient extends HttpApi{
                 });
     }
 
-    public static void getAlbumTypes(String token, String searchWord,String type
+    public static void getAlbumTypes(String token, String searchWord
             ,@NonNull final HttpCallback<TypeCallBackBean> callback) {
 
-        String url = "";
+        OkHttpUtils.post().url(GET_ALBUM_TYPES)
+                .addHeader("token", token)
+                .addParams("searchWord", searchWord)
+                .build()
+                .execute(new BaseHttpCallback<TypeCallBackBean>(TypeCallBackBean.class) {
+                    @Override
+                    public void onResponse(TypeCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
 
-        if(type.equals("0"))//歌单分类
-        {
-            url = GET_ALBUM_TYPES;
-        }
-        else
-            url = GET_AD_TYPES;
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
 
-        OkHttpUtils.post().url(url)
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getAdTypes(String token, String searchWord
+            ,@NonNull final HttpCallback<TypeCallBackBean> callback) {
+
+        OkHttpUtils.post().url(GET_AD_TYPES)
                 .addHeader("token", token)
                 .addParams("searchWord", searchWord)
                 .build()
@@ -620,6 +639,33 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void getCurPlayMusics(String token, String terminalId
+            ,@NonNull final HttpCallback<MusicListResultBean> callback) {
+        OkHttpUtils.post().url(GET_CUR_PLAY_MUSICS)
+                .addHeader("token", token)
+                .addParams("terminalId", terminalId)
+                .build()
+                .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
+                    @Override
+                    public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getAdLists(String token, String pageNo, String pageSize,String merchId, String adtypeId, String adname
             ,@NonNull final HttpCallback<AdMediaListResultBean> callback) {
         OkHttpUtils.post().url(GET_AD_LISTS)
@@ -633,6 +679,61 @@ public class HttpClient extends HttpApi{
                 .execute(new BaseHttpCallback<AdMediaListResultBean>(AdMediaListResultBean.class) {
                     @Override
                     public void onResponse(AdMediaListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void updateAdInfo(String token, String id, String adname,String adtypeId, String adduration,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(UPDATE_AD_INFO)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("adname", adname)
+                .addParams("adtypeId", adtypeId)
+                .addParams("adduration", adduration)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void deleteAd(String token, String id,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(DELETE_AD)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else
@@ -1263,15 +1364,19 @@ public class HttpClient extends HttpApi{
                 });
     }
 
-    /*public static void getLrc(String songId, @NonNull final HttpCallback<Lrc> callback) {
-        OkHttpUtils.get().url(BASE_URL)
-                .addParams(PARAM_METHOD, METHOD_LRC)
-                .addParams(PARAM_SONG_ID, songId)
+    public static void updateUserInfo(String token, String id, String nickName,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(UPDATE_USER_INFO)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("nickName", nickName)
                 .build()
-                .execute(new JsonCallback<Lrc>(Lrc.class) {
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override
-                    public void onResponse(Lrc response, int id) {
-                        callback.onSuccess(response);
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
                     }
 
                     @Override
@@ -1284,7 +1389,34 @@ public class HttpClient extends HttpApi{
                         callback.onFinish();
                     }
                 });
-    }*/
+    }
+
+    public static void updateUserPwd(String token, String oldpassword, String password,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(UPDATE_USER_PWD)
+                .addHeader("token", token)
+                .addParams("oldpassword", oldpassword)
+                .addParams("password", password)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
 
     public static void searchMusic(String keyword, @NonNull final HttpCallback<SearchMusic> callback) {
         OkHttpUtils.get().url(BASE_URL)

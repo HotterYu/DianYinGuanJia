@@ -1,24 +1,35 @@
 package com.znt.vodbox.activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
+import com.znt.vodbox.bean.CommonCallBackBean;
+import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
+import com.znt.vodbox.http.HttpCallback;
+import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.ViewUtils;
@@ -76,9 +87,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		tvConfirm.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				showChangeAccountDialog();
-				//ViewUtils.startActivity(getActivity(),LoginRecordActivity.class,null,1);
-
+				ViewUtils.startActivity(getActivity(),UserRecordActivity.class,null,1);
 			}
 		});
 
@@ -95,7 +104,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 			UserInfo infor = getLocalData().getUserInfor();
 			itvUser.getSecondView().setText(infor.getUsername());
 			itvName.getSecondView().setText(infor.getNickName());
-			//itvPwd.getSecondView().setText(infor.getMerchant().get);
+			itvPwd.getSecondView().setText("******");
 			
 			if(getLocalData().getLoginType().equals("0"))
 			{
@@ -109,28 +118,6 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 			}
 		}
 	}
-
-	private void showChangeAccountDialog()
-	{
-		AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-		dialog.setTitle("切换账户");
-
-		dialog.setItems(R.array.change_account, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog1, int which) {
-				switch (which) {
-					case 0://
-						ViewUtils.startActivity(getActivity(),UserListActivity.class,null,1);
-						break;
-					case 1://
-						ViewUtils.startActivity(getActivity(),UserRecordActivity.class,null,1);
-						break;
-				}
-			}
-		});
-		dialog.show();
-	}
-	
 	/**
 	*callbacks
 	*/
@@ -281,20 +268,19 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 	public void onClick(View v)
 	{
 		// TODO Auto-generated method stub
-		if(v == tvLogout)//ע��
+		if(v == tvLogout)//
 		{
 			//logout();
 			logOutProcess();
-			
-			//PushManager.getInstance().turnOffPush(getActivity());
-		}
-		else if(v == itvName.getBgView())//�༭�ǳ�
-		{
 
 		}
-		else if(v == itvPwd.getBgView())//�༭����
+		else if(v == itvName.getBgView())
 		{
-
+			showNameEditDialog();
+		}
+		else if(v == itvPwd.getBgView())
+		{
+			showPwdEditDialog();
 		}
 		else if(v == accountLogin)
 		{
@@ -309,5 +295,163 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		}
 	}
 	
+	private void showNameEditDialog()
+	{
+
+		ViewGroup extView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.alertext_form,null);
+
+		final String oldName = LocalDataEntity.newInstance(getApplicationContext()).getUserName();
+
+		final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		final EditText etName = (EditText) extView.findViewById(R.id.et_alert_input);
+
+		final AlertView mAlertViewExt = new AlertView("修改昵称", "请输入新的昵称！", "取消", null, new String[]{"完成"}, AccountActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+			@Override
+			public void onItemClick(Object o, int position) {
+
+				if(position == 0)
+				{
+					String newName = etName.getText().toString();
+					if(TextUtils.isEmpty(newName))
+					{
+						Toast.makeText(getApplicationContext(),"请输入昵称",Toast.LENGTH_SHORT).show();
+						return;
+					}
+					if(newName.equals(oldName))
+					{
+						Toast.makeText(getApplicationContext(),"信息未更改",Toast.LENGTH_SHORT).show();
+						return;
+					}
+					updateUserInfo(newName);
+				}
+			}
+		});
+		etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View view, boolean focus) {
+				//输入框出来则往上移动
+				boolean isOpen= imm.isActive();
+				mAlertViewExt.setMarginBottom(isOpen&&focus ? 120 :0);
+			}
+		});
+		etName.setHint("请输入昵称");
+		etName.setText(oldName);
+		mAlertViewExt.addExtView(extView);
+		mAlertViewExt.show();
+	}
+
+	private void updateUserInfo(final String name)
+	{
+		String token = Constant.mUserInfo.getToken();
+		String merchId = Constant.mUserInfo.getMerchant().getId();
+		String adminId = Constant.mUserInfo.getId();
+		HttpClient.updateUserInfo(token, merchId, name, new HttpCallback<CommonCallBackBean>() {
+			@Override
+			public void onSuccess(CommonCallBackBean commonCallBackBean) {
+				if(commonCallBackBean.isSuccess())
+				{
+					LocalDataEntity.newInstance(getActivity()).setUserName(name);
+					itvName.getSecondView().setText(name);
+					showToast("名称修改成功");
+				}
+				else
+					showToast("修改失败："+commonCallBackBean.getMessage());
+			}
+
+			@Override
+			public void onFail(Exception e) {
+				showToast("修改失败");
+			}
+		});
+
+	}
+
+
+	private void showPwdEditDialog()
+	{
+
+		ViewGroup extView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.alertext_form_pwd,null);
+
+		final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+		final EditText etOldPwd = (EditText) extView.findViewById(R.id.et_alert_input1);
+		final EditText etNew = (EditText) extView.findViewById(R.id.et_alert_input2);
+
+		final AlertView mAlertViewExt = new AlertView("修改密码", "请输入要修改的密码！", "取消", null, new String[]{"完成"}, AccountActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+			@Override
+			public void onItemClick(Object o, int position) {
+
+				if(position == 0)
+				{
+					String oldPwd = etOldPwd.getText().toString();
+					String newPwd = etNew.getText().toString();
+					if(TextUtils.isEmpty(oldPwd))
+					{
+						Toast.makeText(getApplicationContext(),"请输入旧密码",Toast.LENGTH_SHORT).show();
+						return;
+					}
+					if(TextUtils.isEmpty(newPwd))
+					{
+						Toast.makeText(getApplicationContext(),"请输入新密码",Toast.LENGTH_SHORT).show();
+						return;
+					}
+					if(newPwd.equals(etOldPwd))
+					{
+						Toast.makeText(getApplicationContext(),"密码无变化",Toast.LENGTH_SHORT).show();
+						return;
+					}
+					updatePwd(oldPwd,newPwd);
+				}
+			}
+		});
+		etOldPwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View view, boolean focus) {
+				//输入框出来则往上移动
+				boolean isOpen= imm.isActive();
+				mAlertViewExt.setMarginBottom(isOpen&&focus ? 120 :0);
+			}
+		});
+		etOldPwd.setHint("请输入旧密码");
+
+		etNew.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View view, boolean focus) {
+				//输入框出来则往上移动
+				boolean isOpen= imm.isActive();
+				mAlertViewExt.setMarginBottom(isOpen&&focus ? 120 :0);
+			}
+		});
+		etNew.setHint("请输入新密码");
+
+		mAlertViewExt.addExtView(extView);
+		mAlertViewExt.show();
+	}
+
+	private void updatePwd(final String oldPwd, final String newPwd)
+	{
+		String token = Constant.mUserInfo.getToken();
+		/*String merchId = Constant.mUserInfo.getMerchant().getId();
+		String adminId = Constant.mUserInfo.getId();*/
+		HttpClient.updateUserPwd(token, oldPwd, newPwd, new HttpCallback<CommonCallBackBean>() {
+			@Override
+			public void onSuccess(CommonCallBackBean commonCallBackBean) {
+				if(commonCallBackBean.isSuccess())
+				{
+					LocalDataEntity.newInstance(getActivity()).setUserPwd(newPwd);
+					showToast("密码修改成功");
+				}
+				else
+					showToast("修改失败："+commonCallBackBean.getMessage());
+			}
+
+			@Override
+			public void onFail(Exception e) {
+				showToast("修改失败");
+			}
+		});
+
+	}
 
 }

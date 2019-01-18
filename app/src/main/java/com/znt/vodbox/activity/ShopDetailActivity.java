@@ -2,10 +2,8 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
-import com.znt.vodbox.bean.PlanInfo;
-import com.znt.vodbox.bean.PlanResultBean;
+import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.dialog.VolumeSetBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -147,6 +146,7 @@ public class ShopDetailActivity extends BaseActivity implements
                     && mShopInfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
                 tvCurStatus.setText(getResources().getString(R.string.dev_status) + getResources().getString(R.string.dev_status_online));
+                tvCurStatus.setTextColor(getResources().getColor(R.color.text_blue_on));
             }
             else
             {
@@ -163,10 +163,7 @@ public class ShopDetailActivity extends BaseActivity implements
         {
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
-
-
         getPlan();
-
     }
 
 
@@ -178,7 +175,34 @@ public class ShopDetailActivity extends BaseActivity implements
             return;
         }
         String token = Constant.mUserInfo.getToken();
-        String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
+
+        HttpClient.getCurPlayMusics(token, mShopInfo.getId(), new HttpCallback<MusicListResultBean>() {
+            @Override
+            public void onSuccess(MusicListResultBean musicListResultBean) {
+                if(musicListResultBean.isSuccess())
+                {
+                    List<MediaInfo> mediaInfoList = musicListResultBean.getData();
+                    if(mediaInfoList != null && mediaInfoList.size() > 0)
+                    {
+                        dataList.clear();
+                        dataList.addAll(mediaInfoList);
+                        mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
+                        tvCurPlayCount.setText(getResources().getString(R.string.dev_shop_detail_cur_play_count) + "("+dataList.size()+")");
+                    }
+                }
+                else
+                    showToast("请求数据失败："+musicListResultBean.getMessage());
+                listView.stopRefresh();
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                showToast("请求数据失败");
+                listView.stopRefresh();
+            }
+        });
+
+        /*String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
         if(TextUtils.isEmpty(planId))
         {
             listView.stopRefresh();
@@ -228,7 +252,7 @@ public class ShopDetailActivity extends BaseActivity implements
             else
                 showToast("load data error");
             Log.e("",e.getMessage());
-        }
+        }*/
 
     }
 
@@ -295,12 +319,16 @@ public class ShopDetailActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        final MediaInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.cur_play_music_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        MediaInfo tempInfo = dataList.get(position);
+        showMusicOperationDialog(tempInfo);
+    }
+
+    private void showMusicOperationDialog(final MediaInfo tempInfo)
+    {
+        new AlertView(tempInfo.getMusicName(),null, "取消", null,
+                getResources().getStringArray(R.array.cur_play_music_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
@@ -321,8 +349,7 @@ public class ShopDetailActivity extends BaseActivity implements
 
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     private void showVolumeDialog(final Shopinfo devInfor)

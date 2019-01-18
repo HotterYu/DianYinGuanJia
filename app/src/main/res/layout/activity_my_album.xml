@@ -16,7 +16,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
             <com.znt.vodbox.view.xlistview.LJListView
                 android:id="@+id/ptrl_music_album"

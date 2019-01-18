@@ -2,21 +2,28 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AdListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdMediaListResultBean;
+import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
@@ -34,6 +41,10 @@ import java.util.List;
 public class AdListActivity  extends BaseActivity implements
         LJListView.IXListViewListener, AdapterView.OnItemClickListener,OnMoreClickListener {
 
+    @Bind(R.id.view_common_title)
+    private View viewTopTitle = null;
+    @Bind(R.id.tv_common_title_sub)
+    private TextView tvTopTitleSub = null;
     @Bind(R.id.tv_common_title)
     private TextView tvTopTitle = null;
     @Bind(R.id.iv_common_back)
@@ -53,6 +64,7 @@ public class AdListActivity  extends BaseActivity implements
     private List<AdMediaInfo> selectedAds = new ArrayList<>();
 
     private boolean isSelect = false;
+    private String adtypeId = "";
 
     private int pageNo = 1;
     private int pageSize = 25;
@@ -66,6 +78,8 @@ public class AdListActivity  extends BaseActivity implements
         tvTopTitle.setText("我的广告");
         ivTopMore.setVisibility(View.GONE);
         tvConfirm.setVisibility(View.VISIBLE);
+        tvTopTitleSub.setVisibility(View.VISIBLE);
+        tvTopTitleSub.setText("全部");
 
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +102,10 @@ public class AdListActivity  extends BaseActivity implements
             }
         });
 
-        tvTopTitle.setOnClickListener(new View.OnClickListener() {
+        viewTopTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), TypeActivity.class);
-                Bundle b = new Bundle();
-                b.putString("TYPE","1");
-                intent.putExtras(b);
+                Intent intent = new Intent(getActivity(), AdCategoryActivity.class);
                 startActivityForResult(intent,2);
             }
         });
@@ -144,7 +155,7 @@ public class AdListActivity  extends BaseActivity implements
         mSearchView.setOnClickSearch(new ICallBack() {
             @Override
             public void SearchAciton(String string) {
-                getAdMedias("");
+                getAdMedias();
             }
         });
     }
@@ -162,14 +173,12 @@ public class AdListActivity  extends BaseActivity implements
         finish();
     }
 
-    public void getAdMedias(String adtypeId)
+    public void getAdMedias()
     {
         String token = Constant.mUserInfo.getToken();
 
         String merchId = Constant.mUserInfo.getMerchant().getId();
-        //String merchId = mUserInfo.getMerchant().getId();
         String adname = mSearchView.getText().toString();
-
         try
         {
             // Simulate network access.
@@ -184,14 +193,18 @@ public class AdListActivity  extends BaseActivity implements
                         if(pageNo == 1)
                             dataList.clear();
 
-                        if(tempList.size() <= pageSize)
+                        if(tempList.size() == pageSize)
                             pageNo ++;
 
                         dataList.addAll(tempList);
 
                         mAdListAdapter.notifyDataSetChanged(dataList);
                         mAdListAdapter.updateSelected(selectedAds);
-                        tvTopTitle.setText("我的广告("+resultBean.getMessage()+")");
+
+                        if(!TextUtils.isEmpty(resultBean.getMessage()))
+                            maxSize = Integer.parseInt(resultBean.getMessage());
+
+                        tvTopTitle.setText("我的广告("+maxSize+")");
                     }
                     else
                     {
@@ -212,24 +225,22 @@ public class AdListActivity  extends BaseActivity implements
         {
             listView.stopRefresh();
         }
-
     }
 
-    public void deleteAlbumMusic(String musicIds)
+    public void deleteAd(final int position, String id)
     {
-        /*try
+        try
         {
             String token = Constant.mUserInfo.getToken();
-            String albumId = mAlbumInfo.getId();
 
-            HttpClient.deleteAlbumMusics(token, albumId, musicIds, new HttpCallback<CommonCallBackBean>() {
+            HttpClient.deleteAd(token, id, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
                     if(resultBean != null)
                     {
-                        int deleteCount = updateDeleteMusicList(musicIds);
-                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
-                        dismissDialog();
+                        dataList.remove(position);
+                        mAdListAdapter.notifyDataSetChanged(dataList);
+                        showToast("操作成功");
                     }
                     else
                     {
@@ -245,7 +256,7 @@ public class AdListActivity  extends BaseActivity implements
         catch (Exception e)
         {
 
-        }*/
+        }
     }
 
     @Override
@@ -260,8 +271,12 @@ public class AdListActivity  extends BaseActivity implements
         else if(requestCode == 2)
         {
             TypeInfo tempInfor = (TypeInfo)data.getSerializableExtra("TYPE_INFO");
-
-            getAdMedias(tempInfor.getId());
+            tvTopTitleSub.setText(tempInfor.getName());
+            adtypeId = tempInfor.getId();
+            if(adtypeId == null)
+                adtypeId = "";
+            pageNo = 1;
+            getAdMedias();
         }
     }
 
@@ -277,12 +292,17 @@ public class AdListActivity  extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        final AdMediaInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getAdname());
-        dialog.setItems(R.array.ad_list_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        AdMediaInfo tempInfo = dataList.get(position);
+        showMusicOperationDialog(position, tempInfo);
+    }
+
+    private AlertView tempAlertView = null;
+    private void showMusicOperationDialog(final int adPosition, final AdMediaInfo tempInfo)
+    {
+        tempAlertView = new AlertView(tempInfo.getAdname(),null, "取消", null,
+                getResources().getStringArray(R.array.ad_list_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
@@ -301,34 +321,105 @@ public class AdListActivity  extends BaseActivity implements
                         showToast("复制成功");
                         break;
                     case 2://
-                        //MusicInfoActivity.start(getContext(), music);
+                        tempAlertView.dismissImmediately();
+                        showRenameDialog(adPosition, tempInfo);
                         break;
                     case 3://
-                        showAlertDialog(getActivity(), new View.OnClickListener()
-                        {
+                        tempAlertView.dismissImmediately();
+                        new AlertView("提示", "确定删除该文件吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
                             @Override
-                            public void onClick(View view)
-                            {
-                                deleteAlbumMusic(tempInfo.getId());
+                            public void onItemClick(Object o, int position) {
+                                if(position == 0)
+                                    deleteAd(adPosition, tempInfo.getId());
                             }
-                        }, "", "确定删除该文件吗?");
+                        }).setCancelable(true).show();
                         break;
                 }
             }
+        });tempAlertView.show();
+    }
+
+    private void showRenameDialog(final int adPosition,final AdMediaInfo tempInfo)
+    {
+        ViewGroup extView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.alertext_form,null);
+
+        final String oldName = tempInfo.getAdname();
+
+        final InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        final EditText etName = (EditText) extView.findViewById(R.id.et_alert_input);
+
+        final AlertView mAlertViewExt = new AlertView("修改名称", "请输入新的昵称！", "取消", null, new String[]{"完成"}, AdListActivity.this, AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+
+                if(position == 0)
+                {
+                    String newName = etName.getText().toString();
+                    if(TextUtils.isEmpty(newName))
+                    {
+                        Toast.makeText(getApplicationContext(),"请输入广告名称",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(newName.equals(oldName))
+                    {
+                        Toast.makeText(getApplicationContext(),"信息未更改",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    updateAdInfo(adPosition, tempInfo, newName);
+                }
+            }
         });
-        dialog.show();
+        etName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focus) {
+                //输入框出来则往上移动
+                boolean isOpen= imm.isActive();
+                mAlertViewExt.setMarginBottom(isOpen&&focus ? 120 :0);
+            }
+        });
+        etName.setHint("请输入昵称");
+        etName.setText(oldName);
+        mAlertViewExt.addExtView(extView);
+        mAlertViewExt.show();
+    }
+
+    private void updateAdInfo(final int position, final AdMediaInfo tempInfo, final String newName)
+    {
+        String token = Constant.mUserInfo.getToken();
+        /*String merchId = Constant.mUserInfo.getMerchant().getId();
+        String adminId = Constant.mUserInfo.getId();*/
+        HttpClient.updateAdInfo(token, tempInfo.getId(), newName,tempInfo.getAdtypeId(),tempInfo.getAdduration(), new HttpCallback<CommonCallBackBean>() {
+            @Override
+            public void onSuccess(CommonCallBackBean commonCallBackBean) {
+                if(commonCallBackBean.isSuccess())
+                {
+                    dataList.get(position).setAdname(newName);
+                    mAdListAdapter.notifyDataSetChanged();
+                    showToast("名称修改成功");
+                }
+                else
+                    showToast("修改失败："+commonCallBackBean.getMessage());
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                showToast("修改失败");
+            }
+        });
+
     }
 
     @Override
     public void onRefresh() {
         pageNo = 1;
-        getAdMedias("");
+        getAdMedias();
     }
 
     @Override
     public void onLoadMore() {
         if(maxSize > dataList.size())
-            getAdMedias("");
+            getAdMedias();
         else
             showToast("没有更多数据了");
     }

@@ -34,12 +34,14 @@ import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
+import com.znt.vodbox.config.Config;
 import com.znt.vodbox.db.DBManager;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.ActivityManager;
+import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 import java.util.ArrayList;
@@ -65,13 +67,14 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-
     @Bind(R.id.tv_common_title)
     private TextView tvTopTitle = null;
     @Bind(R.id.iv_common_back)
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
+    @Bind(R.id.tv_register)
+    private TextView tvRegister = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -117,7 +120,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             @Override
             public void onClick(View view) {
                 attemptLogin();
-
             }
         });
         btnOldLogin.setOnClickListener(new OnClickListener() {
@@ -130,6 +132,17 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 ActivityManager.getInstance().finishAllActivity();
             }
         });
+
+        tvRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putString(Config.Key.ACTIVITY_TITLE,"在线注册");
+                b.putString(Config.Key.ACTIVITY_WEB_URL," http://www.zhunit.com/register.html");
+                ViewUtils.startActivity(LoginActivity.this, WebViewActivity.class,b);
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
@@ -301,7 +314,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                                 tempInfo.setNickName(userInfo.getNickName());
                                 tempInfo.setPwd(mPasswordView.getText().toString());
                                 DBManager.get().getMusicDao().insert(tempInfo);*/
-
+                                ActivityManager.getInstance().finishOthersActivity(LoginActivity.class);
                                 userInfo.setPwd(mPasswordView.getText().toString());
                                 DBManager.newInstance(getApplicationContext()).insertUser(userInfo);
                                 getLocalData().setUserInfor(userInfo);

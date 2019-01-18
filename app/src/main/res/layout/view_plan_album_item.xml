@@ -21,7 +21,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="4dp"
-			android:src="@drawable/ic_menu_sys_albums"
+			android:src="@drawable/icon_album_sys"
             />
         
         <TextView 
@@ -56,5 +56,10 @@
        </RelativeLayout>
         
     </RelativeLayout>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@color/spacebar"/>
 
 </LinearLayout>

@@ -2,10 +2,8 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumMusiclistAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
@@ -239,11 +239,16 @@ public class SearchSystemMusicActivity extends BaseActivity implements
     @Override
     public void onMoreClick(int position) {
         final MediaInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getMusicName());
-        dialog.setItems(R.array.album_music_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        showMusicOperationDialog(tempInfo);
+
+    }
+
+    private void showMusicOperationDialog(final MediaInfo tempInfo)
+    {
+        new AlertView(tempInfo.getMusicName(),null, "取消", null,
+                getResources().getStringArray(R.array.album_music_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         if(TextUtils.isEmpty(albumId))
@@ -288,9 +293,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
                         break;
                 }
             }
-        });
-        dialog.show();
-
+        }).show();
     }
 
     public void addMusicToAlbum(String id, String musicIds)

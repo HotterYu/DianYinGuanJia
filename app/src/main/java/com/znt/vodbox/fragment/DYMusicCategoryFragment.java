@@ -1,6 +1,5 @@
 package com.znt.vodbox.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,12 +7,13 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.AlbumMusicActivity;
 import com.znt.vodbox.activity.MusicActivity;
@@ -84,7 +84,14 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // 设置下拉进度的背景颜色，默认就是白色的
+        initViews();
+
+        getData();
+    }
+
+    private void initViews()
+    {
+// 设置下拉进度的背景颜色，默认就是白色的
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         // 设置下拉进度的主题颜色
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.main_bg, R.color.colorPrimaryDark);
@@ -117,9 +124,6 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
             @Override
             public void onRefresh() {
                 loadMoreWrapper.showFooterView(false);
-                // 刷新数据
-                if(dataList != null && dataList.size() > 0)
-                    dataList.clear();
                 pageNo = 1;
                 getData();
             }
@@ -142,13 +146,22 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
                 }
             }
         });
-        getData();
     }
 
     @Override
     protected void onFragmentFirstVisible() {
         super.onFragmentFirstVisible();
 
+    }
+
+    @Override
+    protected void onFragmentVisibleChange(boolean isVisible) {
+        super.onFragmentVisibleChange(isVisible);
+        if(isVisible)
+        {
+            if(loadMoreWrapper != null)
+                loadMoreWrapper.notifyDataSetChanged();
+        }
     }
 
     public void setOnCountGetCallBack(MusicActivity.OnCountGetCallBack mOnCountGetCallBack)
@@ -193,7 +206,7 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
                         if(pageNo == 1)
                             dataList.clear();
 
-                        if(tempList.size() <= pageSize)
+                        if(tempList.size() == pageSize)
                             pageNo ++;
 
                         dataList.addAll(tempList);
@@ -243,6 +256,7 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
                 public void onSuccess(CommonCallBackBean resultBean) {
                     if(resultBean != null)
                     {
+                        showToast("收藏成功");
                         //finish();
                         /*int deleteCount = updateDeleteMusicList(musicIds);
                         tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
@@ -277,11 +291,15 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
     @Override
     public void onMoreClick(final int position) {
         final AlbumInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.sys_album_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        showSystemAlbumOperationDialog(tempInfo);
+    }
+
+    private void showSystemAlbumOperationDialog(final AlbumInfo tempInfo)
+    {
+        new AlertView(tempInfo.getName(),null, "取消", null,
+                getResources().getStringArray(R.array.sys_album_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         collectAlbum(tempInfo.getId());
@@ -296,8 +314,7 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
                         break;
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
 
 

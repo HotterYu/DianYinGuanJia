@@ -177,7 +177,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
             showCurPlanInfor();
         }
 
-        if(mAdPlanInfo != null && mAdPlanInfo.getPlanModel().equals("2"))//定时播放
+        if(mAdPlanInfo != null && mAdPlanInfo.getPlanModel() != null && mAdPlanInfo.getPlanModel().equals("2"))//定时播放
         {
             switchButtonTimeing.setChecked(true);
             showTimeingPushSet(true);
@@ -185,7 +185,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else
         {
             switchButtonTimeing.setChecked(false);
-            showTimeingPushSet(true);
+            showTimeingPushSet(false);
         }
 
         //listView.onFresh();

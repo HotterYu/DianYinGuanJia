@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,7 +17,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +30,8 @@ import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.ViewPagerAdapter;
 import com.znt.vodbox.application.MusicApplication;
@@ -288,11 +288,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
     private void showSearTypeDialog()
     {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("请选择搜索类型");
-        dialog.setItems(R.array.search_sys_album_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        new AlertView("请选择搜索类型",null, "取消", null,
+                getResources().getStringArray(R.array.search_sys_album_dialog),
+                this, AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
                         mDYMusicFragment.goSearchAlbumActivity(getApplicationContext());
@@ -302,9 +301,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                         break;
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
+
 
     //底部导航监听事件
     @Override

@@ -1,16 +1,16 @@
 package com.znt.vodbox.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.GrouShopActivity;
 import com.znt.vodbox.adapter.GroupListAdapter;
@@ -266,39 +266,40 @@ public class GroupFragment extends BaseFragment  implements
     @Override
     public void onMoreClick(int position) {
         final GroupInfo tempInfo = dataList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getGroupName());
-        dialog.setItems(R.array.group_list_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
+        showGroupOperationDialog(tempInfo);
+    }
+
+    private AlertView tempAlertView = null;
+    private void showGroupOperationDialog(final GroupInfo tempInfo)
+    {
+        tempAlertView = new AlertView(tempInfo.getGroupName(),null, "取消", null,
+                getResources().getStringArray(R.array.group_list_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
-
                         TextInputBottomDialog mTextInputBottomDialog = new TextInputBottomDialog(getActivity());
                         mTextInputBottomDialog.show("请输入分区名称", tempInfo.getGroupName(), new TextInputBottomDialog.OnDismissResultListener() {
                             @Override
                             public void onConfirmDismiss(String content) {
-
                                 renameGroupName(content, tempInfo.getId());
                             }
                         });
                         break;
                     case 1://
-                    /*Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
-                    Bundle b = new Bundle();
-                    b.putSerializable("MEDIA_INFO",tempInfo);
-                    intent.putExtras(b);
-                    startActivity(intent);*/
-                        //requestSetRingtone(music);
-                        break;
-                    case 2://
-                        deleteGroup(tempInfo.getId());
-                        break;
+                        tempAlertView.dismissImmediately();
+                        new AlertView("提示", "确定删除该分区吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if(position == 0)
+                                    deleteGroup(tempInfo.getId());
+                            }
+                        }).setCancelable(true).show();
 
+                        break;
                 }
             }
-        });
-        dialog.show();
+        });tempAlertView.show();
     }
 
 }

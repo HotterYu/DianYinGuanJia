@@ -1,8 +1,6 @@
 package com.znt.vodbox.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
@@ -10,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.ShoplistAdapter;
@@ -205,37 +205,40 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
     @Override
     public void onMoreClick(int position) {
         final Shopinfo tempShop = shopinfoList.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempShop.getName());
-        dialog.setItems(R.array.shop_list_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
-                switch (which) {
-                    case 0://
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("IS_EDIT", true);
-                        if(tempShop.getGroup() != null)
-                            bundle.putString("GROUP_ID",tempShop.getGroup().getId());
-                        bundle.putString("SHOP_IDS",tempShop.getId());
-                        ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
-                        break;
-                    case 1://
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putSerializable("SHOP_INFO",tempShop);
-                        ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
-                        break;
-                    case 2://
-                        Bundle bundle1 = new Bundle();
-                        bundle1.putSerializable("SHOP_INFO",tempShop);
-                        ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle1);
-                        break;
-                }
-            }
-        });
-        dialog.show();
+        showShopOperationDialog(tempShop);
 
     }
 
+      private void showShopOperationDialog(final Shopinfo tempShop)
+      {
+          if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
+          {
+              showToast("该店铺下没有安装设备");
+              return;
+          }
+
+          new AlertView(tempShop.getName(),tempShop.getAddress(), "取消", null,
+                  new String[]{"添加到分区", "插播歌曲"},
+                  getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+              public void onItemClick(Object o,int position){
+                  switch (position) {
+                      case 0://
+                          Bundle bundle = new Bundle();
+                          bundle.putBoolean("IS_EDIT", true);
+                          if(tempShop.getGroup() != null)
+                              bundle.putString("GROUP_ID",tempShop.getGroup().getId());
+                          bundle.putString("SHOP_IDS",tempShop.getId());
+                          ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
+                          break;
+                      case 1://
+                          Bundle bundle2 = new Bundle();
+                          bundle2.putSerializable("SHOP_INFO",tempShop);
+                          ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
+                          break;
+                  }
+              }
+          }).show();
+      }
 
       @Override
       public void onRefresh() {

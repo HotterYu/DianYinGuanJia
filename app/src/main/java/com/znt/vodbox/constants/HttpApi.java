@@ -13,11 +13,17 @@ public class HttpApi
 
     public static final String GET_USER_LIST= API + "/user/list";
 
+    public static final String UPDATE_USER_INFO = API + "/user/update";
+    public static final String UPDATE_USER_PWD = API + "/user/pwd";
+
     public static final String UPDATE_SHOP_INFO = API + "/shop/update";
     public static final String SHOP_PLAY_CONTROLL = API + "/tml/cmd/";
 
     //获取时段的歌曲列表
     public static final String GET_SCHEDULE_MUSICS = API + "/terminal/planschemusic";
+
+
+    public static final String GET_CUR_PLAY_MUSICS = API + "/play/now";
 
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";
@@ -32,6 +38,8 @@ public class HttpApi
     public static final String ADD_MUSIC_TO_ALBUM = API + "/category/saveMusic";
     public static final String GET_SYS_MUSICS = API + "/query/search";
     public static final String GET_AD_LISTS = API + "/adinfo/list";
+    public static final String UPDATE_AD_INFO = API + "/adinfo/update";
+    public static final String DELETE_AD = API + "/adinfo/del";
     public static final String PUSH_MEDIA = API + "/tml/push";
     public static final String GET_PLAN_LIST = API + "/plan/list";
     public static final String GET_AD_PLAN_LIST = API + "/adplan/list";

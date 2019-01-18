@@ -94,6 +94,7 @@
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登录</string>
     <string name="user_login">用户登录</string>
+    <string name="user_register">注册账户</string>
     <string name="old_login_hint">注意：2018年之前接入店音系统的从这里登录</string>
     <string name="old_login">旧版入口</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -187,7 +188,6 @@
 
     <string name="app_close_hint">再按一次退出店音</string>
 
-
     <string name="dev_status">状态:</string>
     <string name="dev_status_online">在线</string>
     <string name="dev_status_offline">离线</string>
@@ -198,6 +198,7 @@
     <string name="dev_shop_play_none">未播放</string>
     <string name="dev_shop_none_device">该店铺下没有设备</string>
     <string name="dev_shop_detail">店铺详情</string>
+
     <string name="dev_shop_detail_push_hint">插播</string>
     <string name="dev_shop_detail_volume_hint">音量</string>
     <string name="dev_shop_detail_play_mode">模式</string>

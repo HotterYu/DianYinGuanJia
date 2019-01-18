@@ -1,15 +1,15 @@
 package com.znt.vodbox.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AlbumSelectAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
@@ -244,13 +244,17 @@ public class AlbumSelectActivity extends BaseActivity implements
 
     @Override
     public void onMoreClick(int position) {
-        final AlbumInfo tempInfo = albumInfos.get(position);
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-        dialog.setTitle(tempInfo.getName());
-        dialog.setItems(R.array.my_album_dialog, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog1, int which) {
-                switch (which) {
+        AlbumInfo tempInfo = albumInfos.get(position);
+        showAlbumOperationDialog(tempInfo);
+    }
+
+    private void showAlbumOperationDialog(final AlbumInfo tempInfo)
+    {
+        new AlertView(tempInfo.getName(),null, "取消", null,
+                getResources().getStringArray(R.array.my_album_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int position){
+                switch (position) {
                     case 0://
                         Intent intent = new Intent(getActivity(), ModifyAlbumActivity.class);
                         Bundle b = new Bundle();
@@ -268,8 +272,7 @@ public class AlbumSelectActivity extends BaseActivity implements
                         break;
                 }
             }
-        });
-        dialog.show();
+        }).show();
     }
 
     @Override

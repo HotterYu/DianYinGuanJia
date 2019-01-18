@@ -255,7 +255,12 @@
             android:launchMode="singleTask"
             />
         <activity
-            android:name=".activity.TypeActivity"
+            android:name=".activity.MediaCategoryActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            />
+        <activity
+            android:name=".activity.AdCategoryActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
             />
@@ -284,6 +289,13 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
             />
+
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            />
+
     </application>
 
 </manifest>

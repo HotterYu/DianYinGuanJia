@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.activity.SearchSysAlbumActivity;
 import com.znt.vodbox.activity.SearchSystemMusicActivity;
-import com.znt.vodbox.activity.TypeActivity;
+import com.znt.vodbox.activity.MediaCategoryActivity;
 import com.znt.vodbox.adapter.DYMusicFragmentPagerAdapter;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
@@ -49,7 +49,6 @@ public class DYMusicFragment extends Fragment {
         startActivity(new Intent(activity, SearchSystemMusicActivity.class));
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +59,8 @@ public class DYMusicFragment extends Fragment {
 
     public void initView(View rootView) {
         tvMore = (TextView) rootView.findViewById(R.id.tv_dymusic_category_more);
+        tvMore.setVisibility(View.GONE);
+
         ViewPager viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         //关键的一个知识点getChidFragmentManager
         adapter = new DYMusicFragmentPagerAdapter(getChildFragmentManager(), getContext());
@@ -77,12 +78,22 @@ public class DYMusicFragment extends Fragment {
         tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putString("TYPE","0");
-                ViewUtils.startActivity(getActivity(), TypeActivity.class,bundle);
+                ViewUtils.startActivity(getActivity(), MediaCategoryActivity.class,null,1);
             }
         });
         getTypes();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != getActivity().RESULT_OK)
+            return;
+        if(requestCode == 1)
+        {
+            TypeInfo tempInfor = (TypeInfo) data.getSerializableExtra("TYPE_INFO");
+
+        }
     }
 
     private List<TypeInfo> typeList = new ArrayList<>();
@@ -99,7 +110,7 @@ public class DYMusicFragment extends Fragment {
         try
         {
             // Simulate network access.
-            HttpClient.getAlbumTypes(token, searchWord,"0", new HttpCallback<TypeCallBackBean>() {
+            HttpClient.getAlbumTypes(token, searchWord,new HttpCallback<TypeCallBackBean>() {
                 @Override
                 public void onSuccess(TypeCallBackBean resultBean) {
 
@@ -115,7 +126,6 @@ public class DYMusicFragment extends Fragment {
                     }
                     else
                     {
-
                         //shopinfoList.clear();
                     }
                 }
@@ -123,8 +133,6 @@ public class DYMusicFragment extends Fragment {
                 @Override
                 public void onFail(Exception e) {
                     //vSearching.setVisibility(View.GONE);
-
-
                 }
             });
         }

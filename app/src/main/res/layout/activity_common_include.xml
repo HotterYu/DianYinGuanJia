@@ -37,15 +37,34 @@
                 style="@style/AppTheme.Text"
                 android:src="@drawable/ic_return_light" />
 
-            <TextView
-                android:id="@+id/tv_common_title"
+            <LinearLayout
+                android:id="@+id/view_common_title"
                 android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="@dimen/LargeTextSize"
-                android:gravity="center_vertical"
-                android:textColor="@color/white"
-                />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_common_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/LargeTextSize"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    />
+                <TextView
+                    android:id="@+id/tv_common_title_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="@dimen/small_text_size"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:visibility="gone"
+                    android:drawableRight="@drawable/icon_sub_title_more"
+                    />
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/iv_common_more"

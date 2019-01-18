@@ -1,21 +1,22 @@
 package com.znt.vodbox.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +26,8 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.WifiListAdapter;
 import com.znt.vodbox.bean.WifiBean;
 import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.permission.PermissionHelper;
+import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.utils.WifiSupport;
 import com.znt.vodbox.utils.binding.Bind;
 
@@ -37,7 +40,7 @@ import java.util.List;
  * Created by prize on 2018/11/9.
  */
 
-public class WifiListActivity extends BaseActivity
+public class WifiListActivity extends BaseActivity implements PermissionInterface
 {
 
     @Bind(R.id.tv_common_title)
@@ -48,15 +51,8 @@ public class WifiListActivity extends BaseActivity
     private ImageView ivTopMore = null;
 
     private static final String TAG = "MainActivity";
-    //权限请求码
-    private static final int PERMISSION_REQUEST_CODE = 0;
-    //两个危险权限需要动态申请
-    private static final String[] NEEDED_PERMISSIONS = new String[]{
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
 
-    private boolean mHasPermission;
+    private PermissionHelper mPermissionHelper;
 
     ProgressBar pbWifiLoading;
 
@@ -85,17 +81,14 @@ public class WifiListActivity extends BaseActivity
             }
         });
 
+        initRecycler();
+
         pbWifiLoading = (ProgressBar) this.findViewById(R.id.pb_wifi_loading);
 
         hidingProgressBar();
-        mHasPermission = checkPermission();
-        if (!mHasPermission && WifiSupport.isOpenWifi(this)) {  //未获取权限，申请权限
-            requestPermission();
-        }else if(mHasPermission && WifiSupport.isOpenWifi(this)){  //已经获取权限
-            initRecycler();
-        }else{
-            Toast.makeText(this,"WIFI处于关闭状态",Toast.LENGTH_SHORT).show();
-        }
+
+        mPermissionHelper = new PermissionHelper(WifiListActivity.this, this);
+        mPermissionHelper.requestPermissions();
 
 
     }
@@ -105,12 +98,6 @@ public class WifiListActivity extends BaseActivity
         adapter = new WifiListAdapter(this,realWifiList);
         recyWifiList.setLayoutManager(new LinearLayoutManager(this));
         recyWifiList.setAdapter(adapter);
-
-        if(WifiSupport.isOpenWifi(this) && mHasPermission){
-            sortScaResult();
-        }else{
-            Toast.makeText(this,"WIFI处于关闭状态或权限获取失败22222",Toast.LENGTH_SHORT).show();
-        }
 
         adapter.setOnItemClickListener(new WifiListAdapter.onItemClickListener() {
             @Override
@@ -146,12 +133,90 @@ public class WifiListActivity extends BaseActivity
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);//监听wifi连接状态广播,是否连接了一个有效路由
         filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);//监听wifi列表变化（开启一个热点或者关闭一个热点）
         this.registerReceiver(wifiReceiver, filter);
+
+        if(WifiSupport.isOpenWifi(this)){
+            wifiListChange();
+        }else{
+            Toast.makeText(this,"WIFI处于关闭状态或权限获取失败22222",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         this.unregisterReceiver(wifiReceiver);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(mPermissionHelper.requestPermissionsResult(requestCode, permissions, grantResults)){
+            //权限请求结果，并已经处理了该回调
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public int getPermissionsRequestCode() {
+        return 10000;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+
+        };
+    }
+    @Override
+    public void requestPermissionsSuccess()
+    {
+        //权限请求用户已经全部允许
+
+        if(WifiSupport.isOpenWifi(this)){
+            wifiListChange();
+        }else{
+            Toast.makeText(this,"WIFI处于关闭状态或权限获取失败22222",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void requestPermissionsFail() {
+        //权限请求不被用户允许。可以提示并退出或者提示权限的用途并重新发起权限申请。
+        showPermissions();
+        //mPermissionHelper.requestPermissions();
+        //close();
+    }
+
+    private void showPermissions(){
+        final Dialog dialog=new android.app.AlertDialog.Builder(this).create();
+        View v= LayoutInflater.from(this).inflate(R.layout.dialog_permissions,null);
+        dialog.show();
+        dialog.setContentView(v);
+
+        Button btn_add= (Button) v.findViewById(R.id.btn_add);
+        Button btn_diss= (Button) v.findViewById(R.id.btn_diss);
+
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPermissionHelper.toPermissionSetting(WifiListActivity.this);
+                dialog.dismiss();
+
+            }
+        });
+
+        btn_diss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+
+            }
+        });
     }
 
     //监听wifi状态
@@ -212,28 +277,6 @@ public class WifiListActivity extends BaseActivity
         }
     }
 
-    /**
-     * 检查是否已经授予权限
-     * @return
-     */
-    private boolean checkPermission() {
-        for (String permission : NEEDED_PERMISSIONS) {
-            if (ActivityCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 申请权限
-     */
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this,
-                NEEDED_PERMISSIONS, PERMISSION_REQUEST_CODE);
-    }
-
     public boolean isNullOrEmpty(Collection c) {
         if (null == c || c.isEmpty()) {
             return true;
@@ -262,7 +305,7 @@ public class WifiListActivity extends BaseActivity
             }
         }
     }
-
+/*
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -289,7 +332,7 @@ public class WifiListActivity extends BaseActivity
                 Toast.makeText(this,"获取权限失败",Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    }*/
 
 
     public void showProgressBar() {
