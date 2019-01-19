@@ -641,8 +641,8 @@ public class HttpClient extends HttpApi{
 
     public static void getCurPlayMusics(String token, String terminalId
             ,@NonNull final HttpCallback<MusicListResultBean> callback) {
-        OkHttpUtils.post().url(GET_CUR_PLAY_MUSICS)
-                .addHeader("token", token)
+        OkHttpUtils.get().url(GET_CUR_PLAY_MUSICS)
+                //.addHeader("token", token)
                 .addParams("terminalId", terminalId)
                 .build()
                 .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
@@ -1035,7 +1035,7 @@ public class HttpClient extends HttpApi{
     }
 
     public static void addAPlan(String token,String name, String cycleTypes, String startTimes,String endTimes
-            , String musicNums, String adinfoIds,String startDate,String endDate,String groupId,String merchId,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+            , String musicNums, String adinfoIds,String startDate,String endDate,String groupId,String merchId, String playModels,@NonNull final HttpCallback<CommonCallBackBean> callback) {
         OkHttpUtils.post().url(ADD_AD_PLAN)
                 .addHeader("token", token)
                 .addParams("name", name)
@@ -1048,6 +1048,7 @@ public class HttpClient extends HttpApi{
                 .addParams("endDate", endDate)
                 .addParams("groupId", groupId)
                 .addParams("merchId", merchId)
+                .addParams("playModels", playModels)
                 .build()
                 .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override
@@ -1071,7 +1072,7 @@ public class HttpClient extends HttpApi{
     }
 
     public static void updateAPlan(String token,String id,String name, String cycleTypes, String startTimes,String endTimes
-            , String musicNums, String adinfoIds,String startDate,String endDate,String merchId,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+            , String musicNums, String adinfoIds,String startDate,String endDate,String merchId,String playModels,@NonNull final HttpCallback<CommonCallBackBean> callback) {
         OkHttpUtils.post().url(UPDATE_AD_PLAN)
                 .addHeader("token", token)
                 .addParams("id", id)
@@ -1084,6 +1085,7 @@ public class HttpClient extends HttpApi{
                 .addParams("startDate", startDate)
                 .addParams("endDate", endDate)
                 .addParams("merchId", merchId)
+                .addParams("playModels", playModels)
                 .build()
                 .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
                     @Override

@@ -176,7 +176,7 @@ public class ShopDetailActivity extends BaseActivity implements
         }
         String token = Constant.mUserInfo.getToken();
 
-        HttpClient.getCurPlayMusics(token, mShopInfo.getId(), new HttpCallback<MusicListResultBean>() {
+        HttpClient.getCurPlayMusics(token, mShopInfo.getTmlRunStatus().get(0).getTerminalId(), new HttpCallback<MusicListResultBean>() {
             @Override
             public void onSuccess(MusicListResultBean musicListResultBean) {
                 if(musicListResultBean.isSuccess())

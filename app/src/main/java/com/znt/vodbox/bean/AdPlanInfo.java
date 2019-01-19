@@ -154,6 +154,7 @@ public class AdPlanInfo implements Serializable, Cloneable
             tempInfo.setId(scheIds.get(i));
             tempInfo.setStartTime(getStartTimes().get(i));
             tempInfo.setEndTime(getEndTimes().get(i));
+            tempInfo.setPlayModel(getPlayModels().get(i));
             tempInfo.setMusicNum(getMusicNums().get(i));
             tempInfo.setCycleType(getCycleTypes().get(i));
             tempInfo.setAdinfoId(getAdinfoIds().get(i));
@@ -175,6 +176,7 @@ public class AdPlanInfo implements Serializable, Cloneable
         adinfoNames.clear();
         cycleTypes.clear();
         musicNums.clear();
+        playModels.clear();
 
         for(int i=0;i<count;i++)
         {
@@ -187,6 +189,7 @@ public class AdPlanInfo implements Serializable, Cloneable
             adUrls.add(subPlanInfor.getAdinfoUrl());
             adinfoIds.add(subPlanInfor.getAdinfoId());
             adinfoNames.add(subPlanInfor.getAdinfoName());
+            playModels.add(subPlanInfor.getPlayModel());
         }
     }
 

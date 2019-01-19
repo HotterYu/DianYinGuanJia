@@ -74,7 +74,7 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
                 Bundle b = new Bundle();
                 b.putSerializable("PLAN_INFO",tempInfo);
                 intent.putExtras(b);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 3);
             }
         });
 
@@ -276,7 +276,7 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
                         Bundle b = new Bundle();
                         b.putSerializable("PLAN_INFO",tempInfo);
                         intent.putExtras(b);
-                        startActivityForResult(intent, 1);
+                        startActivityForResult(intent, 3);
                         break;
                     case 1://
 

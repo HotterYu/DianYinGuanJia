@@ -306,6 +306,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             String token = Constant.mUserInfo.getToken();
             String name = mAdPlanInfo.getName();
             String cycleTypes = mAdPlanInfo.getCycleTypes() + "";
+            String playModels = mAdPlanInfo.getPlayModels() + "";
             String startTimes = mAdPlanInfo.getStartTimes() + "";
             String endTimes = mAdPlanInfo.getEndTimes() + "";
             String adinfoIds = mAdPlanInfo.getAdinfoIds() + "";
@@ -318,6 +319,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
                 groupId = "";
 
             cycleTypes = removeTags(cycleTypes);
+            playModels = removeTags(playModels);
             startTimes = removeTags(startTimes);
             endTimes = removeTags(endTimes);
             musicNums = removeTags(musicNums);
@@ -327,7 +329,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
                 adinfoIds = adinfoIds.substring(1);
             // Simulate network access.
             HttpClient.addAPlan(token,name,  cycleTypes,  startTimes, endTimes
-                    ,  musicNums,  adinfoIds, startDate, endDate, groupId, merchId , new HttpCallback<CommonCallBackBean>() {
+                    ,  musicNums,  adinfoIds, startDate, endDate, groupId, merchId,playModels , new HttpCallback<CommonCallBackBean>() {
                         @Override
                         public void onSuccess(CommonCallBackBean resultBean)
                         {
@@ -362,6 +364,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             String id = mAdPlanInfo.getId();
             String name = mAdPlanInfo.getName();
             String cycleTypes = mAdPlanInfo.getCycleTypes() + "";
+            String playModels = mAdPlanInfo.getPlayModels() + "";
             String startTimes = mAdPlanInfo.getStartTimes() + "";
             String endTimes = mAdPlanInfo.getEndTimes() + "";
             String adinfoIds = mAdPlanInfo.getAdinfoIds() + "";
@@ -374,6 +377,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
                 groupId = "";
 
             cycleTypes = removeTags(cycleTypes);
+            playModels = removeTags(playModels);
             startTimes = removeTags(startTimes);
             endTimes = removeTags(endTimes);
             musicNums = removeTags(musicNums);
@@ -381,7 +385,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
 
             // Simulate network access.
             HttpClient.updateAPlan(token,  id, name,  cycleTypes,  startTimes, endTimes
-                    ,  musicNums,  adinfoIds, startDate, endDate, merchId , new HttpCallback<CommonCallBackBean>() {
+                    ,  musicNums,  adinfoIds, startDate, endDate, merchId, playModels , new HttpCallback<CommonCallBackBean>() {
                         @Override
                         public void onSuccess(CommonCallBackBean resultBean)
                         {

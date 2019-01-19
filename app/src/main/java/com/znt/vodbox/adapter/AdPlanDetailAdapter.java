@@ -118,7 +118,7 @@ public class AdPlanDetailAdapter extends BaseAdapter
         SubAdPlanInfo infor = subPlanList.get(pos);
         vh.tvTime.setText(infor.getPlanTime());
 
-        if(infor.isTimePushModel())
+        if(infor.getPlayModel().equals("2"))
         {
             //定时插播
             vh.tvAlbumHint.setText("定时 " + infor.getStartTime() + "  播放广告：");
@@ -126,9 +126,9 @@ public class AdPlanDetailAdapter extends BaseAdapter
         else
         {
             //间隔插播
-            if(!infor.getMusicNum().startsWith("0"))
+            if(infor.getPlayModel().equals("1"))
                 vh.tvAlbumHint.setText("间隔 " + infor.getMusicNum() + "首歌曲插播一次：" );
-            else
+            else if(infor.getPlayModel().equals("3"))
                 vh.tvAlbumHint.setText("间隔 " + infor.getMusicNum() + "分钟插播一次：");
         }
         vh.tvAlbum.setText(infor.getAdinfoName());

@@ -61,7 +61,7 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
                     intent = new Intent(getActivity(), PlanDetailActivity.class);
                     Bundle b = new Bundle();
                     intent.putExtras(b);
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, 3);
                 }
             }
         });
@@ -122,6 +122,21 @@ public class AllPlanListActivity extends BaseActivity implements View.OnClickLis
                 mViewPager.setCurrentItem(1);
                 break;
 
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode != RESULT_OK)
+            return;
+        if(requestCode == 2)
+        {
+            mAdPlanFragment.refreshData();
+        }
+        else if(requestCode == 3)
+        {
+            mMediaPlanFragment.refreshData();
         }
     }
 }

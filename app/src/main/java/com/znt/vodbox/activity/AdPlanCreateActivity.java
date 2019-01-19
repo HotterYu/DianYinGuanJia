@@ -69,7 +69,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
     private String loopAddNum = "1";
     private String cycleType = "0";
     private String pushTime = "";
-    private String playModel = "1";//1间隔时间插播   2定时插播  3间隔时间插播
+    private String playModels = "1";//1间隔时间插播   2定时插播  3间隔时间插播
     private boolean isEdit = false;
 
     private AdPlanInfo mAdPlanInfo = null;
@@ -199,14 +199,13 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         listView.setRefreshTime();
     }
 
-    private void showCountInternalPush(String loopAddNum)
+    private void showCountInternalPush(String playModel)
     {
-        if(loopAddNum.startsWith("0"))
+        if(playModel.startsWith("3"))
         {
-            String num = loopAddNum.substring(1);
-            itvInsetCount.getSecondView().setText("间隔 " + num + " 分钟插播");
+            itvInsetCount.getSecondView().setText("间隔 " + loopAddNum + " 分钟插播");
         }
-        else
+        else if(playModel.startsWith("1"))
         {
             itvInsetCount.getSecondView().setText("间隔 " + loopAddNum + " 首歌曲插播");
         }
@@ -236,10 +235,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
             selectAdList.addAll(tempInfor.getAdMediaInfoList());
 
             loopAddNum = tempInfor.getMusicNum();
-            showCountInternalPush(loopAddNum);
+            showCountInternalPush(tempInfor.getPlayModel());
 
             startTimes = tempInfor.getStartTime();
             endTimes = tempInfor.getEndTime();
+
+            playModels = tempInfor.getPlayModel();
 
             itvTimeSelect.getSecondView().setText(startTimes + " 到 " + endTimes);
 
@@ -259,10 +260,6 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
 
             showCycleType(cycleType);
 
-            if(!TextUtils.isEmpty(loopAddNum) && !TextUtils.isEmpty(tempInfor.getMusicNum()))
-            {
-                showCountInternalPush(loopAddNum);
-            }
         }
     }
 
@@ -317,7 +314,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         else
         {
 
-            tempInfor.setPlayModel(playModel);
+            tempInfor.setPlayModel(playModels);
 
             if(TextUtils.isEmpty(startTimes) || TextUtils.isEmpty(endTimes))
             {
@@ -530,12 +527,12 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         {
             AdPushTypeBottomDialog mAdPushTypeBottomDialog = new AdPushTypeBottomDialog(getActivity());
 
-            mAdPushTypeBottomDialog.show("广告插播设置", loopAddNum,playModel, new AdPushTypeBottomDialog.OnAdPushDismissResultListener() {
+            mAdPushTypeBottomDialog.show("广告插播设置", loopAddNum,playModels, new AdPushTypeBottomDialog.OnAdPushDismissResultListener() {
                 @Override
                 public void onConfirmDismiss(String content, String type) {
                     //mode = type;
                     loopAddNum = content;
-                    playModel = type;
+                    playModels = type;
                     showCountInternalPush(loopAddNum);
                 }
             });
