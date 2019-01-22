@@ -16,12 +16,12 @@
         android:layout_height="fill_parent"
         android:background="@color/spacebar"
         >
+
         <com.znt.vodbox.view.xlistview.LJListView
             android:id="@+id/ptrl_plan_create"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            ></com.znt.vodbox.view.xlistview.LJListView>
+            android:background="@color/white" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

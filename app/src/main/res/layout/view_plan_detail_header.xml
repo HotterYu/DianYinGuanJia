@@ -18,12 +18,12 @@
 		android:focusable="false"
 		android:focusableInTouchMode="false"
         >
-        <com.znt.vodbox.view.ItemTextView
-	        android:id="@+id/itv_plan_detail_name"
-	        android:layout_width="fill_parent"
-	    	android:layout_height="wrap_content"
-	    	android:layout_marginLeft="10dp"
-	        ></com.znt.vodbox.view.ItemTextView>
+
+		<com.znt.vodbox.view.ItemTextView
+			android:id="@+id/itv_plan_detail_name"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="10dp" />
 
 		<View
 			android:layout_width="fill_parent"
@@ -157,10 +157,10 @@
     <RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white_8p"
 		android:clickable="false"
 		android:focusable="false"
 		android:focusableInTouchMode="false"
+		android:background="@color/spacebar"
         >
         <TextView 
 	        android:id="@+id/tv_plan_detail_plan_time"
@@ -184,9 +184,8 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:layout_alignParentRight="true"
-              android:layout_marginRight="4dp"
               android:padding="12dp"
-              android:background="@drawable/sel_btn_translucent"
+
               >
               
               <ImageView 

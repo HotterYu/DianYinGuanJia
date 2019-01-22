@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lvfq.pickerview.TimePickerView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.PlanDetailAdapter;
@@ -20,12 +20,12 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubPlanInfor;
-import com.znt.vodbox.dialog.DoubleDatePickerDialog;
 import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.DateUtils;
+import com.znt.vodbox.utils.PickViewUtil;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
@@ -70,10 +70,6 @@ public class PlanDetailActivity extends BaseActivity  implements
     private SwitchButton switchButtonDate = null;
 
     private LJListView listView = null;
-
-    private DoubleDatePickerDialog startTimeDialog = null;
-    private DoubleDatePickerDialog endTimeDialog = null;
-
     private PlanDetailAdapter mPlanDetailAdapter = null;
 
     private List<SubPlanInfor> subPlanList = new ArrayList<SubPlanInfor>();
@@ -216,35 +212,6 @@ public class PlanDetailActivity extends BaseActivity  implements
                 showDateSelect(arg1);
             }
         });
-
-        startTimeDialog = new DoubleDatePickerDialog(getActivity(), 0, new DoubleDatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker startDatePicker, int startYear, int startMonthOfYear,
-                                  int startDayOfMonth) {
-                String textString = String.format("%d-%d-%d", startYear,
-                        startMonthOfYear + 1, startDayOfMonth);
-				/*String start = String.format("%d-%d-%d", startYear,
-						startMonthOfYear + 1, startDayOfMonth);
-				String end = String.format("%d-%d-%d", endYear, endMonthOfYear + 1, endDayOfMonth);*/
-                //planInfor.setStartDate(textString);
-                itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + textString);
-            }
-        },  null,getResources().getString(R.string.plan_detail_start_time));
-        endTimeDialog = new DoubleDatePickerDialog(getActivity(), 0, new DoubleDatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker startDatePicker, int startYear, int startMonthOfYear,
-                                  int startDayOfMonth) {
-                String textString = String.format("%d-%d-%d", startYear,
-                        startMonthOfYear + 1, startDayOfMonth);
-				/*String start = String.format("%d-%d-%d", startYear,
-						startMonthOfYear + 1, startDayOfMonth);
-				String end = String.format("%d-%d-%d", endYear, endMonthOfYear + 1, endDayOfMonth);*/
-                //planInfor.setEndDate(textString);
-                itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": "+ textString);
-            }
-        }, null, getResources().getString(R.string.plan_detail_end_time));
     }
 
     private void updatePlanData()
@@ -254,6 +221,7 @@ public class PlanDetailActivity extends BaseActivity  implements
         {
             itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + mPlanInfo.getStartDate());
             itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": " + mPlanInfo.getEndDate());
+            switchButtonDate.setChecked(true);
             showDateSelect(true);
         }
         else
@@ -490,11 +458,26 @@ public class PlanDetailActivity extends BaseActivity  implements
         else if(v == itvDateStart.getBgView())
         {
 
-            startTimeDialog.showTimeDialog(null);
+            PickViewUtil.alertTimerPicker(PlanDetailActivity.this, TimePickerView.Type.YEAR_MONTH_DAY, "yyyy-MM-dd", new PickViewUtil.TimerPickerCallBack() {
+                @Override
+                public void onTimeSelect(String date) {
+
+                    mPlanInfo.setStartDate(date);
+                    itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + date);
+                }
+            });
         }
         else if(v == itvDateEnd.getBgView())
         {
-            endTimeDialog.showTimeDialog(null);
+
+            PickViewUtil.alertTimerPicker(PlanDetailActivity.this, TimePickerView.Type.YEAR_MONTH_DAY, "yyyy-MM-dd", new PickViewUtil.TimerPickerCallBack() {
+                @Override
+                public void onTimeSelect(String date) {
+
+                    mPlanInfo.setEndDate(date);
+                    itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": "+ date);
+                }
+            });
 
         }
         else if(v == itvShops.getBgView())

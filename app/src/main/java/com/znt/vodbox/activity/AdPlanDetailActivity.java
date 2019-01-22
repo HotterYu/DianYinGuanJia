@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lvfq.pickerview.TimePickerView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AdPlanDetailAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
@@ -26,6 +27,7 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.DateUtils;
+import com.znt.vodbox.utils.PickViewUtil;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
@@ -243,6 +245,7 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         {
             itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + mAdPlanInfo.getStartDate());
             itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_end_time) + ": " + mAdPlanInfo.getEndDate());
+            switchButtonDate.setChecked(true);
             showDateSelect(true);
         }
         else
@@ -498,12 +501,25 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         }
         else if(v == itvDateStart.getBgView())
         {
+            PickViewUtil.alertTimerPicker(AdPlanDetailActivity.this, TimePickerView.Type.YEAR_MONTH_DAY, "yyyy-MM-dd", new PickViewUtil.TimerPickerCallBack() {
+                @Override
+                public void onTimeSelect(String date) {
 
-            startTimeDialog.showTimeDialog(null);
+                    mAdPlanInfo.setStartDate(date);
+                    itvDateStart.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + date);
+                }
+            });
         }
         else if(v == itvDateEnd.getBgView())
         {
-            endTimeDialog.showTimeDialog(null);
+            PickViewUtil.alertTimerPicker(AdPlanDetailActivity.this, TimePickerView.Type.YEAR_MONTH_DAY, "yyyy-MM-dd", new PickViewUtil.TimerPickerCallBack() {
+                @Override
+                public void onTimeSelect(String date) {
+
+                    mAdPlanInfo.setEndDate(date);
+                    itvDateEnd.getSecondView().setText(getResources().getString(R.string.plan_detail_start_time) + ": " + date);
+                }
+            });
 
         }
         else if(v == itvShops.getBgView())

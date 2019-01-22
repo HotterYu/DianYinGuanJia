@@ -1,6 +1,5 @@
 package com.znt.vodbox.activity;
 
-import android.app.TimePickerDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,8 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
+import com.lvfq.pickerview.TimePickerView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.AdSelectListAdapter;
 import com.znt.vodbox.adapter.OnMoreClickListener;
@@ -27,8 +26,8 @@ import com.znt.vodbox.bean.AdPlanInfo;
 import com.znt.vodbox.bean.SubAdPlanInfo;
 import com.znt.vodbox.dialog.AdPushTypeBottomDialog;
 import com.znt.vodbox.dialog.TimeSelectBottomDialog;
-import com.znt.vodbox.dialog.WheelListDialog;
 import com.znt.vodbox.utils.DateUtils;
+import com.znt.vodbox.utils.PickViewUtil;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
@@ -37,7 +36,6 @@ import com.znt.vodbox.view.xlistview.LJListView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class AdPlanCreateActivity extends  BaseActivity implements OnClickListener
@@ -454,7 +452,7 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
 
     private void showWeekSelectDialog()
     {
-        final List<String> data = new ArrayList<>();
+        final ArrayList<String> data = new ArrayList<>();
         data.add(getResources().getString(R.string.week_every));
         data.add(getResources().getString(R.string.week_monday));
         data.add(getResources().getString(R.string.week_tuesday));
@@ -464,28 +462,15 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         data.add(getResources().getString(R.string.week_saturday));
         data.add(getResources().getString(R.string.week_sunday));
 
-        final WheelListDialog dialog = new WheelListDialog(getActivity(),data);
-        dialog.setListener(new OnClickListener() {
+        PickViewUtil.alertBottomWheelOption(AdPlanCreateActivity.this, data,Integer.parseInt(cycleType), new PickViewUtil.OnWheelViewClick() {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btOk:
-                        String selectWeek = dialog.getPositionData();
-                        int realPos = dialog.getRealDataPosition();
-                        dialog.dismiss();
-                        itvWeekSelect.getSecondView().setText(data.get(realPos));
-                        //mSubAdPlanInfo.setCycleType(realPos+"");
-                        cycleType = realPos+"";
-                        break;
-                    case R.id.btCancel:
-                        dialog.dismiss();
-                        break;
-                    default:
-                        break;
-                }
+            public void onClick(View view, int postion) {
+                //Toast.makeText(PlanCreateActivity.this, data.get(postion), Toast.LENGTH_SHORT).show();
+                itvWeekSelect.getSecondView().setText(data.get(postion));
+                cycleType = postion+"";
             }
         });
-        dialog.show();
+
     }
 
     /**
@@ -543,21 +528,15 @@ public class AdPlanCreateActivity extends  BaseActivity implements OnClickListen
         }
         else if(v == itvPushTimeing.getBgView())
         {
-            //获取当前系统时间
-            Calendar c= Calendar.getInstance();
-            int hour=c.get(Calendar.HOUR_OF_DAY);
-            int minute=c.get(Calendar.MINUTE);
-
-            //弹出时间对话框
-            TimePickerDialog tpd=new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            PickViewUtil.alertTimerPicker(AdPlanCreateActivity.this, TimePickerView.Type.HOURS_MINS, "HH:mm", new PickViewUtil.TimerPickerCallBack() {
                 @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    //Log.i("text","时间："+hourOfDay+"："+minute);
-                    itvPushTimeing.getSecondView().setText(hourOfDay + "点"+minute+"分");
-                    pushTime = hourOfDay + ":" + minute;
+                public void onTimeSelect(String date) {
+
+                    String[] strs = date.split(":");
+                    itvPushTimeing.getSecondView().setText(strs[0] + "点"+strs[1]+"分");
+                    pushTime = date;
                 }
-            },hour,minute,true);
-            tpd.show();
+            });
         }
     };
 }

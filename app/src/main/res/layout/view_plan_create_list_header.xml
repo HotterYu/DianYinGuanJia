@@ -29,8 +29,8 @@
         android:id="@+id/itv_plan_detail_broadcast_albums"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-
+        android:paddingLeft="10dp"
+        android:background="@color/spacebar"
         />
 
     <View

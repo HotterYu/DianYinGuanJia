@@ -17,8 +17,8 @@ import com.znt.vodbox.adapter.PlanAlbumAdapter;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubPlanInfor;
-import com.znt.vodbox.dialog.WheelListDialog;
 import com.znt.vodbox.utils.DateUtils;
+import com.znt.vodbox.utils.PickViewUtil;
 import com.znt.vodbox.utils.StringUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
@@ -201,9 +201,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         {
             showCurPlanInfor();
         }
-
         //listView.onFresh();
-
     }
 
 
@@ -461,7 +459,7 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
     private void showWeekSelectDialog()
     {
-        final List<String> data = new ArrayList<>();
+        final ArrayList<String> data = new ArrayList<>();
         data.add(getResources().getString(R.string.week_every));
         data.add(getResources().getString(R.string.week_monday));
         data.add(getResources().getString(R.string.week_tuesday));
@@ -471,29 +469,14 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         data.add(getResources().getString(R.string.week_saturday));
         data.add(getResources().getString(R.string.week_sunday));
 
-        final WheelListDialog dialog = new WheelListDialog(getActivity(),data);
-        dialog.setListener(new OnClickListener() {
+        PickViewUtil.alertBottomWheelOption(PlanCreateActivity.this, data,Integer.parseInt(cycleType), new PickViewUtil.OnWheelViewClick() {
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.btOk:
-                        String selectWeek = dialog.getPositionData();
-                        int realPos = dialog.getRealDataPosition();
-                        dialog.dismiss();
-                        itvWeekSelect.getSecondView().setText(data.get(realPos));
-                        cycleType = realPos+"";
-                        /*mPlanInfo.getSelelctPlanInfor().setCycleType(realPos+"");
-                        mPlanInfo.updateSelect(mPlanInfo.getSelelctPlanInfor());*/
-                        break;
-                    case R.id.btCancel:
-                        dialog.dismiss();
-                        break;
-                    default:
-                        break;
-                }
+            public void onClick(View view, int postion) {
+                //Toast.makeText(PlanCreateActivity.this, data.get(postion), Toast.LENGTH_SHORT).show();
+                itvWeekSelect.getSecondView().setText(data.get(postion));
+                cycleType = postion+"";
             }
         });
-        dialog.show();
     }
 
     /**

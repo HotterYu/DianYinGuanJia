@@ -10,7 +10,6 @@
         android:id="@+id/ptrl_plan_datail"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_margin="6dp"
         ></com.znt.vodbox.view.xlistview.LJListView>
 
 </LinearLayout>
