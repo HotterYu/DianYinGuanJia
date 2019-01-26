@@ -235,7 +235,7 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode != getActivity().RESULT_OK)
             return;
-        if(requestCode == 1)
+        if(requestCode == 3)
         {
             refreshData();
         }
