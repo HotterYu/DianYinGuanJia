@@ -199,8 +199,10 @@
     <string name="dev_shop_none_device">该店铺下没有设备</string>
     <string name="dev_shop_detail">店铺详情</string>
 
-    <string name="dev_shop_detail_push_hint">插播</string>
-    <string name="dev_shop_detail_volume_hint">音量</string>
+    <string name="dev_shop_detail_push_hint">实时插播</string>
+    <string name="dev_shop_detail_push_list">插播列表</string>
+    <string name="dev_shop_detail_push_record">插播记录</string>
+    <string name="dev_shop_detail_volume_hint">音量调节</string>
     <string name="dev_shop_detail_play_mode">模式</string>
     <string name="dev_shop_detail_play_mode_order">顺序播放</string>
     <string name="dev_shop_detail_play_mode_radom">随机播放</string>

@@ -24,6 +24,8 @@ public class HttpApi
 
 
     public static final String GET_CUR_PLAY_MUSICS = API + "/play/now";
+    public static final String GET_CUR_PUSH_MUSICS = API + "/terminal/pushlist";
+    public static final String GET_PUSH_HISTORY_MUSICS = API + "/play/pushhistory";
 
     public static final String ADD_ALBUM = API + "/category/add";
     public static final String MODIFY_ALBUM = API + "/category/update";

@@ -666,6 +666,68 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void getCurPushMusics(String terminalId
+            ,@NonNull final HttpCallback<MusicListResultBean> callback) {
+        OkHttpUtils.get().url(GET_CUR_PUSH_MUSICS)
+                .addParams("terminalId", terminalId)
+                .build()
+                .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
+                    @Override
+                    public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
+    /**
+     * terminalId	false	int	终端id
+     pusherId	true	string	插播人，如果是登录用户填userid，如果是小程序非登录用户直接pusherid
+     vodFlag	false	string	0-推荐 1-插播，如果不填默认为插播
+     * @param terminalId
+     * @param pusherId
+     * @param vodFlag
+     * @param callback
+     */
+    public static void getPushHistoryMusics(String terminalId, String pusherId,String vodFlag
+            ,@NonNull final HttpCallback<MusicListResultBean> callback) {
+        OkHttpUtils.get().url(GET_PUSH_HISTORY_MUSICS)
+                .addParams("terminalId", terminalId)
+                .build()
+                .execute(new BaseHttpCallback<MusicListResultBean>(MusicListResultBean.class) {
+                    @Override
+                    public void onResponse(MusicListResultBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
     public static void getAdLists(String token, String pageNo, String pageSize,String merchId, String adtypeId, String adname
             ,@NonNull final HttpCallback<AdMediaListResultBean> callback) {
         OkHttpUtils.post().url(GET_AD_LISTS)

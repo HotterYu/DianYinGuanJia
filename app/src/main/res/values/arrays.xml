@@ -36,6 +36,12 @@
         <item>删除</item>
     </string-array>
 
+
+    <string-array name="search_type_dialog">
+        <item>按照名称搜索</item>
+        <item>按照设备编号搜索</item>
+    </string-array>
+
     <string-array name="ad_list_dialog">
         <item>实时插播</item>
         <item>复制链接</item>

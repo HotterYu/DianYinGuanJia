@@ -58,6 +58,8 @@ public class ShopDetailActivity extends BaseActivity implements
     private TextView tvPlayNext = null;
     private TextView tvPlayStatus = null;
     private TextView tvPlayVolume = null;
+    private TextView tvPushList = null;
+    private TextView tvPushRecord = null;
     private TextView tvCurPlayCount = null;
 
     private MyCycleView mMyCycleView = null;
@@ -105,6 +107,8 @@ public class ShopDetailActivity extends BaseActivity implements
         tvPlayNext = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_next);
         tvPlayStatus = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_play_status);
         tvPlayVolume = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_volume);
+        tvPushList = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_push_list);
+        tvPushRecord = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_push_record);
         tvCurPlayCount = (TextView)viewHeader.findViewById(R.id.tv_shop_detail_header_song_count);
 
         mMyCycleView.initView();
@@ -114,6 +118,8 @@ public class ShopDetailActivity extends BaseActivity implements
         tvPlayNext.setOnClickListener(this);
         tvPlayStatus.setOnClickListener(this);
         tvPlayVolume.setOnClickListener(this);
+        tvPushList.setOnClickListener(this);
+        tvPushRecord.setOnClickListener(this);
 
         listView.addHeader(viewHeader);
 
@@ -163,11 +169,10 @@ public class ShopDetailActivity extends BaseActivity implements
         {
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
-        getPlan();
+        getCurPlayMusics();
     }
 
-
-    public void getPlan()
+    public void getCurPlayMusics()
     {
         if(mShopInfo.getTmlRunStatus().size() <= 0)
         {
@@ -201,59 +206,6 @@ public class ShopDetailActivity extends BaseActivity implements
                 listView.stopRefresh();
             }
         });
-
-        /*String planId = mShopInfo.getTmlRunStatus().get(0).getPlanId();
-        if(TextUtils.isEmpty(planId))
-        {
-            listView.stopRefresh();
-            return;
-        }
-        try
-        {
-            // Simulate network access.
-            HttpClient.getPlan(token, planId, new HttpCallback<PlanResultBean>() {
-                @Override
-                public void onSuccess(PlanResultBean resultBean) {
-
-                    if(resultBean.isSuccess())
-                    {
-                        PlanInfo planInfo = resultBean.getData();
-                        List<MediaInfo> mediaInfoList = resultBean.getMediaInfos();
-                        if(mediaInfoList != null && mediaInfoList.size() > 0)
-                        {
-                            dataList.clear();
-                            dataList.addAll(mediaInfoList);
-                            mAlbumMusiclistAdapter.notifyDataSetChanged(dataList);
-                            tvCurPlayCount.setText(getResources().getString(R.string.dev_shop_detail_cur_play_count) + "("+dataList.size()+")");
-                        }
-                    }
-                    else
-                    {
-                        showToast(resultBean.getMessage());
-                    }
-                    listView.stopRefresh();
-                }
-
-                @Override
-                public void onFail(Exception e) {
-                    if(e != null)
-                        showToast(e.getMessage());
-                    else
-                        showToast("load data error");
-                    listView.stopRefresh();
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            listView.stopRefresh();
-            if(e != null)
-                showToast(e.getMessage());
-            else
-                showToast("load data error");
-            Log.e("",e.getMessage());
-        }*/
-
     }
 
     public void playControll(String type, String value)
@@ -299,12 +251,12 @@ public class ShopDetailActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
-        getPlan();
+        getCurPlayMusics();
     }
 
     @Override
     public void onLoadMore() {
-        getPlan();
+        getCurPlayMusics();
     }
 
     @Override
@@ -391,6 +343,18 @@ public class ShopDetailActivity extends BaseActivity implements
         else if(view == tvPlayStatus)
         {
             playControll("2","");//0-播放 1-暂停
+        }
+        else if(view == tvPushList)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("SHOP_INFO",mShopInfo);
+            ViewUtils.startActivity(getActivity(),PushListActivity.class,bundle);
+        }
+        else if(view == tvPushRecord)
+        {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("SHOP_INFO",mShopInfo);
+            ViewUtils.startActivity(getActivity(),PushListActivity.class,bundle);
         }
         else if(view == tvPlayVolume)
         {

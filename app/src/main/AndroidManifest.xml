@@ -296,6 +296,12 @@
             android:launchMode="singleTask"
             />
 
+        <activity
+            android:name=".activity.PushListActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            />
+
     </application>
 
 </manifest>

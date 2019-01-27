@@ -37,12 +37,16 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
 
       @Bind(R.id.tv_common_title)
       private TextView tvTopTitle = null;
+      @Bind(R.id.tv_common_title_sub)
+      private TextView tvTopTitleSub = null;
       @Bind(R.id.iv_common_back)
       private ImageView ivTopReturn = null;
       @Bind(R.id.iv_common_more)
       private ImageView ivTopMore = null;
       @Bind(R.id.tv_common_confirm)
       private TextView tvConfirm = null;
+
+      private int searchType = 0;
 
 
     private List<Shopinfo> shopinfoList = new ArrayList<>();
@@ -63,6 +67,9 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         ivTopMore.setVisibility(View.GONE);
         tvConfirm.setVisibility(View.GONE);
 
+        tvTopTitleSub.setVisibility(View.VISIBLE);
+        tvTopTitleSub.setText("按照名称搜索");
+
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +77,12 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
             }
         });
 
+        tvTopTitleSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSearchTypeDialog();
+            }
+        });
 
         adapter = new ShoplistAdapter(getActivity(),shopinfoList);
         adapter.setOnMoreClickListener(this);
@@ -134,6 +147,15 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
 
         String shopCode = "";
         String userShopCode = "";
+        if(searchType == 0)
+        {
+
+        }
+        else if(searchType == 1)
+        {
+            userShopCode = name;
+            name = "";
+        }
 
         mSearchView.showRecordView(false);
 
@@ -187,6 +209,27 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         }
 
     }
+
+      private AlertView tempAlertView = null;
+      private void showSearchTypeDialog()
+      {
+          tempAlertView = new AlertView("请选择搜索类型",null, "取消", null,
+                  getResources().getStringArray(R.array.search_type_dialog),
+                  getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+              public void onItemClick(Object o,int which){
+                  if(which == 0)
+                  {
+                      tvTopTitleSub.setText("按照名称搜索");
+                  }
+                  else if(which == 1)
+                  {
+                      tvTopTitleSub.setText("按照编号搜索");
+                  }
+                  searchType = which;
+                  loadShops();
+              }
+          });tempAlertView.show();
+      }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
