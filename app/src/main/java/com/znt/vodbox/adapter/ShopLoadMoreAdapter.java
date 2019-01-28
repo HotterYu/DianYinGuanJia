@@ -134,7 +134,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             else
             {
                 holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
-                holder.tvOnlineTime.setVisibility(View.GONE);
+                holder.tvOnlineTime.setVisibility(View.INVISIBLE);
             }
 
             if(!TextUtils.isEmpty(shopinfo.getAddress()))

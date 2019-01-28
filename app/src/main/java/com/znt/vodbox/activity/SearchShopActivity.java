@@ -30,10 +30,10 @@ import java.util.List;
 
 public class SearchShopActivity extends BaseActivity  implements LJListView.IXListViewListener,AdapterView.OnItemClickListener, OnMoreClickListener
   {
-    @Bind(R.id.lv_all_shops)
-    private LJListView listView;
-    @Bind(R.id.search_view)
-    private SearchView mSearchView = null;
+        @Bind(R.id.lv_all_shops)
+        private LJListView listView;
+        @Bind(R.id.search_view)
+        private SearchView mSearchView = null;
 
       @Bind(R.id.tv_common_title)
       private TextView tvTopTitle = null;

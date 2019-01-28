@@ -7,12 +7,14 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
@@ -23,6 +25,7 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.SharedPreferencesUtil;
+import com.znt.vodbox.utils.SystemUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 import java.util.Random;
@@ -37,6 +40,7 @@ public class WelcomeActivity extends Activity {
     @Bind(R.id.iv_entry)
     ImageView mIVEntry;
 
+    TextView tvVersion;
     private static final int ANIM_TIME = 3000;
 
     private static final float SCALE_END = 1.15F;
@@ -58,8 +62,20 @@ public class WelcomeActivity extends Activity {
         // 如果不是第一次启动app，则正常显示启动屏
         setContentView(R.layout.activity_welcome);
 
+        tvVersion = (TextView)findViewById(R.id.tv_splash_version);
+
+        tvVersion.setText(getVerName(this));
         //ButterKnife.bind(this);
         startMainActivity();
+    }
+    public static String getVerName(Context context) {
+        String verName = "";
+        try {
+            verName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return verName;
     }
     private void startMainActivity(){
         Random random = new Random(SystemClock.elapsedRealtime());//SystemClock.elapsedRealtime() 从开机到现在的毫秒数（手机睡眠(sleep)的时间也包括在内）
@@ -165,18 +181,21 @@ public class WelcomeActivity extends Activity {
                     {
                         //showProgress(false);
                         startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                        finish();
                     }
                 }
 
                 @Override
                 public void onFail(Exception e) {
                     startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                    finish();
                 }
             });
         }
         catch (Exception e)
         {
             startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+            finish();
         }
 
         return true;

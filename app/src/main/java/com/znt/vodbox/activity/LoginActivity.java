@@ -154,6 +154,11 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         else
             initDataFromLocal();
 
+
+
+        InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+
     }
 
     private void loginByRecord(UserInfo userInfo)
@@ -251,8 +256,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      */
     private void attemptLogin() {
 
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(mEmailView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        inputMethodManager.hideSoftInputFromWindow(mEmailView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
 
         // Reset errors.

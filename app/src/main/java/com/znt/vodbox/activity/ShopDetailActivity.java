@@ -25,6 +25,7 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
+import com.znt.vodbox.utils.ToastUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.MyCycleView;
@@ -283,13 +284,14 @@ public class ShopDetailActivity extends BaseActivity implements
             public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
-                        Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
+                        /*Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
                         Bundle b = new Bundle();
                         b.putString("MEDIA_NAME",tempInfo.getMusicName());
                         b.putString("MEDIA_ID",tempInfo.getId());
                         b.putString("MEDIA_URL",tempInfo.getMusicUrl());
                         intent.putExtras(b);
-                        startActivity(intent);
+                        startActivity(intent);*/
+                        pushMedia(tempInfo.getId(),mShopInfo.getTmlRunStatus().get(0).getTerminalId(),"1");
                         //requestSetRingtone(music);
                         break;
                     case 1://
@@ -316,6 +318,50 @@ public class ShopDetailActivity extends BaseActivity implements
             }
         });
 
+    }
+
+    private void pushMedia(String dataId,String terminId, String mediaType)
+    {
+        //String type = "1";//1 歌曲， 2 广告
+        //String dataId = mediaId;
+        String userId = Constant.mUserInfo.getMerchant().getId();
+        String pusherid = "";
+        String pushername = Constant.mUserInfo.getNickName();
+
+        try
+        {
+            // Simulate network access.
+            HttpClient.pushMedia(terminId, mediaType, dataId, userId,pusherid,pushername, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+
+                    if(resultBean != null)
+                    {
+                        if(resultBean.getResultcode().equals("0"))
+                        {
+                            ToastUtils.show(getResources().getString(R.string.push_fail)+":"+resultBean.getMessage());
+                        }
+                        else
+                            ToastUtils.show(getResources().getString(R.string.push_success));
+
+                    }
+                    else
+                    {
+                        ToastUtils.show(getResources().getString(R.string.push_fail));
+                    }
+
+                }
+
+                @Override
+                public void onFail(Exception e) {
+                    ToastUtils.show(getResources().getString(R.string.push_fail));
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            ToastUtils.show(getResources().getString(R.string.push_fail));
+        }
     }
 
     @Override

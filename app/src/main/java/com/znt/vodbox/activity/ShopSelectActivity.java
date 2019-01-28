@@ -8,6 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
@@ -34,6 +36,8 @@ public class ShopSelectActivity extends BaseActivity  implements
     private ImageView ivTopReturn = null;
     @Bind(R.id.iv_common_more)
     private ImageView ivTopMore = null;
+    @Bind(R.id.tv_common_title_sub)
+    private TextView tvTopTitleSub = null;
 
     @Bind(R.id.ptrl_shop_select)
     private LJListView listView = null;
@@ -64,6 +68,16 @@ public class ShopSelectActivity extends BaseActivity  implements
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        tvTopTitleSub.setVisibility(View.VISIBLE);
+        tvTopTitleSub.setText("按照名称搜索");
+
+        tvTopTitleSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSearchTypeDialog();
             }
         });
 
@@ -127,12 +141,15 @@ public class ShopSelectActivity extends BaseActivity  implements
         String userShopCode = "";
         String name = text;
 
-        /*if(StringUtils.isNumeric(text))
+        if(searchType == 0)
         {
-            userShopCode = text;
+
         }
-        else
-            name = text;*/
+        else if(searchType == 1)
+        {
+            userShopCode = name;
+            name = "";
+        }
         try
         {
             // Simulate network access.
@@ -181,6 +198,27 @@ public class ShopSelectActivity extends BaseActivity  implements
             showToast(e.getMessage());
         }
 
+    }
+    private int searchType = 0;
+    private AlertView tempAlertView = null;
+    private void showSearchTypeDialog()
+    {
+        tempAlertView = new AlertView("请选择搜索类型",null, "取消", null,
+                getResources().getStringArray(R.array.search_type_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
+                if(which == 0)
+                {
+                    tvTopTitleSub.setText("按照名称搜索");
+                }
+                else if(which == 1)
+                {
+                    tvTopTitleSub.setText("按照编号搜索");
+                }
+                searchType = which;
+                loadShops();
+            }
+        });tempAlertView.show();
     }
 
     private void pushMedia(String terminId, String mediaType)
