@@ -256,7 +256,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		
 		Bundle bunlde = new Bundle();
 		bunlde.putString("LoginType", "1");
-		ViewUtils.startActivity(getActivity(), LoginActivity.class, bunlde);
+		ViewUtils.startActivity(getActivity(), LoginAct.class, bunlde);
 		finish();
 	}
 	

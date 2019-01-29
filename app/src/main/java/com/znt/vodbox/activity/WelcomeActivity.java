@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +26,6 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
 import com.znt.vodbox.utils.SharedPreferencesUtil;
-import com.znt.vodbox.utils.SystemUtils;
 import com.znt.vodbox.utils.binding.Bind;
 
 import java.util.Random;
@@ -41,10 +41,11 @@ public class WelcomeActivity extends Activity {
     ImageView mIVEntry;
 
     TextView tvVersion;
+    View logoView = null;
     private static final int ANIM_TIME = 3000;
 
     private static final float SCALE_END = 1.15F;
-
+    private float scale = 0.6f; //logo缩放比例
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class WelcomeActivity extends Activity {
         // 如果不是第一次启动app，则正常显示启动屏
         setContentView(R.layout.activity_welcome);
 
+        logoView = findViewById(R.id.view_splash_logo);
         tvVersion = (TextView)findViewById(R.id.tv_splash_version);
 
         tvVersion.setText(getVerName(this));
@@ -78,8 +80,9 @@ public class WelcomeActivity extends Activity {
         return verName;
     }
     private void startMainActivity(){
+
         Random random = new Random(SystemClock.elapsedRealtime());//SystemClock.elapsedRealtime() 从开机到现在的毫秒数（手机睡眠(sleep)的时间也包括在内）
-        Observable.timer(1000, TimeUnit.MILLISECONDS)
+        Observable.timer(3000, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>()
                 {
@@ -115,12 +118,61 @@ public class WelcomeActivity extends Activity {
                 else*/
                 if(!result)
                 {
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                    WelcomeActivity.this.finish();
+                    goLoginPage();
                 }
 
             }
         });
+    }
+
+    private void goLoginPage()
+    {
+        //startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+        startActivity(new Intent(WelcomeActivity.this, LoginAct.class));
+        WelcomeActivity.this.finish();
+    }
+
+    /**
+     * 缩小
+     *
+     * @param view
+     */
+    public void zoomIn(final View view, float dist) {
+        view.setPivotY(view.getHeight());
+        view.setPivotX(view.getWidth() / 2);
+        AnimatorSet mAnimatorSet = new AnimatorSet();
+        ObjectAnimator mAnimatorScaleX = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, scale);
+        ObjectAnimator mAnimatorScaleY = ObjectAnimator.ofFloat(view, "scaleY", 1.0f, scale);
+        ObjectAnimator mAnimatorTranslateY = ObjectAnimator.ofFloat(view, "translationY", 0.0f, -dist);
+
+        mAnimatorSet.play(mAnimatorTranslateY).with(mAnimatorScaleX).with(mAnimatorScaleY);
+
+        mAnimatorSet.setDuration(300);
+        mAnimatorSet.start();
+
+    }
+
+    /**
+     * f放大
+     *
+     * @param view
+     */
+    public void zoomOut(final View view) {
+        if (view.getTranslationY()==0){
+            return;
+        }
+        view.setPivotY(view.getHeight());
+        view.setPivotX(view.getWidth() / 2);
+        AnimatorSet mAnimatorSet = new AnimatorSet();
+
+        ObjectAnimator mAnimatorScaleX = ObjectAnimator.ofFloat(view, "scaleX", scale, 1.0f);
+        ObjectAnimator mAnimatorScaleY = ObjectAnimator.ofFloat(view, "scaleY", scale, 1.0f);
+        ObjectAnimator mAnimatorTranslateY = ObjectAnimator.ofFloat(view, "translationY", view.getTranslationY(), 0);
+
+        mAnimatorSet.play(mAnimatorTranslateY).with(mAnimatorScaleX).with(mAnimatorScaleY);
+        mAnimatorSet.setDuration(300);
+        mAnimatorSet.start();
+
     }
 
     /**
@@ -179,23 +231,19 @@ public class WelcomeActivity extends Activity {
                     }
                     else
                     {
-                        //showProgress(false);
-                        startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                        finish();
+                        goLoginPage();
                     }
                 }
 
                 @Override
                 public void onFail(Exception e) {
-                    startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-                    finish();
+                    goLoginPage();
                 }
             });
         }
         catch (Exception e)
         {
-            startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
-            finish();
+            goLoginPage();
         }
 
         return true;

@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
                     if( MusicApplication.isLogin)
                         ViewUtils.startActivity(getApplicationContext(), AccountActivity.class,null);
                     else
-                        ViewUtils.startActivity(getApplicationContext(), LoginActivity.class,null);
+                        ViewUtils.startActivity(getApplicationContext(), LoginAct.class,null);
                 }
             });
             tvCode.setOnClickListener(new View.OnClickListener() {

@@ -202,7 +202,7 @@ public class UserListActivity extends BaseActivity implements
         {
             Bundle b = new Bundle();
             b.putSerializable("USER_INFO",tempInfor);
-            ViewUtils.startActivity(getActivity(),LoginActivity.class,b);
+            ViewUtils.startActivity(getActivity(),LoginAct.class,b);
             ActivityManager.getInstance().finishOthersActivity(UserRecordActivity.class);
         }
         else

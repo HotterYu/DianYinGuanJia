@@ -126,6 +126,11 @@
             android:launchMode="singleTask"
             />
         <activity
+            android:name=".activity.LoginAct"
+            android:windowSoftInputMode="adjustPan"
+            android:launchMode="singleTask"
+            />
+        <activity
             android:name=".activity.MusicActivity"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"

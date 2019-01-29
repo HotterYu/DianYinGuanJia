@@ -173,7 +173,7 @@ public class UserRecordActivity extends BaseActivity implements LJListView.IXLis
 
 			Bundle b = new Bundle();
 			b.putSerializable("USER_INFO",userInfor);
-			ViewUtils.startActivity(getActivity(),LoginActivity.class,b);
+			ViewUtils.startActivity(getActivity(),LoginAct.class,b);
 			ActivityManager.getInstance().finishOthersActivity(UserRecordActivity.class);
 		}
 		else
