@@ -38,7 +38,17 @@ public class StringUtils
 	
 	private static long STOREUNIT = 1024;
 
+	public static int countStr(String str1, String str2) {
+		if (str1.indexOf(str2) == -1) {
+			return 0;
+		}
+		else
+		{
+			String[] tempStr = str1.split(str2);
+			return tempStr.length-1;
+		}
 
+	}
 
 	public static boolean isNumeric(String str){
 		Pattern pattern = Pattern.compile("[0-9]*");

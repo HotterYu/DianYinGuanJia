@@ -10,6 +10,8 @@
 
 package com.znt.vodbox.bean;
 
+import com.znt.vodbox.utils.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -123,7 +125,7 @@ public class SubPlanInfor implements Serializable
 
 	private String removeSecond(String time)
 	{
-		if(time.length()>=8)
+		if(StringUtils.countStr(time,":") > 1)
 		{
 			int index = time.lastIndexOf(":");
 			time = time.substring(0,index);

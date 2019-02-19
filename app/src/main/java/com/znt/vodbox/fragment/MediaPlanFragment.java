@@ -164,6 +164,7 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
                             dataList.clear();
                         List<PlanInfo> tempList = resultBean.getData();
                         dataList.addAll(tempList);
+
                         maxSize = Integer.parseInt(resultBean.getMessage());
                         loadMoreWrapper.notifyItemChanged(lastSize,dataList.size());
                     }

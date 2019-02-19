@@ -26,6 +26,7 @@ import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.PickViewUtil;
+import com.znt.vodbox.utils.StringUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.ItemTextView;
@@ -252,17 +253,13 @@ public class PlanDetailActivity extends BaseActivity  implements
         {
             itvDateStart.setVisibility(View.VISIBLE);
             itvDateEnd.setVisibility(View.VISIBLE);
-            /*planInfor.setPlanType(PlanInfor.PLAN_TYPE_YEAR);
-            itvDateStart.getSecondView().setText("开始时间：" + planInfor.getStartDate());
-            itvDateEnd.getSecondView().setText("结束时间：" + planInfor.getEndDate());*/
-            //planInfor.setPlanFlag("1");
+
         }
         else
         {
             itvDateStart.setVisibility(View.GONE);
             itvDateEnd.setVisibility(View.GONE);
-            //planInfor.setPlanType(PlanInfor.PLAN_TYPE_EVERYDAY);
-            //planInfor.setPlanFlag("0");
+
         }
     }
 
@@ -337,8 +334,8 @@ public class PlanDetailActivity extends BaseActivity  implements
                 groupId = "";
 
             cycleTypes = removeTags(cycleTypes);
-            startTimes = removeTags(startTimes);
-            endTimes = removeTags(endTimes);
+            startTimes = removeTimeTags(startTimes);
+            endTimes = removeTimeTags(endTimes);
             categoryIds = removeTags(categoryIds);
             if(!switchButton.isChecked())
                 groupId = "";
@@ -390,6 +387,34 @@ public class PlanDetailActivity extends BaseActivity  implements
         return src;
     }
 
+    private String removeTimeTags(String src)
+    {
+        if(src.contains("["))
+            src = src.replace("[","");
+        if(src.contains("]"))
+            src = src.replace("]","");
+        String[] srcArray = src.split(",");
+        src = "";
+        for(int i=0;i<srcArray.length;i++)
+        {
+            String s = srcArray[i];
+            s = removeSecond(s);
+            src += s + ",";
+        }
+        if(src.endsWith(","))
+            src = src.substring(0,src.lastIndexOf(","));
+        return src;
+    }
+
+    private String removeSecond(String time)
+    {
+        if(StringUtils.countStr(time,":") > 1)
+        {
+            int index = time.lastIndexOf(":");
+            time = time.substring(0,index);
+        }
+        return time;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

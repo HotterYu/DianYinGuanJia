@@ -324,7 +324,7 @@ public class AlbumMusicActivity extends BaseActivity implements
     @Override
     public void onMoreClick(int position) {
         MediaInfo tempInfo = dataList.get(position);
-        if(isSystemAlbum)
+         if(isSystemAlbum)
             showSysMusicOperationDialog(tempInfo);
         else
             showMusicOperationDialog(tempInfo);
