@@ -88,7 +88,7 @@ public class ShoplistAdapter extends BaseAdapter {
         {
 
             holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId());
-
+            holder.tvOnlineTime.setVisibility(View.GONE);
             if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
                     shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
@@ -127,7 +127,6 @@ public class ShoplistAdapter extends BaseAdapter {
             holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
             holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
             holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_black_on));
-
         }
 
         if(!TextUtils.isEmpty(shopinfo.getAddress()))

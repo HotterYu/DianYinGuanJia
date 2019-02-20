@@ -59,38 +59,20 @@ public class StringUtils
 		return true;
 	}
 
-	/**
-	* @Description: 瀛楃涓茬┖鍒ゆ柇
-	* @param @param value
-	* @param @return   
-	* @return boolean 
-	* @throws
-	 */
+
 	public static boolean isEmpty(String value) 
 	{
 		return value == null || value.equals("");
 	}
 
-	/**
-	* @Description: 鏍规嵁tag灏嗗瓧绗︿覆鍒嗚В
-	* @param @param url
-	* @param @return   
-	* @return String[] 
-	* @throws
-	 */
+
 	public static String[] splitUrls(String url, String tag) 
 	{
 		String[] urls = url.split(tag);
 		return urls;
 	}
 
-	/**
-	* @Description: 鍏ㄨ鍗婅杞崲
-	* @param @param input
-	* @param @return   
-	* @return String 
-	* @throws
-	 */
+
 	public static String toDBC(String input) 
 	{          
         char[] c = input.toCharArray();

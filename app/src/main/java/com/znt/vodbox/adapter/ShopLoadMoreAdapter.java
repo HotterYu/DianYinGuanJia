@@ -84,7 +84,6 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             Shopinfo shopinfo = dataList.get(position);
 
-            holder.ivCover.setImageResource(R.drawable.icon_shop);
             holder.tvShopName.setText(shopinfo.getName());
 
             if(shopinfo.getGroup() != null && !TextUtils.isEmpty(shopinfo.getGroup().getGroupName()))
@@ -103,11 +102,12 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             {
 
                 holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId());
-
+                holder.tvOnlineTime.setVisibility(View.VISIBLE);
                 if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
                         shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
                 {
                     holder.tvStatus.setText(mContext.getResources().getString(R.string.dev_status_online));
+                    holder.ivCover.setImageResource(R.drawable.icon_shop);
                     holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                     holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                     holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
@@ -115,6 +115,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 else
                 {
                     holder.tvStatus.setText(mContext.getResources().getString(R.string.dev_status_offline));
+                    holder.ivCover.setImageResource(R.drawable.icon_shop_offline);
                     holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
                     holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
                     holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_black_on));
@@ -134,7 +135,14 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             else
             {
                 holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
-                holder.tvOnlineTime.setVisibility(View.INVISIBLE);
+                //holder.tvOnlineTime.setVisibility(View.INVISIBLE);
+                holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
+                holder.tvOnlineTime.setVisibility(View.GONE);
+                holder.ivCover.setImageResource(R.drawable.icon_shop_offline);
+                holder.tvStatus.setText(mContext.getResources().getString(R.string.dev_status_offline));
+                holder.tvStatus.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
+                holder.tvCurSong.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
+                holder.tvShopName.setTextColor(mContext.getResources().getColor(R.color.text_black_on));
             }
 
             if(!TextUtils.isEmpty(shopinfo.getAddress()))

@@ -40,8 +40,8 @@ android {
         applicationId "com.znt.vodbox"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 50
-        versionName "V5.0"
+        versionCode 51
+        versionName "V5.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/rxjava.properties'
