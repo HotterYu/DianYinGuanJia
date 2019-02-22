@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">店音管家</string>
+    <string name="app_name">店音</string>
     <string name="sure_add">完成添加</string>
     <string name="more">更多...</string>
     <string name="sure">确定</string>
@@ -250,10 +250,14 @@
     <string name="title_notifications">Notifications</string>
 
 
+    <string name="plan_name_default">日常播放计划</string>
+    <string name="ad_plan_name_default">日常广告计划</string>
+
     <string name="hint_login_username">请输入登录账户</string>
     <string name="hint_login_password">输入密码</string>
     <string name="login">登录</string>
     <string name="login_forget_pwd">忘记密码</string>
+    <string name="login_old_sys">旧系统入口</string>
     <string name="please_input_limit_pwd">请输入数字或字母</string>
 
 </resources>

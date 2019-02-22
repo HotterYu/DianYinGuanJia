@@ -24,7 +24,6 @@ import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
-import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.PickViewUtil;
 import com.znt.vodbox.utils.StringUtils;
 import com.znt.vodbox.utils.ViewUtils;
@@ -150,8 +149,7 @@ public class PlanDetailActivity extends BaseActivity  implements
         else
         {
             mPlanInfo = new PlanInfo();
-            String defaultName = DateUtils.getStringTimeChinese(System.currentTimeMillis()) + "计划";
-            mPlanInfo.setPlanName(defaultName);
+            mPlanInfo.setPlanName(getResources().getString(R.string.plan_name_default));
             itvName.getSecondView().setText(mPlanInfo.getPlanName());
 
             switchButton.setChecked(false);

@@ -26,7 +26,7 @@
         android:layout_marginTop="100dp"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
-        android:text="店音管家"
+        android:text="店音-StoreSound"
         android:textSize="18sp"
         android:textStyle="bold"
         app:drawableHeight="44dp"
@@ -53,8 +53,8 @@
             android:paddingLeft="13dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_mobile_flag" />
 
@@ -75,7 +75,7 @@
             <ImageView
                 android:id="@+id/iv_clean_phone"
                 android:layout_width="40dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_clear"
                 android:visibility="gone" />
@@ -96,8 +96,8 @@
             android:paddingLeft="13dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/ic_password_flag" />
 
@@ -118,8 +118,8 @@
 
             <ImageView
                 android:id="@+id/clean_password"
-                android:layout_width="40dp"
-                android:layout_height="fill_parent"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_clear"
                 android:visibility="gone" />
@@ -127,7 +127,7 @@
             <ImageView
                 android:id="@+id/iv_show_pwd"
                 android:layout_width="40dp"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:scaleType="centerInside"
                 android:src="@drawable/pass_gone" />
         </LinearLayout>
@@ -170,8 +170,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
                 android:layout_marginLeft="21dp"
-                android:text="@string/login_forget_pwd"
-                android:textColor="@color/color_b0b8b2"
+                android:text="@string/login_old_sys"
+                android:textColor="@color/black"
                 android:textSize="14dp" />
         </LinearLayout>
     </LinearLayout>

@@ -14,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
-import com.qihoo360.replugin.RePlugin;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.CommonCallBackBean;
@@ -31,7 +29,6 @@ import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
-import com.znt.vodbox.utils.ActivityManager;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.CircleImageView;
@@ -60,8 +57,6 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 	private ImageView ivQQLogin = null;
 	private ImageView ivSinaLogin = null;
 	private ImageView ivWeiXinLogin = null;
-	private Button btnOldVersion = null;
-
 	private UserInfo userInfor = null;
 	private boolean isInit = true;
 
@@ -155,8 +150,6 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		ivWeiXinLogin = (ImageView)findViewById(R.id.iv_login_weixin);
 		ivSinaLogin = (ImageView)findViewById(R.id.iv_login_sina);
 
-		btnOldVersion = (Button) findViewById(R.id.btn_login_old);
-
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 		
 	}
@@ -185,7 +178,6 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		ivSinaLogin.setOnClickListener(this);
 
 
-		btnOldVersion.setOnClickListener(this);
 
 	}
 	public int getAppVersionName(Context context) {
@@ -285,13 +277,6 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		else if(v == accountLogin)
 		{
 			
-		}
-		else if(v == btnOldVersion)
-		{
-			String pluginName = "DianYinGuanJiaOld";
-			RePlugin.startActivity(AccountActivity.this, RePlugin.createIntent(pluginName,
-					"com.znt.vodbox.activity.LoginActivity"));
-			ActivityManager.getInstance().finishAllActivity();
 		}
 	}
 	

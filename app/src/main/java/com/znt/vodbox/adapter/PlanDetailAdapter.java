@@ -100,11 +100,7 @@ public class PlanDetailAdapter  extends BaseAdapter
                     selectIndex = (Integer) v.getTag();
                     if(mOnScheDeleteListener != null)
                         mOnScheDeleteListener.OnScheDelete(selectIndex);
-                    /*subPlanList.remove(selectIndex);
-                        *//*if(planInfor == null)
-                            planInfor = new PlanInfor();
-                        planInfor.setSubPlanList(subPlanList);*//*
-                    notifyDataSetChanged();*/
+
                 }
             });
             convertView.setTag(vh);

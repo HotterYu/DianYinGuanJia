@@ -1,12 +1,13 @@
 package com.znt.vodbox.application;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import com.qihoo360.replugin.RePluginApplication;
 import com.tencent.bugly.crashreport.CrashReport;
+import com.znt.vodbox.exception.MyExceptionHandler;
 import com.znt.vodbox.storage.db.DBManager;
 import com.znt.vodbox.utils.ActivityManager;
 
@@ -19,11 +20,14 @@ import java.io.IOException;
  * 自定义Application
  * Created by wcy on 2015/11/27.
  */
-public class MusicApplication extends RePluginApplication {
+public class MusicApplication extends Application {
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        MyExceptionHandler excetionHandler = MyExceptionHandler.getInstance();
+        excetionHandler.init(getApplicationContext());
 
         AppCache.get().init(this);
         ForegroundObserver.init(this);

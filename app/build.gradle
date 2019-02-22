@@ -1,26 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'bugly'
-apply plugin: 'replugin-host-gradle'
-/**
- * 配置项均为可选配置，默认无需添加
- * 更多可选配置项参见replugin-host-gradle的RepluginConfig类
- * 可更改配置项参见 自动生成RePluginHostConfig.java
- */
-repluginHostConfig {
-    /**
-     * 是否使用 AppCompat 库
-     * 不需要个性化配置时，无需添加
-     */
-    useAppCompat = true
-    /**
-     * 背景不透明的坑的数量
-     * 不需要个性化配置时，无需添加
-     */
-    countNotTranslucentStandard = 6
-    countNotTranslucentSingleTop = 2
-    countNotTranslucentSingleTask = 3
-    countNotTranslucentSingleInstance = 2
-}
+
 bugly {
     appId = '6207095b94'
     appKey = 'd935ac63-2cd5-405d-9615-0eb0aafca9c4'
@@ -37,11 +17,11 @@ android {
     }
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.znt.vodbox"
+        applicationId "com.znt.storesound"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 51
-        versionName "V5.1"
+        versionCode 1
+        versionName "V1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/rxjava.properties'
@@ -95,9 +75,6 @@ dependencies {
     implementation files('libs/mail.jar')
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
-
-    implementation 'com.qihoo360.replugin:replugin-host-lib:2.3.0'
-
 
     implementation 'com.just.agentweb:agentweb:4.0.2'
 

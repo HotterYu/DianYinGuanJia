@@ -33,7 +33,7 @@ public class Constant
 	public static final int SOCKET_PORT = 6789;
 	public static final String SOCKET_IP = "192.168.43.1";
 	
-	public static final String WORK_DIR = "/ZNTMusic";
+	public static final String WORK_DIR = "/DianYin";
 	
 	public static boolean isSongUpdate = true;
 	public static boolean isPlayUpdate = false;

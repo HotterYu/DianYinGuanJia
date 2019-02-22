@@ -3,6 +3,7 @@ package com.znt.vodbox.activity;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -342,6 +343,11 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
                 break;
             case R.id.service_apply:
                 goApplyPage();
+                break;
+            case R.id.forget_password:
+                Uri uri = Uri.parse("http://zhunit-music.oss-cn-shenzhen.aliyuncs.com/apk/DianYinGuanJia.apk");
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
                 break;
             case R.id.iv_show_pwd:
                 if(flag == true){

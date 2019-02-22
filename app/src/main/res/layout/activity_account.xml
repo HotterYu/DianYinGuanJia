@@ -100,30 +100,7 @@
 	            android:text="注销"
 	            />
 
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical">
-				<TextView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="44dp"
-					style="?android:textAppearanceSmall"
-					android:textColor="@color/text_blue_on"
-					android:text="@string/old_login_hint"
-					/>
 
-				<Button
-					android:id="@+id/btn_login_old"
-					style="?android:textAppearanceSmall"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_marginTop="8dp"
-					android:text="@string/old_login"
-					android:textColor="@color/colorAccent"
-					android:background="@drawable/button_style_frame" />
-
-			</LinearLayout>
 
 	    </LinearLayout>
 	    

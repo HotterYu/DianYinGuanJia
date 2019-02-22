@@ -1,6 +1,6 @@
 package com.znt.vodbox.bean;
 
-import android.text.TextUtils;
+import com.znt.vodbox.utils.StringUtils;
 
 import java.io.Serializable;
 import java.net.URLDecoder;
@@ -72,7 +72,17 @@ public class SubAdPlanInfo implements Serializable {
     }
 
     public String getStartTime() {
-        return startTime;
+        return removeSecond(startTime);
+    }
+
+    private String removeSecond(String time)
+    {
+        if(StringUtils.countStr(time,":") > 1)
+        {
+            int index = time.lastIndexOf(":");
+            time = time.substring(0,index);
+        }
+        return time;
     }
 
     public void setStartTime(String startTime) {
@@ -80,7 +90,7 @@ public class SubAdPlanInfo implements Serializable {
     }
 
     public String getEndTime() {
-        return endTime;
+        return removeSecond(endTime);
     }
 
     public void setEndTime(String endTime) {
