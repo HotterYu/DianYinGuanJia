@@ -139,6 +139,8 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
         tvApply.setOnClickListener(this);
         tvContact.setOnClickListener(this);
 
+        forget_password.setOnClickListener(this);
+
         et_mobile.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -345,6 +347,19 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
                 goApplyPage();
                 break;
             case R.id.forget_password:
+
+                /*try {
+                    String filePath = Environment.getExternalStorageDirectory()+"/DianYinGuanJia.apk";
+                    FileUtils.copyAssetFileToLocal(this,"apk", filePath);
+                    File apkFile = new File(filePath);
+                    if(apkFile.exists())
+                    {
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }*/
+
                 Uri uri = Uri.parse("http://zhunit-music.oss-cn-shenzhen.aliyuncs.com/apk/DianYinGuanJia.apk");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
