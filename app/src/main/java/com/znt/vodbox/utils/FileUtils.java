@@ -1,7 +1,13 @@
 package com.znt.vodbox.utils;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -28,6 +34,77 @@ import java.util.regex.Pattern;
 public class FileUtils {
     private static final String MP3 = ".mp3";
     private static final String LRC = ".lrc";
+
+    /**
+     * 复制文件到SD卡
+     * @param context
+     * @param fileName 复制的文件名
+     * @param path  保存的目录路径
+     * @return
+     */
+    public static Uri copyAssetsFile(Context context, String fileName, String path) {
+        try {
+            InputStream mInputStream = context.getAssets().open(fileName);
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            File mFile = new File(path + File.separator + "DianYinGuanJia.apk");
+            if(mFile.exists())
+                mFile.delete();
+
+            if(!mFile.exists())
+                mFile.createNewFile();
+            long s = mFile.length();
+            FileOutputStream mFileOutputStream = new FileOutputStream(mFile);
+            byte[] mbyte = new byte[1024];
+            int i = 0;
+            while((i = mInputStream.read(mbyte)) > 0){
+                mFileOutputStream.write(mbyte, 0, i);
+            }
+            mInputStream.close();
+            mFileOutputStream.close();
+            Uri uri = null;
+            try{
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                    //包名.fileprovider
+                    String pkgName = context.getPackageName();
+                    uri = FileProvider.getUriForFile(context, pkgName + ".fileprovider", mFile);
+                }else{
+                    uri = Uri.fromFile(mFile);
+                }
+            }catch (ActivityNotFoundException anfe){
+
+            }
+            MediaScannerConnection.scanFile(context, new String[]{mFile.getAbsolutePath()}, null, null);
+
+            return uri;
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 安装apk
+     * @param uri apk存放的路径
+     * @param context
+     */
+    public static void openApk(Uri uri, Context context) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        if (Build.VERSION.SDK_INT >= 24) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        } else {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        context.startActivity(intent);
+    }
 
     private static String getAppDir() {
         return Environment.getExternalStorageDirectory() + "/PonyMusic";

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">店音</string>
+    <string name="app_name">StoreSound</string>
     <string name="sure_add">完成添加</string>
     <string name="more">更多...</string>
     <string name="sure">确定</string>
@@ -57,6 +57,8 @@
     <string name="menu_export">导出报表</string>
 
     <string name="menu_about">关于店音</string>
+
+    <string name="slogan">助你打造统一的店铺音乐风格</string>
 
     <string name="menu_exit">退出应用</string>
     <string name="network">网络</string>

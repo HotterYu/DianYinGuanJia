@@ -3,6 +3,8 @@ package com.znt.vodbox.utils;
 import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -24,6 +26,35 @@ import java.util.StringTokenizer;
  * Created by hzwangchenyan on 2016/3/22.
  */
 public class SystemUtils {
+
+    /**
+     * 妫�娴嬬綉缁滄槸鍚﹁繛鎺�
+     *
+     * @return
+     */
+    public static boolean isNetConnected(Context context)
+    {
+        if(context == null)
+            return false;
+
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm != null)
+        {
+            NetworkInfo[] infos = cm.getAllNetworkInfo();
+            if (infos != null)
+            {
+                for (NetworkInfo ni : infos)
+                {
+                    if (ni.isConnected())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+        //return WifiFactory.newInstance(context).getWifiAdmin().isWifiEnabled();
+    }
 
     /**
      * 判断是否有Activity在运行

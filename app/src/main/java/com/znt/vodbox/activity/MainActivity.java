@@ -43,6 +43,7 @@ import com.znt.vodbox.fragment.first.HomeFragment;
 import com.znt.vodbox.permission.PermissionHelper;
 import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.utils.ActivityManager;
+import com.znt.vodbox.utils.SystemUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.view.SlideViewPager;
 
@@ -88,6 +89,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
 
         mPermissionHelper = new PermissionHelper(MainActivity.this, this);
         mPermissionHelper.requestPermissions();
+
+        long lastCheckTime = LocalDataEntity.newInstance(getApplicationContext()).getCheckUpdateTime();
+        if(System.currentTimeMillis() - lastCheckTime >= 24 * 60 * 60 * 1000)
+            checkUpdate();
+
+    }
+
+    private void checkUpdate()
+    {
+        if(SystemUtils.isNetConnected(getApplicationContext()))
+        {
+            /*HttpFactory HttpFactory = new HttpFactory(getApplicationContext(), handler);
+            HttpFactory.checkUpdate();*/
+        }
 
     }
 

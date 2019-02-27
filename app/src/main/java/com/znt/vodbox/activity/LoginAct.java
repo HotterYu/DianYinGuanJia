@@ -1,10 +1,15 @@
 package com.znt.vodbox.activity;
 
+import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -18,6 +23,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +36,22 @@ import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
+import com.znt.vodbox.permission.PermissionHelper;
+import com.znt.vodbox.permission.PermissionInterface;
 import com.znt.vodbox.utils.ActivityManager;
+import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.view.DrawableTextView;
 import com.znt.vodbox.view.KeyboardWatcher;
+import com.znt.vodbox.view.SplashView;
+
+import static com.znt.vodbox.activity.WelcomeActivity.getVerName;
 
 /**
  * Created by WZH on 2017/3/25.
  */
 
-public class LoginAct extends BaseActivity implements View.OnClickListener, KeyboardWatcher.SoftKeyboardStateListener {
+public class LoginAct extends BaseActivity implements View.OnClickListener, KeyboardWatcher.SoftKeyboardStateListener,PermissionInterface {
     private DrawableTextView logo;
     private EditText et_mobile;
     private EditText et_password;
@@ -51,6 +63,15 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
     private TextView tvRegister;
     private TextView tvApply;
     private TextView tvContact;
+
+    private String loginType = "0";//1, 不显示splash
+
+    private PermissionHelper mPermissionHelper;
+
+    private LinearLayout linearLayout = null;
+    private SplashView mSplashView = null;
+    private View viewSpBg = null;
+    private final long finishTime = 2500;
 
     private int screenHeight = 0;//屏幕高度
     private float scale = 0.8f; //logo缩放比例
@@ -74,6 +95,76 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
         keyboardWatcher = new KeyboardWatcher(findViewById(Window.ID_ANDROID_CONTENT));
         keyboardWatcher.addSoftKeyboardStateListener(this);
 
+        mPermissionHelper = new PermissionHelper(this, this);
+        mPermissionHelper.requestPermissions();
+
+        loginType = getIntent().getStringExtra("LoginType");
+        if(TextUtils.isEmpty(loginType))
+            loginType = "0";
+        if(loginType.equals("0"))
+        {
+            showSplashView();
+        }
+        else
+        {
+            viewSpBg.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void showSplashView()
+    {
+        mSplashView = new SplashView(this);
+        handler.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                mSplashView.splashAndDisappear(new SplashView.ISplashListener()
+                {
+                    @Override
+                    public void onStart()
+                    {
+                        // log the animation start event
+
+                    }
+
+                    @Override
+                    public void onUpdate(float completionFraction)
+                    {
+                        // log animation update events
+
+                    }
+
+                    @Override
+                    public void onEnd()
+                    {
+                        // log the animation end event
+
+                        // free the view so that it turns into garbage
+                        mSplashView = null;
+                        hideSplash();
+                    }
+                });
+            }
+        }, finishTime);
+
+        mSplashView.setRemoveFromParentOnEnd(true); // remove the SplashView from MainView once animation is completed
+        mSplashView.setSplashBackgroundColor(getResources().getColor(R.color.white)); // the background color of the view
+        mSplashView.setRotationRadius(getResources().getDimensionPixelOffset(R.dimen.splash_rotation_radius)); // radius of the big circle that the little circles will rotate on
+        mSplashView.setCircleRadius(getResources().getDimensionPixelSize(R.dimen.splash_circle_radius)); // radius of each circle
+        mSplashView.setRotationDuration(getResources().getInteger(R.integer.splash_rotation_duration)); // time for one rotation to be completed by the small circles
+        mSplashView.setSplashDuration(getResources().getInteger(R.integer.splash_duration)); // total time taken for the circles to merge together and disappear
+        mSplashView.setCircleColors(getResources().getIntArray(R.array.splash_circle_colors)); // the colors of each circle in order
+
+
+        linearLayout.addView(mSplashView);
+    }
+
+    private void hideSplash()
+    {
+        linearLayout.setVisibility(View.GONE);
+        viewSpBg.setVisibility(View.GONE);
     }
 
     private void loginByRecord(UserInfo userInfo)
@@ -122,6 +213,12 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
         tvApply = (TextView) findViewById(R.id.service_apply);
         tvContact = (TextView) findViewById(R.id.contact_service);
 
+        TextView tvVersion = (TextView)findViewById(R.id.tv_splash_version);
+
+        tvVersion.setText(getVerName(this));
+
+        linearLayout = (LinearLayout) findViewById(R.id.view_login_splash);
+        viewSpBg = findViewById(R.id.view_login_splash_bg);
         service = findViewById(R.id.service);
         body = findViewById(R.id.body);
         screenHeight = this.getResources().getDisplayMetrics().heightPixels; //获取屏幕高度
@@ -318,6 +415,56 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
         return password.length() > 5;
     }
 
+    private void goNewVersion()
+    {
+        if(isAppInstall(getApplicationContext(),"com.znt.vodbox"))
+        {
+            //软件已经安装了，直接打开
+            openApp();
+        }
+        else//软件没有安装，读取文件安装
+        {
+            String apkPath = Environment.getExternalStorageDirectory() +"/StoreSound/";
+            Uri mUri = FileUtils.copyAssetsFile(getApplicationContext(),"DianYinGuanJia.apk",apkPath);
+            if(mUri != null)
+                FileUtils.openApk(mUri,getApplicationContext());
+            else
+                Toast.makeText(getApplicationContext(),"没有读取到安装包",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openApp()
+    {
+        Intent intent = getPackageManager().getLaunchIntentForPackage("com.znt.vodbox");
+        if (intent != null)
+        {
+            //intent.putExtra("type", "110");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * App是否已安装
+     * @param mContext
+     * @param packageName 包名
+     * @return
+     */
+    private boolean isAppInstall(Context mContext, String packageName){
+        PackageInfo mInfo;
+        try {
+            mInfo = mContext.getPackageManager().getPackageInfo(packageName, 0 );
+        } catch (Exception e) {
+            // TODO: handle exception
+            mInfo = null;
+        }
+        if(mInfo == null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     private boolean flag = false;
     @Override
     public void onClick(View v) {
@@ -348,21 +495,11 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
                 break;
             case R.id.forget_password:
 
-                /*try {
-                    String filePath = Environment.getExternalStorageDirectory()+"/DianYinGuanJia.apk";
-                    FileUtils.copyAssetFileToLocal(this,"apk", filePath);
-                    File apkFile = new File(filePath);
-                    if(apkFile.exists())
-                    {
+                goNewVersion();
 
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }*/
-
-                Uri uri = Uri.parse("http://zhunit-music.oss-cn-shenzhen.aliyuncs.com/apk/DianYinGuanJia.apk");
+                /*Uri uri = Uri.parse("http://zhunit-music.oss-cn-shenzhen.aliyuncs.com/apk/DianYinGuanJia.apk");
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
             case R.id.iv_show_pwd:
                 if(flag == true){
@@ -441,6 +578,57 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
         mAnimatorTranslateY.setInterpolator(new AccelerateDecelerateInterpolator());
         mAnimatorTranslateY.start();
         zoomOut(logo);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(mPermissionHelper.requestPermissionsResult(requestCode, permissions, grantResults)){
+            //权限请求结果，并已经处理了该回调
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public int getPermissionsRequestCode() {
+        return 10000;
+    }
+
+    @Override
+    public String[] getPermissions() {
+        return new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_FINE_LOCATION
+
+        };
+    }
+    @Override
+    public void requestPermissionsSuccess()
+    {
+        //权限请求用户已经全部允许
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            if(e == null)
+                showToast("初始化失败");
+            else
+                showToast("初始化失败："+e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void requestPermissionsFail() {
+        //权限请求不被用户允许。可以提示并退出或者提示权限的用途并重新发起权限申请。
+
+        mPermissionHelper.requestPermissions();
+        //
     }
 
 }

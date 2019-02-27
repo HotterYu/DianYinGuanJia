@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
 
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
@@ -29,7 +30,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="${applicationId}.fileProvider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -56,7 +57,7 @@
         </receiver>
 
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".activity.LoginAct"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -125,11 +126,11 @@
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
             />
-        <activity
+        <!--<activity
             android:name=".activity.LoginAct"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            />-->
         <activity
             android:name=".activity.MusicActivity"
             android:windowSoftInputMode="adjustPan"
