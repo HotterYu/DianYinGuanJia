@@ -16,6 +16,7 @@
             android:id="@+id/ptrl_album_music"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_above="@+id/view_bottom_operation"
             android:layout_marginTop="54dp"
 
             ></com.znt.vodbox.view.xlistview.LJListView>
@@ -30,6 +31,77 @@
             app:textHintSearch="输入查询关键字"
             app:searchBlockColor="#ffffff"
             />
+
+        <LinearLayout
+            android:id="@+id/view_bottom_operation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:visibility="gone"
+            android:background="@drawable/sel_item_bg">
+
+            <TextView
+                android:id="@+id/tv_bottom_operation_add"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/text_black_mid"
+                android:text="添加到"
+                android:background="@drawable/sel_item_bg"
+                />
+
+            <TextView
+                android:id="@+id/tv_bottom_operation_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/text_black_mid"
+                android:text="删除"
+                android:background="@drawable/sel_item_bg"
+                />
+
+            <TextView
+                android:id="@+id/tv_bottom_operation_sort"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/text_black_mid"
+                android:text="排序"
+                android:background="@drawable/sel_item_bg"
+                />
+
+            <TextView
+                android:id="@+id/tv_bottom_operation_export"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/text_black_mid"
+                android:text="导出"
+                android:background="@drawable/sel_item_bg"
+                />
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_my_album_music"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
 
     </RelativeLayout>
 

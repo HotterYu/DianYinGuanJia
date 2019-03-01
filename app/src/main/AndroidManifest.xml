@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" /> -->
 
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
@@ -72,242 +72,200 @@
             android:name="com.amap.api.v2.apikey"
             android:value="8bc712cf79e101d74861574411cc563e" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name="com.amap.api.location.APSService" />
 
         <activity
             android:name=".activity.OnlineMusicActivity"
-            android:screenOrientation="portrait"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.ArtistInfoActivity"
             android:label="@string/artist_info"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SearchMusicActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.Search"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Search"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SettingActivity"
             android:label="@string/menu_setting"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AboutActivity"
             android:label="@string/menu_about"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MusicInfoActivity"
             android:label="@string/music_info"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.PlaylistActivity"
             android:label="@string/activity_playlist"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.LoginActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
-        <!--<activity
+            android:windowSoftInputMode="adjustPan" />
+        <!--
+            <activity
             android:name=".activity.LoginAct"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />-->
+            />
+        -->
         <activity
             android:name=".activity.MusicActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MyAlbumActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SystemAlbumActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AlbumMusicActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ShopSelectActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.PlanDetailActivity"
             android:label="@string/title_activity_plan_detail"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AdPlanDetailActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.PlanCreateActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AdPlanCreateActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AllPlanListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AddShopActivity"
             android:label="@string/title_activity_add_shop"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AlbumSelectActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AdListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.GroupListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ModifyAlbumActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SearchSystemMusicActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.GrouShopActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SearchShopActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ShopDetailActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AccountActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ShopSettingActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.UserListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.UserRecordActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.LoginRecordActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.WifiSetActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MediaCategoryActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.AdCategoryActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.WifiListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.UserLoginAndRegisterActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SearchSysAlbumActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="standard"
-            />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.ExportShopActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.WebViewActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.PushListActivity"
-            android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
-            />
-
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.VideoPlayActivity"></activity>
     </application>
 
 </manifest>

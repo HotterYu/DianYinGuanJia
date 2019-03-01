@@ -14,11 +14,25 @@
         android:contentDescription="@null"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/tv_music_item_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="1dp"
+        android:textColor="@color/text_black_mid"
+        android:padding="1dp"
+        android:textSize="@dimen/LargeTextSize"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        />
+
     <ImageView
         android:id="@+id/iv_cover"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:padding="4dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="1dp"
         android:scaleType="fitXY"
         android:src="@drawable/icon_music" />
 
@@ -49,7 +63,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="歌曲"
-                    android:textSize="@dimen/text_size_common" />
+                    android:textSize="@dimen/normal_text_size" />
 
                 <TextView
                     android:id="@+id/tv_artist"
@@ -60,8 +74,19 @@
                     android:singleLine="true"
                     android:text="歌手 - 专辑"
                     android:textColor="@color/grey"
-                    android:textSize="12sp" />
+                    android:textSize="11sp" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_album_music_select"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:padding="6dp"
+                android:background="@drawable/music_list_more_bg_selector"
+                android:contentDescription="@null"
+                android:scaleType="centerInside"
+                android:visibility="gone"
+                android:src="@drawable/icon_selected_off" />
 
             <ImageView
                 android:id="@+id/iv_more"

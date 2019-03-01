@@ -13,6 +13,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.utils.DateUtils;
 import com.znt.vodbox.utils.FileSizeUtil;
+import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -128,9 +129,24 @@ public class AdListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         AdMediaInfo tempInfo = dataList.get(position);
-        //holder.ivCover.setImageResource(R.drawable.default_cover);
+
         holder.tvAlbumName.setText(tempInfo.getAdname());
         holder.ivItemSelect.setTag(position);
+
+        holder.tvNum.setText((position + 1) + "");
+
+        if(FileUtils.isPicture(tempInfo.getUrl()))
+        {
+            holder.ivCover.setImageResource(R.drawable.icon_image);
+        }
+        else if(FileUtils.isVideo(tempInfo.getUrl()))
+        {
+            holder.ivCover.setImageResource(R.drawable.icon_video);
+        }
+        else if(FileUtils.isMusic(tempInfo.getUrl()))
+        {
+            holder.ivCover.setImageResource(R.drawable.icon_music);
+        }
 
         String addTime = tempInfo.getAddTime();
         String addTimeFormat = "";
@@ -183,9 +199,6 @@ public class AdListAdapter extends BaseAdapter {
         @Bind(R.id.tv_my_album_desc)
         private TextView tvDesc;
 
-        @Bind(R.id.tv_my_album_count)
-        private TextView tvCount;
-
         @Bind(R.id.iv_my_album_more)
         private ImageView ivMore;
 
@@ -194,6 +207,9 @@ public class AdListAdapter extends BaseAdapter {
 
         @Bind(R.id.iv_my_album_select)
         private ImageView ivItemSelect;
+
+        @Bind(R.id.tv_music_item_num)
+        private TextView tvNum;
 
         public ViewHolder(View view) {
             ViewBinder.bind(this, view);

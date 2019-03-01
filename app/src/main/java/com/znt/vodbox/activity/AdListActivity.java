@@ -76,8 +76,8 @@ public class AdListActivity  extends BaseActivity implements
         setContentView(R.layout.activity_ad_list);
 
         tvTopTitle.setText("我的广告");
-        ivTopMore.setVisibility(View.GONE);
-        tvConfirm.setVisibility(View.VISIBLE);
+        ivTopMore.setVisibility(View.VISIBLE);
+        tvConfirm.setVisibility(View.GONE);
         tvTopTitleSub.setVisibility(View.VISIBLE);
         tvTopTitleSub.setText("全部");
 
@@ -87,10 +87,10 @@ public class AdListActivity  extends BaseActivity implements
                 finish();
             }
         });
-        tvConfirm.setOnClickListener(new View.OnClickListener() {
+        ivTopMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isSelect)
+                /*if(isSelect)
                     finishAndFeedBack();
                 else
                 {
@@ -98,7 +98,7 @@ public class AdListActivity  extends BaseActivity implements
                     tvConfirm.setText("选择");
                     mAdListAdapter.setSelect(isSelect);
                     mAdListAdapter.notifyDataSetChanged();
-                }
+                }*/
             }
         });
 
@@ -408,6 +408,31 @@ public class AdListActivity  extends BaseActivity implements
             }
         });
 
+    }
+
+    private AlertView operationAlertView = null;
+    private void showTopOperationDialog()
+    {
+        operationAlertView = new AlertView("选择操作",null, "取消", null,
+                getResources().getStringArray(R.array.ad_list_dialog),
+                getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
+            public void onItemClick(Object o,int which){
+                switch (which) {
+                    case 0://
+
+                        break;
+                    case 1://
+
+                        break;
+                    case 2://
+
+                        break;
+                    case 3://
+
+                        break;
+                }
+            }
+        });operationAlertView.show();
     }
 
     @Override

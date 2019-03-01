@@ -87,7 +87,12 @@ public class PlanDetailActivity extends BaseActivity  implements
 
         mPlanInfo = (PlanInfo)getIntent().getSerializableExtra("PLAN_INFO");
 
-        isEdit = (mPlanInfo != null);
+        if(mPlanInfo != null)
+        {
+            isEdit = true;
+            if(TextUtils.isEmpty(mPlanInfo.getId()))
+                isEdit = false;
+        }
 
         tvTopTitle.setText(getResources().getString(R.string.plan_detail));
         ivTopMore.setVisibility(View.GONE);
@@ -280,8 +285,8 @@ public class PlanDetailActivity extends BaseActivity  implements
                 groupId = "";
 
             cycleTypes = removeTags(cycleTypes);
-            startTimes = removeTags(startTimes);
-            endTimes = removeTags(endTimes);
+            startTimes = removeTimeTags(startTimes);
+            endTimes = removeTimeTags(endTimes);
             categoryIds = removeTags(categoryIds);
 
             // Simulate network access.

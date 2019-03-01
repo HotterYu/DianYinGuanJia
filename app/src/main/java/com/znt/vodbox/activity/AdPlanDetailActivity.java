@@ -91,7 +91,12 @@ public class AdPlanDetailActivity extends BaseActivity  implements
 
         mAdPlanInfo = (AdPlanInfo)getIntent().getSerializableExtra("AD_PLAN_INFO");
 
-        isEdit = (mAdPlanInfo != null);
+        if(mAdPlanInfo != null)
+        {
+            isEdit = true;
+            if(TextUtils.isEmpty(mAdPlanInfo.getId()))
+                isEdit = false;
+        }
 
         tvTopTitle.setText(getResources().getString(R.string.ad_plan_detail));
         ivTopMore.setVisibility(View.GONE);
@@ -323,8 +328,8 @@ public class AdPlanDetailActivity extends BaseActivity  implements
 
             cycleTypes = removeTags(cycleTypes);
             playModels = removeTags(playModels);
-            startTimes = removeTags(startTimes);
-            endTimes = removeTags(endTimes);
+            startTimes = removeTimeTags(startTimes);
+            endTimes = removeTimeTags(endTimes);
             musicNums = removeTags(musicNums);
             adinfoIds = removeTags(adinfoIds);
 

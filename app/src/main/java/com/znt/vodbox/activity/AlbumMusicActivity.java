@@ -4,12 +4,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
@@ -20,9 +22,11 @@ import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
+import com.znt.vodbox.entity.Config;
 import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
+import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.view.searchview.ICallBack;
@@ -51,15 +55,21 @@ public class AlbumMusicActivity extends BaseActivity implements
     @Bind(R.id.search_view)
     private SearchView mSearchView = null;
 
+    @Bind(R.id.tv_bottom_operation_add)
+    private TextView tvAdd = null;
+    @Bind(R.id.tv_bottom_operation_delete)
+    private TextView tvDelete = null;
+
+    @Bind(R.id.fab_my_album_music)
+    FloatingActionButton fab = null;
+    @Bind(R.id.view_bottom_operation)
+    View viewBottomOperation = null;
 
     private AlbumInfo mAlbumInfo = null;
     private boolean isSystemAlbum = false;
 
     private List<MediaInfo> dataList = new ArrayList<>();
-
-
     private AlbumMusiclistAdapter mAlbumMusiclistAdapter = null;
-
 
     private int pageNo = 1;
     private int pageSize = 25;
@@ -74,7 +84,6 @@ public class AlbumMusicActivity extends BaseActivity implements
         mAlbumInfo = (AlbumInfo) getIntent().getSerializableExtra("ALBUM_INFO");
         isSystemAlbum = getIntent().getBooleanExtra("IS_SYSTEM_ALBUM", false);
 
-
         mSearchView.init("album_music_record.db");
         mSearchView.showRecordView(false);
 
@@ -85,6 +94,38 @@ public class AlbumMusicActivity extends BaseActivity implements
             tvConfirm.setText("收藏");
         else
             tvConfirm.setText("添加");
+
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                viewBottomOperation.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.GONE);
+                mAlbumMusiclistAdapter.setSelect(true);
+            }
+        });
+
+        tvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String musicIds = mAlbumMusiclistAdapter.getSelectedMediaIds();
+                if(TextUtils.isEmpty(musicIds))
+                    Toast.makeText(getActivity(),"请选择文件",Toast.LENGTH_SHORT).show();
+                else
+                    addSelectMusicsToAlbum(musicIds);
+            }
+        });
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String musicIds = mAlbumMusiclistAdapter.getSelectedMediaIds();
+                if(TextUtils.isEmpty(musicIds))
+                    Toast.makeText(getActivity(),"请选择文件",Toast.LENGTH_SHORT).show();
+                else
+                    deleteMusics(musicIds);
+            }
+        });
 
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -317,8 +358,21 @@ public class AlbumMusicActivity extends BaseActivity implements
         if(position > 0)
             position = position - 1;
 
-        MediaInfo tempInfor = dataList.get(position);
-        showPlayDialog(tempInfor.getMusicName(),tempInfor.getMusicUrl(),tempInfor.getId());
+        MediaInfo tempInfo = dataList.get(position);
+
+        if(FileUtils.isMusic(tempInfo.getMusicUrl()))
+        {
+            showPlayDialog(tempInfo.getMusicName(),tempInfo.getMusicUrl(),tempInfo.getId());
+        }
+        else
+        {
+            Bundle bundle = new Bundle();
+            bundle.putString(Config.VIDEO_NAME, tempInfo.getMusicName());
+            bundle.putString(Config.VIDEO_URL, tempInfo.getMusicUrl());
+            bundle.putString(Config.VIDEO_ID, tempInfo.getId());
+            ViewUtils.startActivity(this,VideoPlayActivity.class,bundle);
+        }
+
     }
 
     @Override
@@ -365,6 +419,29 @@ public class AlbumMusicActivity extends BaseActivity implements
         }).show();
     }
 
+    private void addSelectMusicsToAlbum(String musicIds)
+    {
+        //String musicIds = mAlbumMusiclistAdapter.getSelectedMediaIds();
+        Intent i = new Intent(getActivity(), MyAlbumActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("MUSIC_IDS",musicIds);
+        i.putExtras(bundle);
+        startActivity(i);
+    }
+
+    private void deleteMusics(final String musicIds)
+    {
+        if(mAlertView != null)
+            mAlertView.dismissImmediately();
+        new AlertView("提示", "确定删除该文件吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                if(position == 0)
+                    deleteAlbumMusic(musicIds);
+            }
+        }).setCancelable(true).show();
+    }
+
     private AlertView mAlertView = null;
     private void showMusicOperationDialog(final MediaInfo tempInfo)
     {
@@ -374,11 +451,7 @@ public class AlbumMusicActivity extends BaseActivity implements
             public void onItemClick(Object o,int which){
                 switch (which) {
                     case 0://
-                        Intent i = new Intent(getActivity(), MyAlbumActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("MUSIC_IDS",tempInfo.getId());
-                        i.putExtras(bundle);
-                        startActivity(i);
+                        addSelectMusicsToAlbum(tempInfo.getId());
                         break;
                     case 1://
                         Intent intent = new Intent(getActivity(), ShopSelectActivity.class);
@@ -397,14 +470,7 @@ public class AlbumMusicActivity extends BaseActivity implements
                         showToast("复制成功");
                         break;
                     case 3://
-                        mAlertView.dismissImmediately();
-                        new AlertView("提示", "确定删除该文件吗？", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                if(position == 0)
-                                    deleteAlbumMusic(tempInfo.getId());
-                            }
-                        }).setCancelable(true).show();
+                        deleteMusics(tempInfo.getId());
                         break;
                 }
             }
@@ -419,6 +485,13 @@ public class AlbumMusicActivity extends BaseActivity implements
             mSearchView.showRecordView(false);
             return;
         }
-        super.onBackPressed();
+        if(viewBottomOperation.isShown())
+        {
+            fab.setVisibility(View.VISIBLE);
+            viewBottomOperation.setVisibility(View.GONE);
+            mAlbumMusiclistAdapter.setSelect(false);
+        }
+        else
+            super.onBackPressed();
     }
 }

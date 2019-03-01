@@ -331,4 +331,74 @@ public class FileUtils {
         }
     }
 
+    /**
+     * @Description: MP4文件
+     * @param @param path
+     * @param @return
+     * @return boolean
+     * @throws
+     */
+    public static boolean isVideo(String path)
+    {
+        if(path == null || path.length() == 0)
+            return false;
+        if(path.toLowerCase().endsWith(".mp4") ||
+                path.toLowerCase().endsWith(".264") ||
+                path.toLowerCase().endsWith(".3gp") ||
+                path.toLowerCase().endsWith(".wmv") ||
+                path.toLowerCase().endsWith(".263") ||
+                path.toLowerCase().endsWith(".h264") ||
+                path.toLowerCase().endsWith(".rmvb") ||
+                path.toLowerCase().endsWith(".mts") ||
+                path.toLowerCase().endsWith(".flv"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Description: MP3文件
+     * @param @param path
+     * @param @return
+     * @return boolean
+     * @throws
+     */
+    public static boolean isMusic(String path)
+    {
+        if(path == null || path.length() == 0)
+            return false;
+        if(path.toLowerCase().endsWith(".mp3") ||
+                path.toLowerCase().endsWith(".wav") ||
+                path.toLowerCase().endsWith(".pcm") ||
+                path.toLowerCase().endsWith(".wma") ||
+                path.toLowerCase().endsWith(".flac") ||
+                path.toLowerCase().endsWith(".aac"))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @Description: 图片文件
+     * @param @param path
+     * @param @return
+     * @return boolean
+     * @throws
+     */
+    public static boolean isPicture(String path)
+    {
+        if(path == null || path.length() == 0)
+            return false;
+        if(path.toLowerCase().endsWith(".jpg") ||
+                path.toLowerCase().endsWith(".png") ||
+                path.toLowerCase().endsWith(".bmp") ||
+                path.toLowerCase().endsWith(".gif"))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

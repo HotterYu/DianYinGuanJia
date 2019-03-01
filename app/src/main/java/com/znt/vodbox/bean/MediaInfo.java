@@ -1,9 +1,6 @@
 package com.znt.vodbox.bean;
 
-import android.webkit.URLUtil;
-
 import java.io.Serializable;
-import java.net.URL;
 import java.net.URLDecoder;
 
 public class MediaInfo implements Serializable {
@@ -18,6 +15,26 @@ public class MediaInfo implements Serializable {
     private String sourceType;
     private String status;
     private String fileSize;
+    private String musicNum;
+    boolean isSelected = false;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public String getMusicNum() {
+        if(musicNum == null)
+            musicNum = "";
+        return musicNum;
+    }
+
+    public void setMusicNum(String musicNum) {
+        this.musicNum = musicNum;
+    }
 
     public String getId() {
         return id;
