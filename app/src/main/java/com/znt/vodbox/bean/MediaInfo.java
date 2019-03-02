@@ -15,7 +15,7 @@ public class MediaInfo implements Serializable {
     private String sourceType;
     private String status;
     private String fileSize;
-    private String musicNum;
+    private int num;
     boolean isSelected = false;
 
     public boolean isSelected() {
@@ -26,14 +26,13 @@ public class MediaInfo implements Serializable {
         isSelected = selected;
     }
 
-    public String getMusicNum() {
-        if(musicNum == null)
-            musicNum = "";
-        return musicNum;
+    public void setNum(int num)
+    {
+        this.num = num;
     }
-
-    public void setMusicNum(String musicNum) {
-        this.musicNum = musicNum;
+    public int getNum()
+    {
+        return num;
     }
 
     public String getId() {

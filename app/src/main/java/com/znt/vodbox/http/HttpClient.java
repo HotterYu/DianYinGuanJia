@@ -500,6 +500,35 @@ public class HttpClient extends HttpApi{
                 });
     }
 
+    public static void updateAlbumMusicSort(String token, String id, String musicIds, String orderNumbers
+            ,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+
+        OkHttpUtils.post().url(UPDATE_ALBUM_MUSIC_SORT)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .addParams("musicIds", musicIds)
+                .addParams("orderNumbers", orderNumbers)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
     public static void getAlbumTypes(String token, String searchWord
             ,@NonNull final HttpCallback<TypeCallBackBean> callback) {
 

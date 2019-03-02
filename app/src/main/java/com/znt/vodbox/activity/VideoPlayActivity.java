@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.znt.vodbox.R;
 import com.znt.vodbox.entity.Config;
 import com.znt.vodbox.utils.FileUtils;
@@ -17,6 +18,8 @@ public class VideoPlayActivity extends BaseActivity {
 
     @Bind(R.id.videoPlayer)
     private VideoPlayer videoPlayer;
+    @Bind(R.id.iv_image_preview)
+    private ImageView imageView;
 
     @Bind(R.id.tv_common_title)
     private TextView tvTopTitle = null;
@@ -70,6 +73,9 @@ public class VideoPlayActivity extends BaseActivity {
 
         if(FileUtils.isVideo(videoUrl))
         {
+            imageView.setVisibility(View.GONE);
+            videoPlayer.setVisibility(View.VISIBLE);
+
             //视频
             VideoPlayerItemInfo mVideoPlayerItemInfo = new VideoPlayerItemInfo(videoName,videoUrl);
             //传递给条目里面的MyVideoPlayer
@@ -81,6 +87,14 @@ public class VideoPlayActivity extends BaseActivity {
         else
         {
             //图片
+            imageView.setVisibility(View.VISIBLE);
+            videoPlayer.setVisibility(View.GONE);
+
+            Glide.with(this)
+                    .load(videoUrl)
+                    .placeholder(R.drawable.icon_album_sys)
+                    .error(R.drawable.icon_album_sys)
+                    .into(imageView);
 
         }
 

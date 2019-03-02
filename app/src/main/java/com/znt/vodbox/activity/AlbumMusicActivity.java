@@ -29,6 +29,8 @@ import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.ViewUtils;
 import com.znt.vodbox.utils.binding.Bind;
+import com.znt.vodbox.view.dslv.DragSortController;
+import com.znt.vodbox.view.dslv.DragSortListView;
 import com.znt.vodbox.view.searchview.ICallBack;
 import com.znt.vodbox.view.searchview.SearchView;
 import com.znt.vodbox.view.xlistview.LJListView;
@@ -59,11 +61,21 @@ public class AlbumMusicActivity extends BaseActivity implements
     private TextView tvAdd = null;
     @Bind(R.id.tv_bottom_operation_delete)
     private TextView tvDelete = null;
+    @Bind(R.id.tv_bottom_operation_sort)
+    private TextView tvSort = null;
+    @Bind(R.id.tv_bottom_operation_export)
+    private TextView tvExport = null;
+    @Bind(R.id.tv_bottom_operation_confirm)
+    private TextView tvOperationConfirm = null;
 
     @Bind(R.id.fab_my_album_music)
     FloatingActionButton fab = null;
     @Bind(R.id.view_bottom_operation)
     View viewBottomOperation = null;
+    @Bind(R.id.view_bottom_operation_confirm)
+    View viewBottomOperationConfirm = null;
+
+    private DragSortController mController;
 
     private AlbumInfo mAlbumInfo = null;
     private boolean isSystemAlbum = false;
@@ -74,6 +86,31 @@ public class AlbumMusicActivity extends BaseActivity implements
     private int pageNo = 1;
     private int pageSize = 25;
     private int curMusicSize = 0;
+
+    private DragSortListView.DropListener onDrop =
+            new DragSortListView.DropListener() {
+                @Override
+                public void drop(int from, int to) {
+                    if (from != to) {
+                        //DragSortListView list = getListView();
+                        MediaInfo item = (MediaInfo) mAlbumMusiclistAdapter.getItem(from);
+                        mAlbumMusiclistAdapter.remove(item);
+                        mAlbumMusiclistAdapter.insert(item, to);
+                        //mListView.getListView().moveCheckState(from, to);
+                    }
+                }
+            };
+
+    private DragSortListView.RemoveListener onRemove =
+            new DragSortListView.RemoveListener() {
+                @Override
+                public void remove(int which) {
+                    //DragSortListView list = getListView();
+                    MediaInfo item = (MediaInfo) mAlbumMusiclistAdapter.getItem(which);
+                    mAlbumMusiclistAdapter.remove(item);
+                    //mListView.getListView().removeCheckState(which);
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -126,6 +163,24 @@ public class AlbumMusicActivity extends BaseActivity implements
                     deleteMusics(musicIds);
             }
         });
+        tvSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDragView(true);
+            }
+        });
+        tvExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        tvOperationConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateMusicSort();
+            }
+        });
 
         ivTopReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,7 +219,7 @@ public class AlbumMusicActivity extends BaseActivity implements
         listView.setPullRefreshEnable(true);
         listView.setIsAnimation(true);
         listView.setXListViewListener(this);
-        listView.showFootView(false);
+        listView.showFootView(true);
         listView.setRefreshTime();
         listView.setOnItemClickListener(this);
 
@@ -190,6 +245,107 @@ public class AlbumMusicActivity extends BaseActivity implements
 
     }
 
+    private void showDragView(boolean isDrag)
+    {
+        mAlbumMusiclistAdapter.setDragView(isDrag);
+        if(isDrag)
+        {
+            viewBottomOperationConfirm.setVisibility(View.VISIBLE);
+            viewBottomOperation.setVisibility(View.GONE);
+            mAlbumMusiclistAdapter.setSelect(false);
+
+            //setRightText("更新排序");
+            //tvDrag.setText("返回");
+            showToast("请点击左侧 拖动 按钮拖动排序，并更新排序生效");
+            mController = buildController(listView.getListView());
+
+            listView.getListView().setDragEnabled(true);
+
+            listView.getListView().setDropListener(onDrop);
+            listView.getListView().setRemoveListener(onRemove);
+            listView.getListView().setFloatViewManager(mController);
+            listView.getListView().setOnTouchListener(mController);
+        }
+        else
+        {
+            viewBottomOperationConfirm.setVisibility(View.GONE);
+            viewBottomOperation.setVisibility(View.VISIBLE);
+            /*setRightText("添加");
+            tvDrag.setText("排序");*/
+
+            mController = null;
+
+            listView.getListView().setDragEnabled(false);
+
+            listView.getListView().setDropListener(null);
+            listView.getListView().setRemoveListener(null);
+
+            listView.getListView().setFloatViewManager(null);
+            listView.getListView().setOnTouchListener(null);
+
+        }
+
+    }
+
+    /**
+     * Called in onCreateView. Override this to provide a custom
+     * DragSortController.
+     */
+    public DragSortController buildController(DragSortListView dslv) {
+        // defaults are
+        //   dragStartMode = onDown
+        //   removeMode = flingRight
+        DragSortController controller = new DragSortController(dslv);
+        controller.setDragHandleId(R.id.drag_handle);
+        //controller.setClickRemoveId(R.id.click_remove);
+        controller.setRemoveEnabled(false);
+        //controller.setSortEnabled(true);
+        //controller.setDragInitMode(DragSortController.ON_DOWN);
+        //controller.setRemoveMode(DragSortController.FLING_REMOVE);
+        return controller;
+    }
+
+    private void updateMusicSort()
+    {
+        String musicInfoIds = "";
+        String orderNumbers = "";
+        int size = dataList.size();
+        for(int i=0;i<size;i++)
+        {
+            MediaInfo tempInfor = dataList.get(i);
+            musicInfoIds += tempInfor.getId() + ",";
+            orderNumbers += (i+1) + ",";
+        }
+        if(musicInfoIds.endsWith(","))
+        {
+            musicInfoIds = musicInfoIds.substring(0, musicInfoIds.length() - 1);
+        }
+        if(orderNumbers.endsWith(","))
+        {
+            orderNumbers = orderNumbers.substring(0, orderNumbers.length() - 1);
+        }
+        String token = Constant.mUserInfo.getToken();
+        HttpClient.updateAlbumMusicSort(token, mAlbumInfo.getId(), musicInfoIds, orderNumbers, new HttpCallback<CommonCallBackBean>() {
+            @Override
+            public void onSuccess(CommonCallBackBean mCallBackBean) {
+                if(mCallBackBean.isSuccess())
+                {
+                    finish();
+                    showToast("操作成功");
+                }
+                else
+                    showToast("操作失败");
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                if(e != null)
+                    showToast("操作失败:"+e.getMessage());
+                else
+                    showToast("操作失败");
+            }
+        });
+    }
     public void getAlbumMusics()
     {
 
@@ -245,7 +401,6 @@ public class AlbumMusicActivity extends BaseActivity implements
         {
             listView.stopRefresh();
         }
-
     }
 
     public void deleteAlbumMusic(final String musicIds)
@@ -295,9 +450,6 @@ public class AlbumMusicActivity extends BaseActivity implements
                     if(resultBean != null)
                     {
                         finish();
-                        /*int deleteCount = updateDeleteMusicList(musicIds);
-                        tvTopTitle.setText(mAlbumInfo.getName() + "(" + (curMusicSize - deleteCount) + ")");
-                        dismissDialog();*/
                     }
                     else
                     {
@@ -347,9 +499,15 @@ public class AlbumMusicActivity extends BaseActivity implements
     public void onLoadMore()
     {
         if(curMusicSize > dataList.size())
+        {
+            listView.showFootView(true);
             getAlbumMusics();
+        }
         else
+        {
+            listView.showFootView(false);
             showToast("没有更多数据了");
+        }
     }
 
     @Override
@@ -485,7 +643,11 @@ public class AlbumMusicActivity extends BaseActivity implements
             mSearchView.showRecordView(false);
             return;
         }
-        if(viewBottomOperation.isShown())
+        if(viewBottomOperationConfirm.isShown())
+        {
+            showDragView(false);
+        }
+        else if(viewBottomOperation.isShown())
         {
             fab.setVisibility(View.VISIBLE);
             viewBottomOperation.setVisibility(View.GONE);

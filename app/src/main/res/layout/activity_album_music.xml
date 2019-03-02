@@ -93,6 +93,31 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/view_bottom_operation_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:visibility="gone"
+            android:background="@drawable/sel_item_bg">
+
+            <TextView
+                android:id="@+id/tv_bottom_operation_confirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:padding="12dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/text_blue_on"
+                android:text="确认更新"
+                android:background="@drawable/sel_item_bg"
+                />
+
+        </LinearLayout>
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_my_album_music"
             android:layout_width="wrap_content"

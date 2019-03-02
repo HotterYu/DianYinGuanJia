@@ -34,6 +34,7 @@ public class HttpApi
     public static final String COLLECT_ALBUM = API + "/category/copy";
     public static final String DELETE_ALBUM = API + "/category/del";
     public static final String GET_ALBUM_MUSICS = API + "/category/music";
+    public static final String UPDATE_ALBUM_MUSIC_SORT = API + "/category/updateindex";
     public static final String GET_ALBUM_TYPES = API + "/query/musictype";
     public static final String GET_AD_TYPES = API + "/query/adtype";
     public static final String DELETE_ALBUM_MUSICS = API + "/category/delMusic";

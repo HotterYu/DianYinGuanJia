@@ -36,6 +36,17 @@
         android:scaleType="fitXY"
         android:src="@drawable/icon_music" />
 
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:src="@drawable/icon_drag_music"
+        android:layout_toRightOf="@+id/tv_music_item_num"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

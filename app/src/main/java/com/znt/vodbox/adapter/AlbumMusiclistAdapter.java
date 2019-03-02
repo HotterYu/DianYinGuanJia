@@ -39,6 +39,29 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
         //notifyDataSetChanged();
     }
 
+    public void remove(int index)
+    {
+        dataList.remove(index);
+        notifyDataSetChanged();
+    }
+    public void remove(MediaInfo ietm)
+    {
+        dataList.remove(ietm);
+        notifyDataSetChanged();
+    }
+    public void insert(MediaInfo ietm, int index)
+    {
+        dataList.add(index, ietm);
+        notifyDataSetChanged();
+    }
+
+    private boolean isDrag = false;
+    public void setDragView(boolean isDrag)
+    {
+        this.isDrag = isDrag;
+        notifyDataSetChanged();
+    }
+
     public List<MediaInfo> getSelectedMedias()
     {
         List<MediaInfo> tempList = new ArrayList<>();
@@ -151,6 +174,17 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
             holder.ivItemSelect.setVisibility(View.GONE);
         }
 
+        if(isDrag)
+        {
+            holder.ivCover.setVisibility(View.GONE);
+            holder.ivSortIcon.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            holder.ivCover.setVisibility(View.VISIBLE);
+            holder.ivSortIcon.setVisibility(View.GONE);
+        }
+
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,6 +222,9 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
 
         @Bind(R.id.iv_album_music_select)
         private ImageView ivItemSelect;
+
+        @Bind(R.id.drag_handle)
+        private ImageView ivSortIcon;
 
 
         public ViewHolder(View view) {
