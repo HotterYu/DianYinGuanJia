@@ -108,15 +108,15 @@ public class UserInfo implements Serializable
 
         if(type.equals("0"))
         {
-            return "系统管理员";
+            return "系统";
         }
         else if(type.equals("1"))
         {
-            return "总管理员";
+            return "总部";
         }
         else if(type.equals("2"))
         {
-            return "分区管理员";
+            return "分区";
         }
         else if(type.equals("3"))
         {

@@ -102,9 +102,11 @@ public class PlanLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(TextUtils.isEmpty(tempInfo.getStartDate()))
             {
                 holder.tvDate.setText("播放时间：每天");
+                holder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
             }
             else
             {
+                holder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                 holder.tvDate.setText("播放时间："+tempInfo.getStartDate() + "至" + tempInfo.getEndDate());
             }
 

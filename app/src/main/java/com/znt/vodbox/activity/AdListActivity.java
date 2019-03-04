@@ -4,6 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,18 @@ public class AdListActivity  extends BaseActivity implements
     private LJListView listView = null;
     @Bind(R.id.search_view)
     private SearchView mSearchView = null;
+    @Bind(R.id.fab_my_my_ads)
+    FloatingActionButton fab = null;
+
+
+    @Bind(R.id.tv_bottom_operation_delete)
+    private TextView tvDelete = null;
+    @Bind(R.id.tv_bottom_operation_export)
+    private TextView tvExport = null;
+
+    @Bind(R.id.view_bottom_operation)
+    View viewBottomOperation = null;
+
 
     private AdListAdapter mAdListAdapter = null;
 
@@ -76,7 +89,7 @@ public class AdListActivity  extends BaseActivity implements
         setContentView(R.layout.activity_ad_list);
 
         tvTopTitle.setText("我的广告");
-        ivTopMore.setVisibility(View.VISIBLE);
+        ivTopMore.setVisibility(View.GONE);
         tvConfirm.setVisibility(View.GONE);
         tvTopTitleSub.setVisibility(View.VISIBLE);
         tvTopTitleSub.setText("全部");
@@ -87,20 +100,7 @@ public class AdListActivity  extends BaseActivity implements
                 finish();
             }
         });
-        ivTopMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*if(isSelect)
-                    finishAndFeedBack();
-                else
-                {
-                    isSelect = true;
-                    tvConfirm.setText("选择");
-                    mAdListAdapter.setSelect(isSelect);
-                    mAdListAdapter.notifyDataSetChanged();
-                }*/
-            }
-        });
+
 
         viewTopTitle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +118,45 @@ public class AdListActivity  extends BaseActivity implements
 
         selectedAds = (List<AdMediaInfo>) getIntent().getSerializableExtra("AD_SELECTED_LIST");
 
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                viewBottomOperation.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.GONE);
+                mAdListAdapter.setSelect(true);
+            }
+        });
+        tvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String musicIds = mAdListAdapter.getSelectedMediaIds();
+                if(TextUtils.isEmpty(musicIds))
+                    Toast.makeText(getActivity(),"请选择文件",Toast.LENGTH_SHORT).show();
+                else
+                    deleteAds(musicIds);
+            }
+        });
+        tvExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectInfos = mAdListAdapter.getSelectedMediaInfos();
+                if(TextUtils.isEmpty(selectInfos))
+                {
+                    showToast("请选择文件");
+                    return;
+                }
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setText(selectInfos);
+                showToast("文件信息已复制，请粘贴自行下载");
+
+                viewBottomOperation.setVisibility(View.GONE);
+                mAdListAdapter.setSelect(false);
+
+            }
+        });
 
         listView.getListView().setDivider(getResources().getDrawable(R.color.transparent));
         listView.getListView().setDividerHeight(1);
@@ -240,6 +279,37 @@ public class AdListActivity  extends BaseActivity implements
                     {
                         dataList.remove(position);
                         mAdListAdapter.notifyDataSetChanged(dataList);
+                        showToast("操作成功");
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    public void deleteAds(String ids)
+    {
+        try
+        {
+            String token = Constant.mUserInfo.getToken();
+
+            HttpClient.deleteAd(token, ids, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null)
+                    {
+                        getAdMedias();
                         showToast("操作成功");
                     }
                     else
@@ -457,6 +527,13 @@ public class AdListActivity  extends BaseActivity implements
             mSearchView.showRecordView(false);
             return;
         }
-        super.onBackPressed();
+        if(viewBottomOperation.isShown())
+        {
+            fab.setVisibility(View.VISIBLE);
+            viewBottomOperation.setVisibility(View.GONE);
+            mAdListAdapter.setSelect(false);
+        }
+        else
+            super.onBackPressed();
     }
 }

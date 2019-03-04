@@ -75,6 +75,23 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
 
         return tempList;
     }
+    public String getSelectedMediaInfos()
+    {
+        String selectInfos = "";
+
+        for(int i=0;i<dataList.size();i++)
+        {
+            MediaInfo tempInfo = dataList.get(i);
+            if(tempInfo.isSelected())
+            {
+                String name = tempInfo.getMusicName();
+                String url = tempInfo.getMusicUrl();
+                String info = name + "\n" + url;
+                selectInfos += info + "\n";
+            }
+        }
+        return selectInfos;
+    }
     public String getSelectedMediaIds()
     {
         String ids = "";

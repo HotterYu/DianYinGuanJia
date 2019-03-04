@@ -172,10 +172,14 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
 
         String account = userInfo.getUsername();
         String pwd = userInfo.getPwd();
-        if(!TextUtils.isEmpty(account) && !TextUtils.isEmpty(pwd))
+        if(TextUtils.isEmpty(account))
+            return;
+        if(TextUtils.isEmpty(pwd))
         {
-            login(account, pwd);
+            et_mobile.setText(account);
+            return;
         }
+        login(account, pwd);
     }
     private void initDataFromLocal()
     {

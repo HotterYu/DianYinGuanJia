@@ -29,8 +29,6 @@ public class UserListAdapter extends BaseAdapter {
         this.dataList = dataList;
         notifyDataSetChanged();
     }
-
-
     public void setOnMoreClickListener(OnMoreClickListener listener) {
         this.listener = listener;
     }
@@ -54,17 +52,17 @@ public class UserListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_my_albums, parent, false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_my_accounts, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         UserInfo tempInfo = dataList.get(position);
-        holder.ivCover.setVisibility(View.GONE);
-        //holder.ivMore.setVisibility(View.GONE);
-        holder.tvAlbumName.setText(tempInfo.getNickName());
-        holder.tvDesc.setText(tempInfo.getUsername());
+        holder.ivMore.setVisibility(View.GONE);
+        holder.tvNickName.setText("名称：" + tempInfo.getNickName());
+        holder.tvLoginName.setText("账户：" + tempInfo.getUsername());
+        holder.tvType.setText("类型：" + tempInfo.getTypeName());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,22 +80,22 @@ public class UserListAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        @Bind(R.id.iv_my_album_cover)
+        @Bind(R.id.iv_my_account_cover)
         private ImageView ivCover;
 
-        @Bind(R.id.tv_my_album_name)
-        private TextView tvAlbumName;
+        @Bind(R.id.tv_my_account_nick_name)
+        private TextView tvNickName;
 
-        @Bind(R.id.tv_my_album_desc)
-        private TextView tvDesc;
+        @Bind(R.id.tv_my_account_login_name)
+        private TextView tvLoginName;
 
-        @Bind(R.id.tv_my_album_count)
-        private TextView tvCount;
+        @Bind(R.id.tv_my_account_type)
+        private TextView tvType;
 
-        @Bind(R.id.iv_my_album_more)
+        @Bind(R.id.iv_my_account_more)
         private ImageView ivMore;
 
-        @Bind(R.id.v_my_album_divider)
+        @Bind(R.id.v_my_account_divider)
         private View vDivider;
 
 

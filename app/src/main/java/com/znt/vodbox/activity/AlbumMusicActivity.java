@@ -128,7 +128,11 @@ public class AlbumMusicActivity extends BaseActivity implements
         ivTopMore.setVisibility(View.GONE);
         tvConfirm.setVisibility(View.VISIBLE);
         if(isSystemAlbum)
+        {
             tvConfirm.setText("收藏");
+            tvSort.setVisibility(View.GONE);
+            tvDelete.setVisibility(View.GONE);
+        }
         else
             tvConfirm.setText("添加");
 
@@ -172,6 +176,20 @@ public class AlbumMusicActivity extends BaseActivity implements
         tvExport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String selectInfos = mAlbumMusiclistAdapter.getSelectedMediaInfos();
+                if(TextUtils.isEmpty(selectInfos))
+                {
+                    showToast("请选择文件");
+                    return;
+                }
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 将文本内容放到系统剪贴板里。
+                cm.setText(selectInfos);
+                showToast("文件信息已复制，请粘贴自行下载");
+
+                viewBottomOperationConfirm.setVisibility(View.GONE);
+                viewBottomOperation.setVisibility(View.GONE);
+                mAlbumMusiclistAdapter.setSelect(false);
 
             }
         });

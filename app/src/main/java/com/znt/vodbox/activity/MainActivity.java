@@ -125,7 +125,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             TextView followers = (TextView) headerlayout.findViewById(R.id.followers);
             TextView following = (TextView) headerlayout.findViewById(R.id.following);
             TextView tvCode = (TextView) headerlayout.findViewById(R.id.tv_act_code);
-            tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName());
+            tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName()
+            +"-" + LocalDataEntity.newInstance(getApplicationContext()).getUserInfor().getTypeName());
             tvCode.setText("复制激活码:"+LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
             /*followers.setText("");
             following.setText("");*/

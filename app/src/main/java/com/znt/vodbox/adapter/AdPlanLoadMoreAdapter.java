@@ -102,9 +102,16 @@ public class AdPlanLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 holder.ivCover.setImageResource(R.drawable.icon_plan_push_off);
 
             if(TextUtils.isEmpty(tempInfo.getStartDate()))
+            {
                 holder.tvDate.setText("播放时间：每天");
+                holder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_black_off));
+            }
             else
+            {
+                holder.tvDate.setTextColor(mContext.getResources().getColor(R.color.text_blue_on));
                 holder.tvDate.setText("播放时间："+tempInfo.getStartDate() + "至" + tempInfo.getEndDate());
+            }
+
             if(!TextUtils.isEmpty(tempInfo.getAddTime()))
                 holder.tvCreateTime.setText("创建时间:"+DateUtils.getDateFromLong(Long.parseLong(tempInfo.getAddTime())));
             holder.ivMore.setOnClickListener(new View.OnClickListener() {

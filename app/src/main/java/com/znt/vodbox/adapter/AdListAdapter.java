@@ -17,6 +17,7 @@ import com.znt.vodbox.utils.FileUtils;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class AdListAdapter extends BaseAdapter {
     public void setSelect(boolean isSelect)
     {
         this.isSelect = isSelect;
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public List<AdMediaInfo> getSelectedList()
@@ -56,6 +57,39 @@ public class AdListAdapter extends BaseAdapter {
                 tempList.add(tempInfo);
         }
         return tempList;
+    }
+
+    public String getSelectedMediaIds()
+    {
+        String ids = "";
+
+        for(int i=0;i<dataList.size();i++)
+        {
+            AdMediaInfo tempInfo = dataList.get(i);
+            if(tempInfo.isSelected())
+                ids += tempInfo.getId() + ",";
+        }
+        if(ids.endsWith(","))
+            ids = ids.substring(0,ids.length()-1);
+        return ids;
+    }
+
+    public String getSelectedMediaInfos()
+    {
+        String selectInfos = "";
+
+        for(int i=0;i<dataList.size();i++)
+        {
+            AdMediaInfo tempInfo = dataList.get(i);
+            if(tempInfo.isSelected())
+            {
+                String name = tempInfo.getAdname();
+                String url = URLDecoder.decode(tempInfo.getUrl());
+                String info = name + "\n" + url;
+                selectInfos += info + "\n";
+            }
+        }
+        return selectInfos;
     }
 
     public void updateSelected(List<AdMediaInfo> selectedList)
