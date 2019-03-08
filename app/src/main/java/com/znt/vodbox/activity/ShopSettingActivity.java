@@ -141,19 +141,11 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		itvWifiName.getSecondView().setText(deviceInfor.getWifiName() + "\n" + deviceInfor.getWifiPassword());
 		itvWifiPwd.getSecondView().setText(deviceInfor.getWifiPassword());
 		//itvIp.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
-		//itvStorage.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
-		
-		/*itvName.showIocn();
-		itvAddr.showIocn();
-		itvOritation.showIocn();
-		itvLastOnline.showIocn();
-		itvEndTime.showIocn();
-		itvVersion.showIocn();
-		itvWifiName.showIocn();
-		itvWifiPwd.showIocn();
-		itvIp.showIocn();
-		itvStorage.showIocn();*/
-		
+		if(TextUtils.isEmpty(deviceInfor.getNetInfo()))
+			itvStorage.getSecondView().setText("无");
+		else
+			itvStorage.getSecondView().setText(deviceInfor.getNetInfo());
+
 		itvWifiName.setOnClick(this);
 		itvName.setOnClick(this);
 		itvAddr.setOnClick(this);
