@@ -112,7 +112,10 @@ public class AdListActivity  extends BaseActivity implements
 
         isSelect = getIntent().getBooleanExtra("IS_SELECT", false);
         if(isSelect)
+        {
+            tvConfirm.setVisibility(View.VISIBLE);
             tvConfirm.setText("完成");
+        }
         else
             tvConfirm.setText("选择");
 
@@ -155,6 +158,13 @@ public class AdListActivity  extends BaseActivity implements
                 viewBottomOperation.setVisibility(View.GONE);
                 mAdListAdapter.setSelect(false);
 
+            }
+        });
+
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishAndFeedBack();
             }
         });
 

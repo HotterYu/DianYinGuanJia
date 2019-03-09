@@ -213,6 +213,8 @@ public class VideoMediaController extends RelativeLayout {
 
     //更新播放的时间和进度
     public void updatePlayTimeAndProgress() {
+
+
         //获取目前播放的进度
         int currentPosition = MediaHelper.getInstance().getCurrentPosition();
         //格式化

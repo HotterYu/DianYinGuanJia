@@ -218,6 +218,8 @@ public class SearchSystemMusicActivity extends BaseActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        if(position > 0)
+            position = position - 1;
         final MediaInfo tempInfor = dataList.get(position);
 
         if(mShopinfo == null)

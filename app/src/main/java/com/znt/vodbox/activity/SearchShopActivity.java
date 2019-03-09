@@ -242,6 +242,7 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         if(tempShop.getGroup() != null)
             bundle.putString("GROUP_ID",tempShop.getGroup().getId());
         bundle.putString("SHOP_IDS",tempShop.getId());
+        bundle.putSerializable("SHOP_INFO",tempShop);
         ViewUtils.startActivity(getActivity(),ShopDetailActivity.class,bundle);
     }
 
