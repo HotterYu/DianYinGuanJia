@@ -166,6 +166,7 @@ public class VideoPlayer extends RelativeLayout {
     {
         if(mPlayer != null)
         {
+            
             mPlayer.reset();
             mPlayer.release();
             mPlayer = null;
