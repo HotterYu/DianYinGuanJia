@@ -2,7 +2,6 @@ package com.znt.vodbox.activity;
 
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -142,7 +141,7 @@ public class ShopDetailActivity extends BaseActivity implements
         tvCurPlayCount.setText(getResources().getString(R.string.dev_shop_detail_cur_play_count) + "(0)");
 
 
-        if(mShopInfo.getTmlRunStatus() == null || mShopInfo.getTmlRunStatus().size() > 0)
+        if(mShopInfo.getTmlRunStatus() != null && mShopInfo.getTmlRunStatus().size() > 0)
         {
             tvShopName.setText(mShopInfo.getTmlRunStatus().get(0).getShopname());
             if(mShopInfo.getGroup() != null && !TextUtils.isEmpty(mShopInfo.getGroup().getGroupName()))

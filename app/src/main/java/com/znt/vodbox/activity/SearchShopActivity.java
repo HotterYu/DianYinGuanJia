@@ -237,6 +237,13 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         if(position > 0)
             position = position - 1;
         Shopinfo tempShop = shopinfoList.get(position);
+
+        if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
+        {
+            showToast("该店铺下没有安装播放器");
+            return;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putBoolean("IS_EDIT", true);
         if(tempShop.getGroup() != null)
