@@ -251,8 +251,8 @@ public class UserRecordActivity extends BaseActivity implements LJListView.IXLis
 			vh.ivDelete.setTag(position);
 
 			UserInfo infor = userList.get(position);
-			if(!TextUtils.isEmpty(infor.getNickName()))
-				vh.tvName.setText(infor.getNickName());
+			if(!TextUtils.isEmpty(infor.getMerchant().getName()))
+				vh.tvName.setText(infor.getMerchant().getName());
 			if(!TextUtils.isEmpty(infor.getUsername()))
 				vh.tvAccount.setText(infor.getUsername());
 

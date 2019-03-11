@@ -122,12 +122,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             headerlayout = navigationView.getHeaderView(0);
             imageView = (CircleImageView) headerlayout.findViewById(R.id.profile_image);
             TextView tv_header = (TextView) headerlayout.findViewById(R.id.tv_header);
+            TextView tv_header_type = (TextView) headerlayout.findViewById(R.id.tv_header_account_type);
             TextView followers = (TextView) headerlayout.findViewById(R.id.followers);
             TextView following = (TextView) headerlayout.findViewById(R.id.following);
             TextView tvCode = (TextView) headerlayout.findViewById(R.id.tv_act_code);
-            tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName()
-            +"-" + LocalDataEntity.newInstance(getApplicationContext()).getUserInfor().getTypeName());
-            tvCode.setText("复制激活码:"+LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
+            tv_header_type.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserInfor().getTypeName());
+            tv_header.setText(LocalDataEntity.newInstance(getApplicationContext()).getUserName());
+            tvCode.setText("激活码复制:" + LocalDataEntity.newInstance(getApplicationContext()).getPcCode());
             /*followers.setText("");
             following.setText("");*/
             headerlayout.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +143,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationB
             tvCode.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    String pcCode = LocalDataEntity.newInstance(getApplicationContext()).getPcCode();
+                    String pcCode = LocalDataEntity.newInstance(getApplicationContext()).getUserName() + "" +
+                            LocalDataEntity.newInstance(getApplicationContext()).getPcCode();
                     ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                     // 将文本内容放到系统剪贴板里。
                     cm.setText(pcCode);

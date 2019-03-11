@@ -148,7 +148,7 @@ public class LocalDataEntity
 	{
 		sharedPre.setData(USER_ID, userInfor.getId());
 		sharedPre.setData(USER_TYPE, userInfor.getType());
-		sharedPre.setData(USER_NAME, userInfor.getNickName());
+		sharedPre.setData(USER_NAME, userInfor.getMerchant().getName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
 		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
 		sharedPre.setData(USER_TOKEN, userInfor.getToken());

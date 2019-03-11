@@ -60,7 +60,7 @@ public class UserListAdapter extends BaseAdapter {
         }
         UserInfo tempInfo = dataList.get(position);
         holder.ivMore.setVisibility(View.GONE);
-        holder.tvNickName.setText("名称：" + tempInfo.getNickName());
+        holder.tvNickName.setText("名称：" + tempInfo.getMerchant().getName());
         holder.tvLoginName.setText("账户：" + tempInfo.getUsername());
         holder.tvType.setText("类型：" + tempInfo.getTypeName());
         holder.ivMore.setOnClickListener(new View.OnClickListener() {

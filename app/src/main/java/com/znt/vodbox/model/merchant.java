@@ -19,7 +19,15 @@ public class merchant implements Serializable{
     private String name = "";
     private String bindCode = "";
     private String shopcodeFlag = "";
+    private String downloadUrl = "";
 
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public void setDownloadUrl(String downloadUrl) {
+        this.downloadUrl = downloadUrl;
+    }
     public String getId() {
         return id;
     }

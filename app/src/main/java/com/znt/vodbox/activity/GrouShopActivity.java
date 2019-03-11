@@ -238,7 +238,7 @@ public class GrouShopActivity extends BaseActivity  implements
         String dataId = "";
         String userId = Constant.mUserInfo.getMerchant().getId();
         String pusherid = "";
-        String pushername = Constant.mUserInfo.getNickName();
+        String pushername = Constant.mUserInfo.getMerchant().getName();
 
         try
         {

@@ -249,7 +249,7 @@ public class DBManager extends MyDbHelper
 
 		String login_account = infor.getUsername();
 		String login_pwd = infor.getPwd();
-		String user_name = infor.getNickName();
+		String user_name = infor.getMerchant().getName();
 		String act_code = infor.getMerchant().getBindCode();
 		String user_id = infor.getId();
 
@@ -282,7 +282,7 @@ public class DBManager extends MyDbHelper
 
 		String login_account = infor.getUsername();
 		String login_pwd = infor.getPwd();
-		String user_name = infor.getNickName();
+		String user_name = infor.getMerchant().getName();
 		String act_code = infor.getMerchant().getBindCode();
 		String user_id = infor.getId();
 

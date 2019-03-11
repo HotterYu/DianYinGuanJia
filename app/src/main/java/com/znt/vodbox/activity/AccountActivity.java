@@ -98,7 +98,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 		{
 			UserInfo infor = getLocalData().getUserInfor();
 			itvUser.getSecondView().setText(infor.getUsername());
-			itvName.getSecondView().setText(infor.getNickName());
+			itvName.getSecondView().setText(infor.getMerchant().getName());
 			itvPwd.getSecondView().setText("******");
 			
 			if(getLocalData().getLoginType().equals("0"))

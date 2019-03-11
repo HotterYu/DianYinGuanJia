@@ -18,6 +18,7 @@ public class UserInfo implements Serializable
     private String lastLoginIp = "";//
     private String lastLoginTime = "";//
     private String pwd = "";
+
     public String getPwd()
     {
         return pwd;
