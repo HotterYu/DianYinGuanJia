@@ -30,19 +30,11 @@ public class Shopinfo implements Serializable
     private String wifiPassword = "";
     private String linkman = "";
     private String linkmanPhone = "";
-    private String netInfo = "";
+
     private String status = "";
     private GroupInfo group ;
     private int type = 0;
     private List<tmlRunStatus> tmlRunStatus = null;
-
-    public String getNetInfo() {
-        return netInfo;
-    }
-
-    public void setNetInfo(String netInfo) {
-        this.netInfo = netInfo;
-    }
 
     public int getType() {
         return type;

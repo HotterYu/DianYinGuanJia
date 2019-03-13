@@ -130,6 +130,10 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 					itvEndTime.getSecondView().setText(DateUtils.getDateFromLong(endTime));
 				itvEndTime.getSecondView().setTextColor(getResources().getColor(R.color.text_black_mid));
 			}
+			if(TextUtils.isEmpty(deviceInfor.getTmlRunStatus().get(0).getNetInfo()))
+				itvStorage.getSecondView().setText("无");
+			else
+				itvStorage.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).getNetInfo());
 		}
 		
 		itvName.getSecondView().setText(deviceInfor.getName());
@@ -137,14 +141,10 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 		itvOritation.getSecondView().setText(getVideoWhirl(deviceInfor.getTmlRunStatus().get(0).getVideoWhirl()));
 		itvLastOnline.getSecondView().setText(DateUtils.getDateFromLong(Long.parseLong(deviceInfor.getTmlRunStatus().get(0).getLastConnTime())));
 		
-		//itvVersion.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
+		itvVersion.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).getSoftVersion());
 		itvWifiName.getSecondView().setText(deviceInfor.getWifiName() + "\n" + deviceInfor.getWifiPassword());
 		itvWifiPwd.getSecondView().setText(deviceInfor.getWifiPassword());
-		//itvIp.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).get);
-		if(TextUtils.isEmpty(deviceInfor.getNetInfo()))
-			itvStorage.getSecondView().setText("无");
-		else
-			itvStorage.getSecondView().setText(deviceInfor.getNetInfo());
+		itvIp.getSecondView().setText(deviceInfor.getTmlRunStatus().get(0).getIp());
 
 		itvWifiName.setOnClick(this);
 		itvName.setOnClick(this);

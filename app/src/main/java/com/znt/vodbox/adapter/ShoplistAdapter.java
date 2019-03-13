@@ -87,8 +87,7 @@ public class ShoplistAdapter extends BaseAdapter {
                 && shopinfo.getTmlRunStatus().size() >0)
         {
 
-            holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId());
-            holder.tvOnlineTime.setVisibility(View.GONE);
+            holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId()+"\n" + shopinfo.getTmlRunStatus().get(0).getSoftVersion());
             if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
                     shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))
             {
@@ -114,6 +113,7 @@ public class ShoplistAdapter extends BaseAdapter {
 
             if(!TextUtils.isEmpty(shopinfo.getTmlRunStatus().get(0).getLastConnTime()))
             {
+                holder.tvOnlineTime.setVisibility(View.VISIBLE);
                 String time = DateUtils.getStringTime(Long.parseLong(shopinfo.getTmlRunStatus().get(0).getLastConnTime()));
                 holder.tvOnlineTime.setText(time);
             }

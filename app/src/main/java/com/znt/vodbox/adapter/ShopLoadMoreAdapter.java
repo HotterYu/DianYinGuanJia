@@ -101,7 +101,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     && shopinfo.getTmlRunStatus().size() >0)
             {
 
-                holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId());
+                holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId()+"\n" + shopinfo.getTmlRunStatus().get(0).getSoftVersion());
                 holder.tvOnlineTime.setVisibility(View.VISIBLE);
                 if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
                         shopinfo.getTmlRunStatus().get(0).getOnlineStatus().equals("1"))

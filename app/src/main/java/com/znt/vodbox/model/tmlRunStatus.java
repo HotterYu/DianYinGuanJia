@@ -28,6 +28,33 @@ public class tmlRunStatus implements Serializable{
     private String shopcode = "";
     private String shopname = "";
     private String onlineStatus = "";
+    private String netInfo = "";
+    private String softVersion = "";
+    private String ip = "";
+
+    public String getSoftVersion() {
+        return softVersion;
+    }
+
+    public void setSoftVersion(String softVersion) {
+        this.softVersion = softVersion;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getNetInfo() {
+        return netInfo;
+    }
+
+    public void setNetInfo(String netInfo) {
+        this.netInfo = netInfo;
+    }
 
     public String getTerminalId() {
         return terminalId;
