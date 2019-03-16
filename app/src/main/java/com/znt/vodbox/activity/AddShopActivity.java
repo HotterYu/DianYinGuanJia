@@ -100,23 +100,20 @@ public class AddShopActivity extends BaseActivity{
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
 
-                    if(resultBean != null)
+                    if(resultBean != null && resultBean.isSuccess())
                     {
-                        //getGroupList();
+                        showToast(resultBean.getMessage());
+
+                        Intent intent = new Intent();
+                        Bundle bundle = new Bundle();
+                        intent.putExtras(bundle);
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }
                     else
                     {
-
+                        showToast(resultBean.getMessage());
                     }
-
-                    showToast(resultBean.getMessage());
-
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    intent.putExtras(bundle);
-                    setResult(RESULT_OK, intent);
-                    finish();
-
                 }
 
                 @Override

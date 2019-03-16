@@ -650,7 +650,8 @@ public class AlbumMusicActivity extends BaseActivity implements
                         break;
                 }
             }
-        });mAlertView.show();
+        });
+        mAlertView.show();
     }
 
     @Override

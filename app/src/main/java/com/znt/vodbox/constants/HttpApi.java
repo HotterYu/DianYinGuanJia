@@ -5,6 +5,10 @@ public class HttpApi
     //public static final String API = "http://47.104.209.249:8080/api";
     public static final String API = "http://api.zhunit.com/api";
 
+    public static final String GET_TERMINAL_INFO = API + "/terminal/info";
+    public static final String DELETE_SHOP = API + "/shop/del";
+
+
     public static final String LOGIN = API + "/user/login";
 
     public static final String ADD_SHOP = API + "/shop/add";

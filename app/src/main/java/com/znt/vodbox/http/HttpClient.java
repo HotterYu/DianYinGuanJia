@@ -1558,4 +1558,59 @@ public class HttpClient extends HttpApi{
                     }
                 });
     }
+
+
+    public static void deleteShop(String token, String id,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(DELETE_SHOP)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+    public static void getTerminalInfo(String token, String id,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+        OkHttpUtils.post().url(GET_TERMINAL_INFO)
+                .addHeader("token", token)
+                .addParams("id", id)
+                .build()
+                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                    @Override
+                    public void onResponse(CommonCallBackBean response, int id) {
+                        if(response == null)
+                            callback.onFail(null);
+                        else
+                            callback.onSuccess(response);
+                    }
+
+                    @Override
+                    public void onError(Call call, Exception e, int id) {
+                        callback.onFail(e);
+                    }
+
+                    @Override
+                    public void onAfter(int id) {
+                        callback.onFinish();
+                    }
+                });
+    }
+
+
 }

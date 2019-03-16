@@ -23,8 +23,10 @@ import com.znt.vodbox.activity.ShopDetailActivity;
 import com.znt.vodbox.adapter.LoadMoreWrapper;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.ShopLoadMoreAdapter;
+import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.constants.RequestCode;
+import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -284,23 +286,22 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     @Override
     public void onMoreClick(final int position) {
         Shopinfo tempShop = dataList.get(position);
-        showShopOperationDialog(tempShop);
+        showShopOperationDialog(position,tempShop);
     }
 
-    private void showShopOperationDialog(final Shopinfo tempShop)
+    private void showShopOperationDialog(final int pos, final Shopinfo tempShop)
     {
-        if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
-        {
-            showToast("该店铺下没有安装设备");
-            return;
-        }
-
-        new AlertView(tempShop.getName(),tempShop.getAddress(), "取消", null,
-                new String[]{"添加到分区", "插播歌曲"},
+        mAlertView = new AlertView(tempShop.getName(),tempShop.getAddress(), "取消", null,
+                new String[]{"添加到分区", "插播歌曲", "删除店铺"},
                 getActivity(), AlertView.Style.ActionSheet, new OnItemClickListener(){
             public void onItemClick(Object o,int position){
                 switch (position) {
                     case 0://
+                        if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
+                        {
+                            showToast("该店铺下没有安装设备");
+                            return;
+                        }
                         Bundle bundle = new Bundle();
                         bundle.putBoolean("IS_EDIT", true);
                         if(tempShop.getGroup() != null)
@@ -309,13 +310,66 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
                         ViewUtils.startActivity(getActivity(),GroupListActivity.class,bundle,1);
                         break;
                     case 1://
+                        if(tempShop.getTmlRunStatus() == null || tempShop.getTmlRunStatus().size() == 0)
+                        {
+                            showToast("该店铺下没有安装设备");
+                            return;
+                        }
                         Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("SHOP_INFO",tempShop);
                         ViewUtils.startActivity(getActivity(),SearchSystemMusicActivity.class,bundle2);
                         break;
+                    case 2://
+                        deleteShop(pos,tempShop.getId());
+                        break;
                 }
             }
-        }).show();
+        });
+        mAlertView.show();
+    }
+    private AlertView mAlertView = null;
+    private void deleteShop(final int pos,final String id)
+    {
+        if(mAlertView != null)
+            mAlertView.dismissImmediately();
+        new AlertView("提示", "确定删除该店铺吗?", "取消", new String[]{"确定"}, null, getActivity(), AlertView.Style.Alert, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Object o, int position) {
+                if(position == 0)
+                    deleteShopProces(pos, id);
+            }
+        }).setCancelable(true).show();
+    }
+    public void deleteShopProces(final int pos, final String id)
+    {
+        try
+        {
+            String token = Constant.mUserInfo.getToken();
+
+            HttpClient.deleteShop(token, id, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null && resultBean.isSuccess())
+                    {
+                        dataList.remove(pos);
+                        loadMoreWrapper.notifyDataSetChanged();
+                        dismissDialog();
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     @Override

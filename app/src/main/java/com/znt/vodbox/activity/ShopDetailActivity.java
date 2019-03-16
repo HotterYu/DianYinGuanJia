@@ -170,6 +170,7 @@ public class ShopDetailActivity extends BaseActivity implements
         {
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
+        getTerminalInfo();
         getCurPlayMusics();
     }
 
@@ -252,11 +253,13 @@ public class ShopDetailActivity extends BaseActivity implements
 
     @Override
     public void onRefresh() {
+        getTerminalInfo();
         getCurPlayMusics();
     }
 
     @Override
     public void onLoadMore() {
+
         getCurPlayMusics();
     }
 
@@ -361,6 +364,37 @@ public class ShopDetailActivity extends BaseActivity implements
         catch (Exception e)
         {
             ToastUtils.show(getResources().getString(R.string.push_fail));
+        }
+    }
+
+    public void getTerminalInfo()
+    {
+        try
+        {
+            String id = mShopInfo.getId();
+            String token = Constant.mUserInfo.getToken();
+
+            HttpClient.getTerminalInfo(token, id, new HttpCallback<CommonCallBackBean>() {
+                @Override
+                public void onSuccess(CommonCallBackBean resultBean) {
+                    if(resultBean != null && resultBean.isSuccess())
+                    {
+                        dismissDialog();
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
         }
     }
 
