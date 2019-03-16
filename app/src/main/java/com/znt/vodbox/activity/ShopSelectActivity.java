@@ -141,20 +141,30 @@ public class ShopSelectActivity extends BaseActivity  implements
         String userShopCode = "";
         String name = text;
 
+        String terminalId = "";
+        String oldId = "";
         if(searchType == 0)
         {
 
         }
         else if(searchType == 1)
         {
-            userShopCode = name;
+            terminalId = name;
             name = "";
+            oldId = "";
         }
+        else if(searchType == 2)
+        {
+            oldId = name;
+            name = "";
+            terminalId = "";
+        }
+
+        mSearchView.showRecordView(false);
         try
         {
-            // Simulate network access.
-            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,""
-                    , new HttpCallback<ShopListResultBean>() {
+            HttpClient.getAllShops(token, pageNo+"", pageSize+""
+                    ,merchId,groupId,memberId,name,shopCode,userShopCode,terminalId,oldId,"", new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
 

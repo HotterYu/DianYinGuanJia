@@ -195,7 +195,8 @@ public class OnlineShopFragment extends BaseFragment implements OnMoreClickListe
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,onlinestatus
+            HttpClient.getAllShops(token, pageNo+"", pageSize+""
+                    ,merchId,groupId,memberId,name,shopCode,userShopCode,"","",onlinestatus
                     , new HttpCallback<ShopListResultBean>() {
                 @Override
                 public void onSuccess(ShopListResultBean resultBean) {

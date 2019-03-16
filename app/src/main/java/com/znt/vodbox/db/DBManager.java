@@ -243,13 +243,13 @@ public class DBManager extends MyDbHelper
 
 		if(isUserExist(infor))
 		{
-			updateUser(infor);
-			return 1;
+			deleteUser(infor.getId());
 		}
 
 		String login_account = infor.getUsername();
 		String login_pwd = infor.getPwd();
-		String user_name = infor.getMerchant().getName();
+		//String user_name = infor.getUsername();
+		String user_nick_name = infor.getMerchant().getName();
 		String act_code = infor.getMerchant().getBindCode();
 		String user_id = infor.getId();
 
@@ -259,8 +259,10 @@ public class DBManager extends MyDbHelper
 			values.put("login_account", login_account);
 		if(!TextUtils.isEmpty(login_pwd))
 			values.put("login_pwd", login_pwd);
-		if(!TextUtils.isEmpty(user_name))
-			values.put("user_name", user_name);
+		if(!TextUtils.isEmpty(user_nick_name))
+			values.put("user_name", user_nick_name);
+		/*if(!TextUtils.isEmpty(user_nick_name))
+			values.put("user_nick_name", user_nick_name);*/
 		if(!TextUtils.isEmpty(act_code))
 			values.put("act_code", act_code);
 		if(!TextUtils.isEmpty(user_id))
@@ -282,7 +284,8 @@ public class DBManager extends MyDbHelper
 
 		String login_account = infor.getUsername();
 		String login_pwd = infor.getPwd();
-		String user_name = infor.getMerchant().getName();
+		//String user_name = infor.getUsername();
+		String user_nick_name = infor.getMerchant().getName();
 		String act_code = infor.getMerchant().getBindCode();
 		String user_id = infor.getId();
 
@@ -292,8 +295,10 @@ public class DBManager extends MyDbHelper
 			values.put("login_account", login_account);
 		if(!TextUtils.isEmpty(login_pwd))
 			values.put("login_pwd", login_pwd);
-		if(!TextUtils.isEmpty(user_name))
-			values.put("user_name", user_name);
+		if(!TextUtils.isEmpty(user_nick_name))
+			values.put("user_name", user_nick_name);
+		/*if(!TextUtils.isEmpty(user_nick_name))
+			values.put("user_nick_name", user_nick_name);*/
 		if(!TextUtils.isEmpty(act_code))
 			values.put("act_code", act_code);
 		if(!TextUtils.isEmpty(user_id))
@@ -315,13 +320,16 @@ public class DBManager extends MyDbHelper
 				String login_account = cur.getString(cur.getColumnIndex("login_account"));
 				String login_pwd = cur.getString(cur.getColumnIndex("login_pwd"));
 				String user_name = cur.getString(cur.getColumnIndex("user_name"));
+				//String user_nick_name = cur.getString(cur.getColumnIndex("user_nick_name"));
 				String act_code = cur.getString(cur.getColumnIndex("act_code"));
 				String user_id = cur.getString(cur.getColumnIndex("user_id"));
 
 				UserInfo infor = new UserInfo();
 				infor.setUsername(login_account);
 				infor.setPwd(login_pwd);
-				infor.setNickName(user_name);
+				//infor.setNickName(user_nick_name);
+
+				infor.getMerchant().setName(user_name);
 				infor.getMerchant().setBindCode(act_code);
 				infor.setId(user_id);
 

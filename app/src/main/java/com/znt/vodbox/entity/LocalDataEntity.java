@@ -31,6 +31,7 @@ public class LocalDataEntity
 	private final String THIRD_ID = "NEW_THIRD_ID";
 	private final String THIRD_TOKEN = "NEW_THIRD_TOKEN";
 	private final String USER_NAME = "NEW_USER_NAME";
+	private final String USER_NICK_NAME = "NEW_USER_NICK_NAME";
 	private final String USER_PWD = "NEW_USER_PWD";
 	private final String USER_HEAD = "NEW_USER_HEAD";
 	private final String USER_ACCOUNT = "NEW_USER_ACCOUNT";
@@ -149,6 +150,7 @@ public class LocalDataEntity
 		sharedPre.setData(USER_ID, userInfor.getId());
 		sharedPre.setData(USER_TYPE, userInfor.getType());
 		sharedPre.setData(USER_NAME, userInfor.getMerchant().getName());
+		sharedPre.setData(USER_NICK_NAME, userInfor.getNickName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
 		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
 		sharedPre.setData(USER_TOKEN, userInfor.getToken());
@@ -163,6 +165,7 @@ public class LocalDataEntity
 		UserInfo userInfor = new UserInfo();
 		String userId = sharedPre.getData(USER_ID, SystemUtils.getDeviceId(context));
 		String userName = sharedPre.getData(USER_NAME, "DG-" + Build.MODEL);
+		String userNickName = sharedPre.getData(USER_NICK_NAME, "DG-" + Build.MODEL);
 		String userPwd = sharedPre.getData(USER_PWD, "");
 		String head = sharedPre.getData(USER_HEAD, "");
 		String userAccount = sharedPre.getData(USER_ACCOUNT, "");
@@ -170,11 +173,14 @@ public class LocalDataEntity
 		String pcCode = sharedPre.getData(PC_CODE, "");
 		String token = sharedPre.getData(USER_TOKEN, "");
 		userInfor.setId(userId);
-		userInfor.setNickName(userName);
+		userInfor.setNickName(userNickName);
 		//userInfor.setHead(head);
 
 		if(userInfor.getMerchant() != null)
+		{
 			userInfor.getMerchant().setBindCode(pcCode);
+			userInfor.getMerchant().setName(userName);
+		}
 		userInfor.setToken(token);
 		userInfor.setPwd(userPwd);
 		userInfor.setType(userType);

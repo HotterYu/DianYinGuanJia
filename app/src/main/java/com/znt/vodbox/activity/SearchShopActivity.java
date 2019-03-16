@@ -147,14 +147,23 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
 
         String shopCode = "";
         String userShopCode = "";
+        String terminalId = "";
+        String oldId = "";
         if(searchType == 0)
         {
 
         }
         else if(searchType == 1)
         {
-            userShopCode = name;
+            terminalId = name;
             name = "";
+            oldId = "";
+        }
+        else if(searchType == 2)
+        {
+            oldId = name;
+            name = "";
+            terminalId = "";
         }
 
         mSearchView.showRecordView(false);
@@ -162,7 +171,8 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
         try
         {
             // Simulate network access.
-            HttpClient.getAllShops(token, pageNo+"", pageSize+"",merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo+"", pageSize+""
+                    ,merchId,groupId,memberId,name,shopCode,userShopCode,terminalId,oldId,""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
@@ -224,6 +234,10 @@ public class SearchShopActivity extends BaseActivity  implements LJListView.IXLi
                   else if(which == 1)
                   {
                       tvTopTitleSub.setText("按照编号搜索");
+                  }
+                  else if(which == 2)
+                  {
+                      tvTopTitleSub.setText("按照旧编号搜索");
                   }
                   searchType = which;
                   loadShops();

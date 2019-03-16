@@ -348,7 +348,7 @@ public class HttpClient extends HttpApi{
     }
 
     public static void getAllShops(String token, String pageNo, String pageSize,String merchId, String groupId, String memberId,
-                                   String name, String shopCode, String userShopCode, String onlinestatus,
+                                   String name, String shopCode, String userShopCode, String terminalId, String oldId, String onlinestatus,
                                    @NonNull final HttpCallback<ShopListResultBean> callback) {
         OkHttpUtils.post().url(GET_SHOP_LIST)
                 .addHeader("token", token)
@@ -359,6 +359,8 @@ public class HttpClient extends HttpApi{
                 .addParams("name", name)
                 .addParams("shopCode", shopCode)
                 .addParams("userShopCode", userShopCode)
+                .addParams("terminalId", terminalId)
+                .addParams("oldId", oldId)
                 .addParams("onlineStatus", onlinestatus)
                 .addParams("pageSize", pageSize)
                 .addParams("pageNo", pageNo)

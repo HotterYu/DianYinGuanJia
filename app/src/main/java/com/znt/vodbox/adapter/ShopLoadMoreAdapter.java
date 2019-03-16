@@ -100,7 +100,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(shopinfo.getTmlRunStatus() != null
                     && shopinfo.getTmlRunStatus().size() >0)
             {
-
+                holder.tvDevId.setVisibility(View.VISIBLE);
                 holder.tvDevId.setText(shopinfo.getTmlRunStatus().get(0).getTerminalId()+"\n" + shopinfo.getTmlRunStatus().get(0).getSoftVersion());
                 holder.tvOnlineTime.setVisibility(View.VISIBLE);
                 if(shopinfo.getTmlRunStatus().get(0).getOnlineStatus() != null &&
@@ -134,6 +134,7 @@ public class ShopLoadMoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             else
             {
+                holder.tvDevId.setVisibility(View.GONE);
                 holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));
                 //holder.tvOnlineTime.setVisibility(View.INVISIBLE);
                 holder.tvCurSong.setText(mContext.getResources().getString(R.string.dev_shop_none_device));

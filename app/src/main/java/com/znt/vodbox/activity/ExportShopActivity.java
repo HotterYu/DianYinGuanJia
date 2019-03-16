@@ -179,9 +179,11 @@ public class ExportShopActivity extends BaseActivity{
         String shopCode = "";
         String userShopCode = "";
 
+
         try
         {
-            HttpClient.getAllShops(token, pageNo + "", pageSize + "",merchId,groupId,memberId,name,shopCode,userShopCode,""
+            HttpClient.getAllShops(token, pageNo + "", pageSize +
+                            "",merchId,groupId,memberId,name,shopCode,userShopCode,"","",""
                     , new HttpCallback<ShopListResultBean>() {
                         @Override
                         public void onSuccess(ShopListResultBean resultBean) {
