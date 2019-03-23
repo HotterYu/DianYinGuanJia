@@ -1,5 +1,6 @@
 package com.znt.vodbox.adapter;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.utils.FileUtils;
+import com.znt.vodbox.utils.FormatFileSizeUtil;
 import com.znt.vodbox.utils.binding.Bind;
 import com.znt.vodbox.utils.binding.ViewBinder;
 
@@ -171,7 +173,16 @@ public class AlbumMusiclistAdapter extends BaseAdapter {
 
         holder.tvAlbumName.setText(tempInfo.getMusicName());
         String artist = FileUtils.getArtistAndAlbum(tempInfo.getMusicSing(), tempInfo.getMusicAlbum());
-        holder.tvDesc.setText(artist);
+        String fileSize = tempInfo.getFileSize();
+        float fileSizeFloat = 0;
+        if(!TextUtils.isEmpty(fileSize))
+        {
+            fileSizeFloat = Float.parseFloat(fileSize);
+        }
+        if(fileSizeFloat > 0)
+            holder.tvDesc.setText(artist + "  " + FormatFileSizeUtil.formatFileSize((long) fileSizeFloat));
+        else
+            holder.tvDesc.setText(artist + "  ");
 
         holder.tvNum.setText((position + 1) + "");
 
