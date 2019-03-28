@@ -15,7 +15,7 @@ import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.ShopListResultBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -114,7 +114,7 @@ public class GrouShopActivity extends BaseActivity  implements
     public void loadShops()
     {
         String text = mSearchView.getText();
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = mGroupInfo.getId();
@@ -183,7 +183,7 @@ public class GrouShopActivity extends BaseActivity  implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
             String id = mGroupInfo.getId();
 
 
@@ -237,9 +237,9 @@ public class GrouShopActivity extends BaseActivity  implements
     {
         String type = "1";
         String dataId = "";
-        String userId = Constant.mUserInfo.getMerchant().getId();
+        String userId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String pusherid = "";
-        String pushername = Constant.mUserInfo.getMerchant().getName();
+        String pushername = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getName();
 
         try
         {

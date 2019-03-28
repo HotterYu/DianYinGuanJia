@@ -26,7 +26,6 @@ import com.znt.vodbox.adapter.ShopLoadMoreAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.constants.RequestCode;
-import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -344,7 +343,7 @@ public class ShopFragment extends BaseFragment implements OnMoreClickListener {
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
             HttpClient.deleteShop(token, id, new HttpCallback<CommonCallBackBean>() {
                 @Override

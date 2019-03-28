@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
@@ -87,7 +87,7 @@ public class ModifyAlbumActivity extends BaseActivity{
 
     public void addpAlbum()
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String name = etAlbumName.getText().toString().trim();
 
         if(TextUtils.isEmpty(name))
@@ -98,7 +98,7 @@ public class ModifyAlbumActivity extends BaseActivity{
 
         String description = etAlbumDesc.getText().toString().trim();
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String remark = etAlbumRemark.getText().toString().trim();
 
 
@@ -144,7 +144,7 @@ public class ModifyAlbumActivity extends BaseActivity{
 
     public void mofifyAlbum(AlbumInfo albumInfo)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getApplicationContext()).getUserInfor().getToken();
         String name = etAlbumName.getText().toString().trim();
 
         if(TextUtils.isEmpty(name))
@@ -155,7 +155,7 @@ public class ModifyAlbumActivity extends BaseActivity{
 
         String description = etAlbumDesc.getText().toString().trim();
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getApplicationContext()).getUserInfor().getMerchant().getId();
         String remark = etAlbumRemark.getText().toString().trim();
         if(name.equals(albumInfo.getName()) && description.equals(albumInfo.getDescription()) && remark.equals(albumInfo.getRemark()))
         {

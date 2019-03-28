@@ -25,7 +25,7 @@ import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.bean.TypeInfo;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -369,7 +369,7 @@ public class PushListActivity extends BaseActivity implements
 
     private void updateAdInfo(final int position, final AdMediaInfo tempInfo, final String newName)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         /*String merchId = Constant.mUserInfo.getMerchant().getId();
         String adminId = Constant.mUserInfo.getId();*/
         HttpClient.updateAdInfo(token, tempInfo.getId(), newName,tempInfo.getAdtypeId(),tempInfo.getAdduration(), new HttpCallback<CommonCallBackBean>() {

@@ -16,7 +16,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.ViewUtils;
@@ -133,10 +133,10 @@ public class AlbumSelectActivity extends BaseActivity implements
 
     public void loadMyAlbums()
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String pageNo = "1";
         String pageSize = "20";
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         String typeId = "";
         String name = mSearchView.getText().toString();
@@ -177,7 +177,7 @@ public class AlbumSelectActivity extends BaseActivity implements
 
     public void deleteAlbum(String id)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         try
         {
             // Simulate network access.

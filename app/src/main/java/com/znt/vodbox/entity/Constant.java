@@ -2,8 +2,6 @@
 package com.znt.vodbox.entity;
 
 
-import com.znt.vodbox.model.UserInfo;
-
 /**
  * @ClassName: Constant 
  * @Description: TODO
@@ -24,10 +22,6 @@ public class Constant
 	public static boolean isInnerVersion = false;
 	
 
-
-
-
-    public static UserInfo mUserInfo = null;
 
 
 

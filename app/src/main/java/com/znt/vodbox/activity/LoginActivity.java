@@ -34,7 +34,7 @@ import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.config.Config;
 import com.znt.vodbox.db.DBManager;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
@@ -281,7 +281,7 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                         if(tempInfor.isSuccess())
                         {
                             UserInfo userInfo = tempInfor.getData();
-                            Constant.mUserInfo = userInfo;
+                            LocalDataEntity.newInstance(getActivity()).setUserInfor(userInfo);
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 

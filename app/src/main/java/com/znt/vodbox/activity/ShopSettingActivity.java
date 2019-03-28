@@ -18,7 +18,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.dialog.TextInputBottomDialog;
 import com.znt.vodbox.dialog.VideoDirectionDialog;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -259,7 +259,7 @@ public class ShopSettingActivity extends BaseActivity implements OnClickListener
 	{
 
 		deviceInfor.setName(name);
-		String token = Constant.mUserInfo.getToken();
+		String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 		try
 		{
 			// Simulate network access.

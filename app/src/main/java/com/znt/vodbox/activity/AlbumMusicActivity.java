@@ -23,7 +23,7 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.entity.Config;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.FileUtils;
@@ -342,7 +342,7 @@ public class AlbumMusicActivity extends BaseActivity implements
         {
             orderNumbers = orderNumbers.substring(0, orderNumbers.length() - 1);
         }
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         HttpClient.updateAlbumMusicSort(token, mAlbumInfo.getId(), musicInfoIds, orderNumbers, new HttpCallback<CommonCallBackBean>() {
             @Override
             public void onSuccess(CommonCallBackBean mCallBackBean) {
@@ -368,9 +368,9 @@ public class AlbumMusicActivity extends BaseActivity implements
     {
 
         String searchWord = mSearchView.getText().toString();
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {
@@ -425,7 +425,7 @@ public class AlbumMusicActivity extends BaseActivity implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
             String albumId = mAlbumInfo.getId();
 
             HttpClient.deleteAlbumMusics(token, albumId, musicIds, new HttpCallback<CommonCallBackBean>() {
@@ -458,8 +458,8 @@ public class AlbumMusicActivity extends BaseActivity implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+            String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
             String albumId = mAlbumInfo.getId();
 
             HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {

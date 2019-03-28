@@ -20,7 +20,7 @@ import com.znt.vodbox.adapter.PlanLoadMoreAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.PlanListResultBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
@@ -141,9 +141,9 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
             loadMoreWrapper.setLoadState(loadMoreWrapper.LOADING_END);
         }
 
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String id = "";//计划id
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String groupId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String typeId = "";
@@ -195,7 +195,7 @@ public class MediaPlanFragment extends BaseFragment implements OnMoreClickListen
 
     public void deletePlan(PlanInfo info)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
         try
         {

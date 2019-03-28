@@ -19,7 +19,7 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.dialog.TextInputBottomDialog;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
@@ -131,7 +131,7 @@ public class GroupListActivity extends BaseActivity implements
 
     public void getGroupList()
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String pageNo = "1";
         String pageSize = "100";
         //String merchId = Constant.mUserInfo.getMerchant().getId();
@@ -176,7 +176,7 @@ public class GroupListActivity extends BaseActivity implements
 
     public void deleteGroup(String id)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
 
         try
@@ -214,8 +214,8 @@ public class GroupListActivity extends BaseActivity implements
 
     public void renameGroupName(String groupName, String id)
     {
-        String token = Constant.mUserInfo.getToken();
-        String adminId = Constant.mUserInfo.getId();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+        String adminId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getId();
 
         try
         {
@@ -252,9 +252,9 @@ public class GroupListActivity extends BaseActivity implements
 
     public void addGroup(String groupName)
     {
-        String token = Constant.mUserInfo.getToken();
-        String merchId = Constant.mUserInfo.getMerchant().getId();
-        String adminId = Constant.mUserInfo.getId();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
+        String adminId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getId();
 
         try
         {
@@ -291,7 +291,7 @@ public class GroupListActivity extends BaseActivity implements
 
     public void addShopTopGroup(String id)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         try
         {
             // Simulate network access.

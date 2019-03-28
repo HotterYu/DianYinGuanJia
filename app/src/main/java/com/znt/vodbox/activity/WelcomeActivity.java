@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
-import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -211,7 +210,6 @@ public class WelcomeActivity extends Activity {
                     {
                         UserInfo userInfo = tempInfor.getData();
                         userInfo.setPwd(password);
-                        Constant.mUserInfo = userInfo;
 
                         LocalDataEntity.newInstance(getApplicationContext()).setUserInfor(userInfo);
 

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -88,7 +88,7 @@ public class WifiSetActivity  extends BaseActivity{
 
     public void updateShopInfo()
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String wifiName = etAlbumName.getText().toString().trim();
 
         if(TextUtils.isEmpty(wifiName))

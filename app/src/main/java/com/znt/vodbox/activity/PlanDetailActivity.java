@@ -21,7 +21,7 @@ import com.znt.vodbox.bean.GroupInfo;
 import com.znt.vodbox.bean.PlanInfo;
 import com.znt.vodbox.bean.SubPlanInfor;
 import com.znt.vodbox.dialog.TextInputBottomDialog;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.PickViewUtil;
@@ -271,7 +271,7 @@ public class PlanDetailActivity extends BaseActivity  implements
 
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
             String planName = mPlanInfo.getPlanName();
             String cycleTypes = mPlanInfo.getCycleTypes() + "";
             String startTimes = mPlanInfo.getStartTimes() + "";
@@ -279,7 +279,7 @@ public class PlanDetailActivity extends BaseActivity  implements
             String categoryIds = mPlanInfo.getCategoryIds() + "";
             String startDate = mPlanInfo.getStartDate();
             String endDate = mPlanInfo.getEndDate();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
             String groupId = mPlanInfo.getGroupId();
             if(!switchButton.isChecked())
                 groupId = "";
@@ -322,7 +322,7 @@ public class PlanDetailActivity extends BaseActivity  implements
 
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
             String id = mPlanInfo.getId();
             String planName = mPlanInfo.getPlanName();
             String cycleTypes = mPlanInfo.getCycleTypes() + "";
@@ -331,7 +331,7 @@ public class PlanDetailActivity extends BaseActivity  implements
             String categoryIds = mPlanInfo.getCategoryIds() + "";
             String startDate = mPlanInfo.getStartDate();
             String endDate = mPlanInfo.getEndDate();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
             String groupId = mPlanInfo.getGroupId();
             if(!switchButton.isChecked())
                 groupId = "";

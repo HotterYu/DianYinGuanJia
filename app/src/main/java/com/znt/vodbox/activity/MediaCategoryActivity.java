@@ -13,7 +13,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.TypeListAdapter;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
@@ -111,8 +111,8 @@ public class MediaCategoryActivity extends BaseActivity implements
     {
 
         String searchWord = mSearchView.getText().toString();
-        String token = Constant.mUserInfo.getToken();
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {

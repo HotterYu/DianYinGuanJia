@@ -26,7 +26,7 @@ import com.znt.vodbox.bean.AdMediaInfo;
 import com.znt.vodbox.bean.AdMediaListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.binding.Bind;
@@ -224,9 +224,9 @@ public class AdListActivity  extends BaseActivity implements
 
     public void getAdMedias()
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String adname = mSearchView.getText().toString();
         try
         {
@@ -280,7 +280,7 @@ public class AdListActivity  extends BaseActivity implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
             HttpClient.deleteAd(token, id, new HttpCallback<CommonCallBackBean>() {
                 @Override
@@ -312,7 +312,7 @@ public class AdListActivity  extends BaseActivity implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
             HttpClient.deleteAd(token, ids, new HttpCallback<CommonCallBackBean>() {
                 @Override
@@ -466,7 +466,7 @@ public class AdListActivity  extends BaseActivity implements
 
     private void updateAdInfo(final int position, final AdMediaInfo tempInfo, final String newName)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         /*String merchId = Constant.mUserInfo.getMerchant().getId();
         String adminId = Constant.mUserInfo.getId();*/
         HttpClient.updateAdInfo(token, tempInfo.getId(), newName,tempInfo.getAdtypeId(),tempInfo.getAdduration(), new HttpCallback<CommonCallBackBean>() {

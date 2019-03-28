@@ -24,7 +24,6 @@ import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.constants.RequestCode;
-import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -248,8 +247,8 @@ public class DYMusicCategoryFragment extends BaseFragment implements OnMoreClick
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+            String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
 
             HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {
                 @Override

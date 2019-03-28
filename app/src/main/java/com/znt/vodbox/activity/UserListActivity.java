@@ -14,7 +14,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.adapter.UserListAdapter;
 import com.znt.vodbox.bean.UserListCallBackBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
@@ -113,10 +113,10 @@ public class UserListActivity extends BaseActivity implements
         String nickName = mSearchView.getText().toString();
         String userName = "";
         String orgzId = "";//所属客户id
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String pageNo = "1";
         String pageSize = "100";
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        //String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {

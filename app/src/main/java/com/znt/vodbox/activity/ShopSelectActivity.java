@@ -14,7 +14,7 @@ import com.znt.vodbox.R;
 import com.znt.vodbox.adapter.ShoplistAdapter;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.ShopListResultBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -132,7 +132,7 @@ public class ShopSelectActivity extends BaseActivity  implements
     {
         String text = mSearchView.getText();
 
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String merchId = "";
         //String merchId = mUserInfo.getMerchant().getId();
         String groupId = "";
@@ -235,9 +235,9 @@ public class ShopSelectActivity extends BaseActivity  implements
     {
         //String type = "1";//1 歌曲， 2 广告
         String dataId = mediaId;
-        String userId = Constant.mUserInfo.getMerchant().getId();
+        String userId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String pusherid = "";
-        String pushername = Constant.mUserInfo.getNickName();
+        String pushername = LocalDataEntity.newInstance(getActivity()).getUserInfor().getNickName();
 
         try
         {

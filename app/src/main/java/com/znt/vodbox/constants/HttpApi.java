@@ -6,7 +6,11 @@ public class HttpApi
     public static final String API = "http://api.zhunit.com/api";
 
     public static final String GET_TERMINAL_INFO = API + "/terminal/info";
+    public static final String GET_SHOP_INFO = API + "/shop/info";
     public static final String DELETE_SHOP = API + "/shop/del";
+
+
+    public static final String WIFI_CONFIG_CHECK = API + "/terminal/wifiConn";
 
 
     public static final String LOGIN = API + "/user/login";

@@ -27,7 +27,7 @@ import android.widget.TextView;
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.db.DBManager;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
@@ -127,7 +127,9 @@ public class UserRecordActivity extends BaseActivity implements LJListView.IXLis
 					UserInfo tempInforData = tempInfor.getData();
 					if(TextUtils.isEmpty(tempInforData.getPwd()))
 						tempInforData.setPwd(userInfor.getPwd());
-					Constant.mUserInfo = tempInforData;
+
+					LocalDataEntity.newInstance(getActivity()).setUserInfor(tempInforData);
+
 					if(tempInforData != null)
 					{
 						getLocalData().setUserInfor(tempInforData);

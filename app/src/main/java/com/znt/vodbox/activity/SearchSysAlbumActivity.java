@@ -19,7 +19,7 @@ import com.znt.vodbox.bean.AlbumInfo;
 import com.znt.vodbox.bean.AlbumListResultBean;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.ToastUtils;
@@ -153,9 +153,9 @@ public class SearchSysAlbumActivity extends BaseActivity implements
             listView.stopRefresh();
             return;
         }
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        //String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
 
         try
@@ -289,8 +289,8 @@ public class SearchSysAlbumActivity extends BaseActivity implements
     {
         try
         {
-            String token = Constant.mUserInfo.getToken();
-            String merchId = Constant.mUserInfo.getMerchant().getId();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+            String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
 
             HttpClient.collectAlbum(token, albumId, merchId, new HttpCallback<CommonCallBackBean>() {
                 @Override

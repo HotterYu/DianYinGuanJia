@@ -24,7 +24,6 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.znt.vodbox.R;
 import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.CommonCallBackBean;
-import com.znt.vodbox.entity.Constant;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -328,9 +327,9 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 
 	private void updateUserInfo(final String name)
 	{
-		String token = Constant.mUserInfo.getToken();
-		String merchId = Constant.mUserInfo.getMerchant().getId();
-		String adminId = Constant.mUserInfo.getId();
+		String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+		String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
+		String adminId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getId();
 		HttpClient.updateUserInfo(token, merchId, name, new HttpCallback<CommonCallBackBean>() {
 			@Override
 			public void onSuccess(CommonCallBackBean commonCallBackBean) {
@@ -416,7 +415,7 @@ public class AccountActivity extends BaseActivity implements OnClickListener
 
 	private void updatePwd(final String oldPwd, final String newPwd)
 	{
-		String token = Constant.mUserInfo.getToken();
+		String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 		/*String merchId = Constant.mUserInfo.getMerchant().getId();
 		String adminId = Constant.mUserInfo.getId();*/
 		HttpClient.updateUserPwd(token, oldPwd, newPwd, new HttpCallback<CommonCallBackBean>() {

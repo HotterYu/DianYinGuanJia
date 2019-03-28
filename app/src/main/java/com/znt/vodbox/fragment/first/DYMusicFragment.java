@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.znt.vodbox.R;
+import com.znt.vodbox.activity.MediaCategoryActivity;
 import com.znt.vodbox.activity.SearchSysAlbumActivity;
 import com.znt.vodbox.activity.SearchSystemMusicActivity;
-import com.znt.vodbox.activity.MediaCategoryActivity;
 import com.znt.vodbox.adapter.DYMusicFragmentPagerAdapter;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.TypeInfo;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.utils.ViewUtils;
@@ -99,13 +99,10 @@ public class DYMusicFragment extends Fragment {
     private List<TypeInfo> typeList = new ArrayList<>();
     public void getTypes()
     {
-
-        if(Constant.mUserInfo == null)
-            return;
         //LocalDataEntity.newInstance(getActivity()).getUserInfor();
         String searchWord = "";
-        String token = Constant.mUserInfo.getToken();
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+        //String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
         try
         {

@@ -20,7 +20,7 @@ import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.dialog.VolumeSetBottomDialog;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -181,7 +181,7 @@ public class ShopDetailActivity extends BaseActivity implements
             listView.stopRefresh();
             return;
         }
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
         HttpClient.getCurPlayMusics(token, mShopInfo.getTmlRunStatus().get(0).getTerminalId(), new HttpCallback<MusicListResultBean>() {
             @Override
@@ -212,7 +212,7 @@ public class ShopDetailActivity extends BaseActivity implements
 
     public void playControll(String type, String value)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String terminalId = mShopInfo.getTmlRunStatus().get(0).getTerminalId();
         try
         {
@@ -327,9 +327,9 @@ public class ShopDetailActivity extends BaseActivity implements
     {
         //String type = "1";//1 歌曲， 2 广告
         //String dataId = mediaId;
-        String userId = Constant.mUserInfo.getMerchant().getId();
+        String userId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String pusherid = "";
-        String pushername = Constant.mUserInfo.getNickName();
+        String pushername = LocalDataEntity.newInstance(getActivity()).getUserInfor().getNickName();
 
         try
         {
@@ -371,10 +371,10 @@ public class ShopDetailActivity extends BaseActivity implements
     {
         try
         {
-            String id = mShopInfo.getId();
-            String token = Constant.mUserInfo.getToken();
+            String id = mShopInfo.getTmlRunStatus().get(0).getTerminalId();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
-            HttpClient.getTerminalInfo(token, id, new HttpCallback<CommonCallBackBean>() {
+            HttpClient.getShopInfo(token, id, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
                     if(resultBean != null && resultBean.isSuccess())
@@ -388,7 +388,8 @@ public class ShopDetailActivity extends BaseActivity implements
                 }
                 @Override
                 public void onFail(Exception e) {
-                    showToast(e.getMessage());
+                    if(e != null)
+                        showToast(e.getMessage());
                 }
             });
         }

@@ -21,7 +21,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
-import com.znt.vodbox.entity.Constant;
+import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.Shopinfo;
@@ -130,11 +130,11 @@ public class SearchSystemMusicActivity extends BaseActivity implements
             listView.stopRefresh();
             return;
         }
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         String pageNo = "1";
         String pageSize = "100";
 
-        String merchId = Constant.mUserInfo.getMerchant().getId();
+        String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         //String merchId = mUserInfo.getMerchant().getId();
 
         try
@@ -176,9 +176,9 @@ public class SearchSystemMusicActivity extends BaseActivity implements
     private void pushMedia(String terminId, String dataId)
     {
         String type = "1";
-        String userId = Constant.mUserInfo.getMerchant().getId();
+        String userId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
         String pusherid = "";
-        String pushername = Constant.mUserInfo.getNickName();
+        String pushername = LocalDataEntity.newInstance(getActivity()).getUserInfor().getNickName();
         try
         {
             // Simulate network access.
@@ -300,7 +300,7 @@ public class SearchSystemMusicActivity extends BaseActivity implements
 
     public void addMusicToAlbum(String id, String musicIds)
     {
-        String token = Constant.mUserInfo.getToken();
+        String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
         try
         {
             // Simulate network access.

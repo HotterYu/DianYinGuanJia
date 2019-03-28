@@ -536,6 +536,9 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         if(arg2 > 1)
             arg2 = arg2 - 2;
 
+        if(selectAlbumList.size() == 0 || selectAlbumList.size() <= arg2)
+            return;
+
         AlbumInfo infor = selectAlbumList.get(arg2);
         Bundle bundle = new Bundle();
         bundle.putSerializable("ALBUM_INFO", infor);
