@@ -312,7 +312,7 @@ public class PlanInfo implements Serializable, Cloneable
     public boolean checkPlanTime(String startTime, String endTime)
     {
         boolean isValid = true;
-        int start = DateUtils.timeToInt(startTime, ":");
+        /*int start = DateUtils.timeToInt(startTime, ":");
         int end = DateUtils.timeToInt(endTime, ":");
         if(start == end)
             return false;
@@ -353,51 +353,7 @@ public class PlanInfo implements Serializable, Cloneable
                     break;
                 }
             }
-        }
-
-
-		/*boolean isValid = true;
-		int start = DateUtils.timeToInt(startTime, ":");
-		int end = DateUtils.timeToInt(endTime, ":");
-		if(start > end)
-			end += 24 * 60;
-
-		int size = subPlanList.size();
-		for(int i=0;i<size;i++)
-		{
-			if(i !=selectIndex)
-			{
-				SubPlanInfor tempInfor = subPlanList.get(i);
-				int tempS = DateUtils.timeToInt(tempInfor.getStartTime(), ":");
-				int tempE = DateUtils.timeToInt(tempInfor.getEndTime(), ":");
-				if(tempS > tempE)
-				{
-					if(start < tempE)
-						start += 24 * 60;
-					tempE += 24 * 60;
-				}
-				if(isTimeOverlap(tempS, tempE, start))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(tempS, tempE, end))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(start, end, tempS))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(start, end, tempE))
-				{
-					isValid = false;
-					break;
-				}
-			}
-		}*/
+        }*/
 
         return isValid;
     }

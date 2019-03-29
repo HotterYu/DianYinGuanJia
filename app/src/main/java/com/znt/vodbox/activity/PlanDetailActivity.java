@@ -108,7 +108,9 @@ public class PlanDetailActivity extends BaseActivity  implements
             @Override
             public void onClick(View v) {
                 if(isEdit)
+                {
                     updatePlanToServer();
+                }
                 else
                     createPlan();
             }
@@ -143,6 +145,10 @@ public class PlanDetailActivity extends BaseActivity  implements
 
         listView.addHeader(headerView);
 
+        if(isEdit)
+            switchButton.setEnable(false);
+        else
+            switchButton.setEnable(true);
 
         mPlanDetailAdapter = new PlanDetailAdapter(getActivity(),this);
         listView.setAdapter(mPlanDetailAdapter);
@@ -163,10 +169,6 @@ public class PlanDetailActivity extends BaseActivity  implements
             showDateSelect(false);
 
         }
-
-        /*listView.onFresh();
-        listView.stopRefresh();*/
-
     }
 
     private void initViews()
@@ -204,6 +206,11 @@ public class PlanDetailActivity extends BaseActivity  implements
             public void onCheckedChanged(CompoundButton arg0, boolean arg1)
             {
                 // TODO Auto-generated method stub
+                if(isEdit)
+                {
+                    showToast("编辑状态下不能修改分区，如需要修改分区请新建计划~");
+                    return;
+                }
                 showShops(arg1);
             }
         });
@@ -288,7 +295,11 @@ public class PlanDetailActivity extends BaseActivity  implements
             startTimes = removeTimeTags(startTimes);
             endTimes = removeTimeTags(endTimes);
             categoryIds = removeTags(categoryIds);
-
+            if(!switchButtonDate.isChecked())
+            {
+                startDate = "";
+                endDate = "";
+            }
             // Simulate network access.
             HttpClient.addPlan(token, groupId, planName,cycleTypes,startTimes,endTimes,categoryIds,startDate,endDate
                    ,merchId , new HttpCallback<CommonCallBackBean>() {
@@ -332,16 +343,19 @@ public class PlanDetailActivity extends BaseActivity  implements
             String startDate = mPlanInfo.getStartDate();
             String endDate = mPlanInfo.getEndDate();
             String merchId = LocalDataEntity.newInstance(getActivity()).getUserInfor().getMerchant().getId();
-            String groupId = mPlanInfo.getGroupId();
+            /*String groupId = mPlanInfo.getGroupId();
             if(!switchButton.isChecked())
-                groupId = "";
+                groupId = "";*/
 
             cycleTypes = removeTags(cycleTypes);
             startTimes = removeTimeTags(startTimes);
             endTimes = removeTimeTags(endTimes);
             categoryIds = removeTags(categoryIds);
-            if(!switchButton.isChecked())
-                groupId = "";
+            if(!switchButtonDate.isChecked())
+            {
+                startDate = "";
+                endDate = "";
+            }
             // Simulate network access.
             HttpClient.updatePlanToServer(token, id, planName,cycleTypes,startTimes,endTimes,categoryIds,startDate,endDate
                     ,merchId , new HttpCallback<CommonCallBackBean>() {
@@ -510,6 +524,12 @@ public class PlanDetailActivity extends BaseActivity  implements
         }
         else if(v == itvShops.getBgView())
         {
+            if(isEdit)
+            {
+                showToast("编辑状态下不能修改分区，如需要修改分区请新建计划~");
+                return;
+            }
+
             Bundle bundle = new Bundle();
             bundle.putString("GROUP_ID",mPlanInfo.getGroupId());
             bundle.putBoolean("IS_EDIT",true);

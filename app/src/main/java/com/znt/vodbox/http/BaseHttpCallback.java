@@ -1,5 +1,7 @@
 package com.znt.vodbox.http;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.Callback;
 
@@ -18,9 +20,18 @@ public abstract class BaseHttpCallback<T>  extends Callback<T>
     private Class<T> clazz;
     private Gson gson;
 
+    private Context mContext = null;
+
     public BaseHttpCallback(Class<T> clazz)
     {
         this.clazz = clazz;
+        gson = new Gson();
+    }
+
+    public BaseHttpCallback(Class<T> clazz, Context mContext)
+    {
+        this.clazz = clazz;
+        this.mContext = mContext;
         gson = new Gson();
     }
 
@@ -30,11 +41,6 @@ public abstract class BaseHttpCallback<T>  extends Callback<T>
         try
         {
             String jsonString = response.body().string();
-            /*JSONObject json = new JSONObject(jsonString);
-
-            String data = getInfoFromJson(json, "data");*/
-            //if(data == null)
-
             return gson.fromJson(jsonString, clazz);
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,5 +62,4 @@ public abstract class BaseHttpCallback<T>  extends Callback<T>
         }
         return null;
     }
-
 }

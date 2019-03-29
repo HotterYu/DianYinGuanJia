@@ -32,7 +32,6 @@ import com.znt.vodbox.application.MusicApplication;
 import com.znt.vodbox.bean.UserCallBackBean;
 import com.znt.vodbox.config.Config;
 import com.znt.vodbox.db.DBManager;
-import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
 import com.znt.vodbox.model.UserInfo;
@@ -184,24 +183,31 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
     private void initDataFromLocal()
     {
         UserInfo userInfo = getLocalData().getUserInfor();
-        String account = userInfo.getUsername();
-        String pwd = userInfo.getPwd();
-
-        if(!TextUtils.isEmpty(account) && !TextUtils.isEmpty(pwd))
+        if(userInfo != null)
         {
-            login(account, pwd);
+            String account = userInfo.getUsername();
+            String pwd = userInfo.getPwd();
+
+            if(!TextUtils.isEmpty(account) && !TextUtils.isEmpty(pwd))
+            {
+                login(account, pwd);
+            }
         }
     }
 
     private void fillEditText()
     {
         UserInfo userInfo = getLocalData().getUserInfor();
-        String account = userInfo.getUsername();
-        String pwd = userInfo.getPwd();
-        if(!TextUtils.isEmpty(account))
-            et_mobile.setText(account);
-        if(!TextUtils.isEmpty(pwd))
-            et_password.setText(pwd);
+        if(userInfo != null)
+        {
+            String account = userInfo.getUsername();
+            String pwd = userInfo.getPwd();
+            if(!TextUtils.isEmpty(account))
+                et_mobile.setText(account);
+            if(!TextUtils.isEmpty(pwd))
+                et_password.setText(pwd);
+        }
+
     }
 
     private void initView() {
@@ -364,22 +370,17 @@ public class LoginAct extends BaseActivity implements View.OnClickListener, Keyb
                     if(tempInfor.isSuccess())
                     {
                         UserInfo userInfo = tempInfor.getData();
-                        LocalDataEntity.newInstance(getActivity()).setUserInfor(userInfo);
-
                         /*InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);*/
 
                         if(userInfo != null)
                         {
-                            /*LoginRecordInfo tempInfo = new LoginRecordInfo();
-                            tempInfo.setAccount(userInfo.getUsername());
-                            tempInfo.setNickName(userInfo.getNickName());
-                            tempInfo.setPwd(mPasswordView.getText().toString());
-                            DBManager.get().getMusicDao().insert(tempInfo);*/
+
                             ActivityManager.getInstance().finishOthersActivity(LoginAct.class);
                             userInfo.setPwd(password);
                             DBManager.newInstance(getApplicationContext()).insertUser(userInfo);
                             getLocalData().setUserInfor(userInfo);
+                            getLocalData().setUserPwd(password);
                             MusicApplication.isLogin = true;
                             Intent intent = new Intent(LoginAct.this, MainActivity.class);
                             Bundle b = new Bundle();

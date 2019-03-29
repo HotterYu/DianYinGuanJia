@@ -26,12 +26,16 @@ public class LocalDataEntity
 	private final String WIFI_PWD = "NEW_WIFI_PWD";
 	private final String WIFI_MAC = "NEW_WIFI_MAC";
 	private final String USER_ID = "NEW_USER_ID";
+	private final String USER_MEM_ID = "NEW_USER_MEME_ID";
 	private final String USER_TYPE = "NEW_USER_TYPE";
 	private final String USER_TOKEN = "NEW_USER_TOKEN";
 	private final String THIRD_ID = "NEW_THIRD_ID";
 	private final String THIRD_TOKEN = "NEW_THIRD_TOKEN";
 	private final String USER_NAME = "NEW_USER_NAME";
 	private final String USER_NICK_NAME = "NEW_USER_NICK_NAME";
+
+	private final String USER_INFO = "NEW_USER_INFO";
+
 	private final String USER_PWD = "NEW_USER_PWD";
 	private final String USER_HEAD = "NEW_USER_HEAD";
 	private final String USER_ACCOUNT = "NEW_USER_ACCOUNT";
@@ -53,6 +57,8 @@ public class LocalDataEntity
 	private final String CHECK_UPDATE_TIME = "NEW_CHECK_UPDATE_TIME";
 	
 	private MySharedPreference sharedPre = null;
+
+	private static LocalDataEntity INSTANCE = null;
 	
 	public LocalDataEntity(Context context)
 	{
@@ -61,8 +67,22 @@ public class LocalDataEntity
 	}
 	public static LocalDataEntity newInstance(Context context)
 	{
-		return new LocalDataEntity(context);
+		if(INSTANCE == null)
+			INSTANCE = new LocalDataEntity(context);
+		return INSTANCE;
 	}
+
+	/*public void init(Context context)
+	{
+		this.context  = context;
+		INSTANCE = new LocalDataEntity(context);
+	}
+	public static LocalDataEntity getInstance()
+	{
+		if(INSTANCE == null)
+			INSTANCE = new LocalDataEntity(context);
+		return INSTANCE;
+	}*/
 	
 	public void setCheckUpdateTime(long time)
 	{
@@ -145,25 +165,30 @@ public class LocalDataEntity
 		devices += devId;
 		sharedPre.setData(USER_DEVICES, devices);
 	}
+
+
+	public void setUserString(String jasonStr)
+	{
+		sharedPre.setData(USER_INFO, jasonStr);
+	}
+
 	public void setUserInfor(UserInfo userInfor)
 	{
 		sharedPre.setData(USER_ID, userInfor.getId());
 		sharedPre.setData(USER_TYPE, userInfor.getType());
 		sharedPre.setData(USER_NAME, userInfor.getMerchant().getName());
+		sharedPre.setData(USER_MEM_ID, userInfor.getMerchant().getId());
 		sharedPre.setData(USER_NICK_NAME, userInfor.getNickName());
 		sharedPre.setData(USER_PWD, userInfor.getPwd());
 		sharedPre.setData(USER_ACCOUNT, userInfor.getUsername());
 		sharedPre.setData(USER_TOKEN, userInfor.getToken());
-		//sharedPre.setData(USER_HEAD, userInfor.getHead());
-		//sharedPre.setData(USER_DEVICES, userInfor.getBindDevices());
-		//sharedPre.setData(ADMIN, userInfor.isAdmin());
 		sharedPre.setData(PC_CODE, userInfor.getMerchant().getBindCode());
-		//sharedPre.setData(SHOW_SYS_MUSIC_FLAG, userInfor.getShowSysMusicFlag());
 	}
 	public UserInfo getUserInfor()
 	{
 		UserInfo userInfor = new UserInfo();
-		String userId = sharedPre.getData(USER_ID, SystemUtils.getDeviceId(context));
+		String userId = sharedPre.getData(USER_ID, "");
+		String userMemId = sharedPre.getData(USER_MEM_ID, "");
 		String userName = sharedPre.getData(USER_NAME, "DG-" + Build.MODEL);
 		String userNickName = sharedPre.getData(USER_NICK_NAME, "DG-" + Build.MODEL);
 		String userPwd = sharedPre.getData(USER_PWD, "");
@@ -180,6 +205,7 @@ public class LocalDataEntity
 		{
 			userInfor.getMerchant().setBindCode(pcCode);
 			userInfor.getMerchant().setName(userName);
+			userInfor.getMerchant().setId(userMemId);
 		}
 		userInfor.setToken(token);
 		userInfor.setPwd(userPwd);

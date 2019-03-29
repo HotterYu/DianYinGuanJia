@@ -200,6 +200,11 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             public void onCheckedChanged(CompoundButton arg0, boolean arg1)
             {
                 // TODO Auto-generated method stub
+                if(isEdit)
+                {
+                    showToast("编辑状态下不能修改分区，如需要修改分区请新建计划~");
+                    return;
+                }
                 showShops(arg1);
             }
         });
@@ -391,6 +396,12 @@ public class AdPlanDetailActivity extends BaseActivity  implements
             musicNums = removeTags(musicNums);
             adinfoIds = removeTags(adinfoIds);
 
+            if(!switchButtonDate.isChecked())
+            {
+                startDate = "";
+                endDate = "";
+            }
+
             // Simulate network access.
             HttpClient.updateAPlan(token,  id, name,  cycleTypes,  startTimes, endTimes
                     ,  musicNums,  adinfoIds, startDate, endDate, merchId, playModels , new HttpCallback<CommonCallBackBean>() {
@@ -558,6 +569,11 @@ public class AdPlanDetailActivity extends BaseActivity  implements
         }
         else if(v == itvShops.getBgView())
         {
+            if(isEdit)
+            {
+                showToast("编辑状态下不能修改分区，如需要修改分区请新建计划~");
+                return;
+            }
             Bundle bundle = new Bundle();
             bundle.putString("GROUP_ID",mAdPlanInfo.getGroupId());
             bundle.putBoolean("IS_EDIT",true);

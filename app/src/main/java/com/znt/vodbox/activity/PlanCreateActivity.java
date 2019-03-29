@@ -89,7 +89,6 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
 
     private void finishAndFeedBack()
     {
-
         SubPlanInfor tempInfor = getSubPlanInfor();
         if(tempInfor == null)
             return;
@@ -98,7 +97,6 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
             mPlanInfo.addSubPlanInfor(tempInfor);
         else
             mPlanInfo.updateSelect(tempInfor);
-
 
         Intent intent = new Intent();
         Bundle bundle = new Bundle();
@@ -375,11 +373,6 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
         if(hour == 0 && min == 0)
             startTimes = "00:00";
 
-        /*if(!planInfor.checkPlanTime(startTimes, endTimes))
-            tvTimeHint.setVisibility(View.VISIBLE);
-        else
-            tvTimeHint.setVisibility(View.GONE);*/
-
         tvPlanTime.setText(startTimes + " 到 " + endTimes);
 
     }
@@ -391,11 +384,6 @@ public class PlanCreateActivity extends  BaseActivity implements OnClickListener
             endTimes = "00:" + getStringTwo(min);
         if(hour == 0 && min == 0)
             endTimes = "00:00";
-        /*if(!planInfor.checkPlanTime(startTimes, endTimes))
-            tvTimeHint.setVisibility(View.VISIBLE);
-        else
-            tvTimeHint.setVisibility(View.GONE);*/
-
         tvPlanTime.setText(startTimes + " 到 " + endTimes);
 
     }

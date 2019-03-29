@@ -346,18 +346,24 @@ public class AdPlanInfo implements Serializable, Cloneable
     public boolean checkPlanTime(String startTime, String endTime)
     {
         boolean isValid = true;
-        int start = DateUtils.timeToInt(startTime, ":");
+        /*int start = DateUtils.timeToInt(startTime, ":");
         int end = DateUtils.timeToInt(endTime, ":");
         if(start == end)
             return false;
+
         int size = subPlanList.size();
+
         for(int i=0;i<size;i++)
         {
+            SubAdPlanInfo tempInfor = subPlanList.get(i);
+            String week = tempInfor.getCycleType();
+
             if(i != selectedPlanIndex)
             {
-                SubAdPlanInfo tempInfor = subPlanList.get(i);
+
                 int tempS = DateUtils.timeToInt(tempInfor.getStartTime(), ":");
                 int tempE = DateUtils.timeToInt(tempInfor.getEndTime(), ":");
+
                 if((tempS > tempE))
                 {
                     if(start > end)
@@ -387,52 +393,7 @@ public class AdPlanInfo implements Serializable, Cloneable
                     break;
                 }
             }
-        }
-
-
-		/*boolean isValid = true;
-		int start = DateUtils.timeToInt(startTime, ":");
-		int end = DateUtils.timeToInt(endTime, ":");
-		if(start > end)
-			end += 24 * 60;
-
-		int size = subPlanList.size();
-		for(int i=0;i<size;i++)
-		{
-			if(i !=selectIndex)
-			{
-				SubPlanInfor tempInfor = subPlanList.get(i);
-				int tempS = DateUtils.timeToInt(tempInfor.getStartTime(), ":");
-				int tempE = DateUtils.timeToInt(tempInfor.getEndTime(), ":");
-				if(tempS > tempE)
-				{
-					if(start < tempE)
-						start += 24 * 60;
-					tempE += 24 * 60;
-				}
-				if(isTimeOverlap(tempS, tempE, start))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(tempS, tempE, end))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(start, end, tempS))
-				{
-					isValid = false;
-					break;
-				}
-				if(isTimeOverlap(start, end, tempE))
-				{
-					isValid = false;
-					break;
-				}
-			}
-		}*/
-
+        }*/
         return isValid;
     }
     private boolean isTimeOverlap(int start, int end, int dest)
