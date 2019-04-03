@@ -9,10 +9,6 @@ public class HttpApi
     public static final String GET_SHOP_INFO = API + "/shop/info";
     public static final String DELETE_SHOP = API + "/shop/del";
 
-
-    public static final String WIFI_CONFIG_CHECK = API + "/terminal/wifiConn";
-
-
     public static final String LOGIN = API + "/user/login";
 
     public static final String ADD_SHOP = API + "/shop/add";
