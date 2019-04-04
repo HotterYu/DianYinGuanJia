@@ -19,6 +19,7 @@ import com.znt.vodbox.adapter.OnMoreClickListener;
 import com.znt.vodbox.bean.CommonCallBackBean;
 import com.znt.vodbox.bean.MediaInfo;
 import com.znt.vodbox.bean.MusicListResultBean;
+import com.znt.vodbox.bean.ShopInfoCallBackBean;
 import com.znt.vodbox.dialog.VolumeSetBottomDialog;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
@@ -140,7 +141,14 @@ public class ShopDetailActivity extends BaseActivity implements
 
         tvCurPlayCount.setText(getResources().getString(R.string.dev_shop_detail_cur_play_count) + "(0)");
 
+        updateUi();
 
+        getTerminalInfo();
+        getCurPlayMusics();
+    }
+
+    private void updateUi()
+    {
         if(mShopInfo.getTmlRunStatus() != null && mShopInfo.getTmlRunStatus().size() > 0)
         {
             tvShopName.setText(mShopInfo.getTmlRunStatus().get(0).getShopname());
@@ -161,7 +169,7 @@ public class ShopDetailActivity extends BaseActivity implements
             }
 
             if(mShopInfo.getTmlRunStatus().get(0).getPlayModel() != null
-            && mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
+                    && mShopInfo.getTmlRunStatus().get(0).getPlayModel().equals("0"))
                 tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_order));
             else
                 tvPlayMode.setText(getResources().getString(R.string.dev_shop_detail_play_mode_radom));
@@ -170,8 +178,6 @@ public class ShopDetailActivity extends BaseActivity implements
         {
             tvTopTitle.setText(getResources().getString(R.string.dev_shop_none_device));
         }
-        getTerminalInfo();
-        getCurPlayMusics();
     }
 
     public void getCurPlayMusics()
@@ -374,11 +380,13 @@ public class ShopDetailActivity extends BaseActivity implements
             String id = mShopInfo.getTmlRunStatus().get(0).getTerminalId();
             String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
 
-            HttpClient.getShopInfo(token, id, new HttpCallback<CommonCallBackBean>() {
+            HttpClient.getShopInfo(token, id, new HttpCallback<ShopInfoCallBackBean>() {
                 @Override
-                public void onSuccess(CommonCallBackBean resultBean) {
+                public void onSuccess(ShopInfoCallBackBean resultBean) {
                     if(resultBean != null && resultBean.isSuccess())
                     {
+                        mShopInfo = resultBean.getData();
+                        updateUi();
                         dismissDialog();
                     }
                     else

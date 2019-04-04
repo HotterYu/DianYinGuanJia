@@ -15,6 +15,7 @@ import com.znt.vodbox.bean.GourpListResultBean;
 import com.znt.vodbox.bean.MusicListResultBean;
 import com.znt.vodbox.bean.PlanListResultBean;
 import com.znt.vodbox.bean.PlanResultBean;
+import com.znt.vodbox.bean.ShopInfoCallBackBean;
 import com.znt.vodbox.bean.ShopListResultBean;
 import com.znt.vodbox.bean.TypeCallBackBean;
 import com.znt.vodbox.bean.UserCallBackBean;
@@ -1586,14 +1587,14 @@ public class HttpClient extends HttpApi{
                 });
     }
 
-    public static void getShopInfo(String token, String id,@NonNull final HttpCallback<CommonCallBackBean> callback) {
+    public static void getShopInfo(String token, String id,@NonNull final HttpCallback<ShopInfoCallBackBean> callback) {
         OkHttpUtils.post().url(GET_SHOP_INFO)
                 .addHeader("token", token)
                 .addParams("terminalId", id)
                 .build()
-                .execute(new BaseHttpCallback<CommonCallBackBean>(CommonCallBackBean.class) {
+                .execute(new BaseHttpCallback<ShopInfoCallBackBean>(ShopInfoCallBackBean.class) {
                     @Override
-                    public void onResponse(CommonCallBackBean response, int id) {
+                    public void onResponse(ShopInfoCallBackBean response, int id) {
                         if(response == null)
                             callback.onFail(null);
                         else

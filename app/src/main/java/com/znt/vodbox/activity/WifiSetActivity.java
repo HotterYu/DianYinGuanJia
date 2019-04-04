@@ -2,6 +2,8 @@ package com.znt.vodbox.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.znt.vodbox.R;
 import com.znt.vodbox.bean.CommonCallBackBean;
+import com.znt.vodbox.bean.ShopInfoCallBackBean;
 import com.znt.vodbox.entity.LocalDataEntity;
 import com.znt.vodbox.http.HttpCallback;
 import com.znt.vodbox.http.HttpClient;
@@ -43,6 +46,33 @@ public class WifiSetActivity  extends BaseActivity{
     private View mLoginFormView;
 
     private Shopinfo mShopinfo = null;
+
+    private int checkWifiCount = 0;
+    private final int CHECK_TIME = 5000;
+    private final int MSG_WIFI_CHECK = 1;
+    private Handler mHandler = new Handler()
+    {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == MSG_WIFI_CHECK)
+            {
+                removeMessages(MSG_WIFI_CHECK);
+                if(checkWifiCount <= 36)
+                {
+                    getTerminalInfo();
+                    sendEmptyMessageDelayed(MSG_WIFI_CHECK, CHECK_TIME);
+                    checkWifiCount ++;
+                }
+                else
+                {
+                    checkWifiCount = 0;
+                    showToast("配置失败，请检查要配置的wifi是否正常");
+                    dismissDialog();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,25 +132,27 @@ public class WifiSetActivity  extends BaseActivity{
 
         try
         {
-            // Simulate network access.
             HttpClient.updateShopInfo(token, mShopinfo, new HttpCallback<CommonCallBackBean>() {
                 @Override
                 public void onSuccess(CommonCallBackBean resultBean) {
 
-                    if(resultBean.isSuccess())
+                    if(resultBean != null && resultBean.isSuccess())
                     {
-                        Intent intent = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("DeviceInfor",mShopinfo);
-                        intent.putExtras(bundle);
-                        setResult(RESULT_OK, intent);
-                        finish();
+                        showProgressDialog(getActivity(),"正在配置WIFI，请稍后...");
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ViewUtils.sendMessage(mHandler,MSG_WIFI_CHECK);
+                            }
+                        }, CHECK_TIME);
                     }
                     else
                     {
-
+                        if(resultBean == null)
+                            showToast("发送wifi信息失败");
+                        else
+                            showToast(resultBean.getMessage());
                     }
-                    showToast(resultBean.getMessage());
                 }
 
                 @Override
@@ -134,9 +166,76 @@ public class WifiSetActivity  extends BaseActivity{
             showToast(e.getMessage());
             Log.e("",e.getMessage());
         }
-
     }
 
+    private void configSuccess()
+    {
+        dismissDialog();
+        showToast("配置成功");
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("DeviceInfor",mShopinfo);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    public void getTerminalInfo()
+    {
+        try
+        {
+            String id = mShopinfo.getTmlRunStatus().get(0).getTerminalId();
+            String token = LocalDataEntity.newInstance(getActivity()).getUserInfor().getToken();
+
+            HttpClient.getShopInfo(token, id, new HttpCallback<ShopInfoCallBackBean>() {
+                @Override
+                public void onSuccess(ShopInfoCallBackBean resultBean) {
+                    if(resultBean != null && resultBean.isSuccess())
+                    {
+                        mShopinfo = resultBean.getData();
+                        String wifiUpdateCode = mShopinfo.getTmlRunStatus().get(0).getWifiUpdateCode();
+                        if(wifiUpdateCode != null && wifiUpdateCode.equals("1000"))
+                        {
+                            //wifi开始配置了
+                            //dismissDialog();
+                            showToast("终端收到WIFI配置请求,正在配置...");
+                        }
+                        else if(wifiUpdateCode != null && wifiUpdateCode.equals("1001"))
+                        {
+                            //wifi配置失败
+                            dismissDialog();
+                            showToast("wifi配置失败");
+                        }
+                        else if(wifiUpdateCode != null && wifiUpdateCode.equals("1002"))
+                        {
+                            //wifi配置成功
+                            configSuccess();
+                        }
+                        else if(wifiUpdateCode != null && wifiUpdateCode.equals("1003"))
+                        {
+                            //wifi开关打开失败
+                            dismissDialog();
+                            showToast("WIFI开关打开失败");
+                        }
+
+                    }
+                    else
+                    {
+                        showToast(resultBean.getMessage());
+                    }
+                }
+                @Override
+                public void onFail(Exception e) {
+                    if(e != null)
+                        showToast(e.getMessage());
+                }
+            });
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

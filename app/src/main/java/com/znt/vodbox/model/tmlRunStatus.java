@@ -31,6 +31,15 @@ public class tmlRunStatus implements Serializable{
     private String netInfo = "";
     private String softVersion = "";
     private String ip = "";
+    private String wifiUpdateCode = "";
+
+    public String getWifiUpdateCode() {
+        return wifiUpdateCode;
+    }
+
+    public void setWifiUpdateCode(String wifiUpdateCode) {
+        this.wifiUpdateCode = wifiUpdateCode;
+    }
 
     public String getSoftVersion() {
         return softVersion;

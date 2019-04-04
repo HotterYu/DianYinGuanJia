@@ -20,8 +20,8 @@ android {
         applicationId "com.znt.storesound"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 4
-        versionName "V1.4"
+        versionCode 5
+        versionName "V1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         packagingOptions {
             exclude 'META-INF/rxjava.properties'
