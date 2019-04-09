@@ -50,6 +50,7 @@ public class WifiSetActivity  extends BaseActivity{
     private int checkWifiCount = 0;
     private final int CHECK_TIME = 5000;
     private final int MSG_WIFI_CHECK = 1;
+    private boolean isCheckWifiStop = false;
     private Handler mHandler = new Handler()
     {
         @Override
@@ -60,9 +61,12 @@ public class WifiSetActivity  extends BaseActivity{
                 removeMessages(MSG_WIFI_CHECK);
                 if(checkWifiCount <= 36)
                 {
-                    getTerminalInfo();
-                    sendEmptyMessageDelayed(MSG_WIFI_CHECK, CHECK_TIME);
-                    checkWifiCount ++;
+                    if(!isCheckWifiStop)
+                    {
+                        getTerminalInfo();
+                        sendEmptyMessageDelayed(MSG_WIFI_CHECK, CHECK_TIME);
+                        checkWifiCount ++;
+                    }
                 }
                 else
                 {
@@ -70,6 +74,7 @@ public class WifiSetActivity  extends BaseActivity{
                     showToast("配置失败，请检查要配置的wifi是否正常");
                     dismissDialog();
                 }
+
             }
         }
     };
@@ -180,6 +185,16 @@ public class WifiSetActivity  extends BaseActivity{
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+
+        isCheckWifiStop = true;
+        if(mHandler != null)
+            mHandler.removeMessages(MSG_WIFI_CHECK);
+
+        super.onDestroy();
+    }
+
     public void getTerminalInfo()
     {
         try
@@ -198,13 +213,13 @@ public class WifiSetActivity  extends BaseActivity{
                         {
                             //wifi开始配置了
                             //dismissDialog();
-                            showToast("终端收到WIFI配置请求,正在配置...");
+                            showToast("终端收到WIFI配置,正在等待配置成功...");
                         }
                         else if(wifiUpdateCode != null && wifiUpdateCode.equals("1001"))
                         {
                             //wifi配置失败
-                            dismissDialog();
-                            showToast("wifi配置失败");
+                            /*dismissDialog();
+                            showToast("wifi配置失败");*/
                         }
                         else if(wifiUpdateCode != null && wifiUpdateCode.equals("1002"))
                         {
